@@ -43,23 +43,23 @@ make
 
 ### Built-in
 
-[ ] implement "cd"
-[x] implement "pwd"
-[x] implement "unset"
-[ ] implement "echo"
-[x] implement "export"
-[x] implement "env"
-[ ] implement "exit"
+- [ ] implement "cd"  
+- [x] implement "pwd"  
+- [x] implement "unset"  
+- [ ] implement "echo"  
+- [x] implement "export"  
+- [x] implement "env"  
+- [ ] implement "exit"  
 
 ### Parsing
 
-[ ] Tokenize
-[ ] Lexer
-[ ] Parser
+- [ ] Tokenize
+- [ ] Lexer
+- [ ] Parser
 
 ### Signal
 
-[ ] cntl - C
-[ ] cntl - D
-[ ] cntl - \
+- [ ] cntl - C
+- [ ] cntl - D
+- [ ] cntl - \
 
