@@ -1,2 +1,0 @@
-fd1, hello
-printf~~
