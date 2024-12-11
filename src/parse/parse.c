@@ -173,11 +173,34 @@ int	count_special_character(t_data *data, char *input)
 	double_flag = -1;
 	while (input[idx])
 	{
-		if (input[idx] == '\'' && double_flag < 0)
-			single_flag *= -1;
-		else if(input[idx] == '\"' && single_flag < 0)
-			double_flag *= -1;
-		if ((single_flag < 0 && double_flag < 0) && (!ft_strncmp(input + idx, "<<", 2) || !ft_strncmp(input + idx, ">>", 2)))
+		// if (input[idx] == '\'' && double_flag < 0)
+		// 	single_flag *= -1;
+		// else if(input[idx] == '\"' && single_flag < 0)
+		// 	double_flag *= -1;
+		
+		if (input[idx] == '\'' /*&& double_flag < 0*/)
+		{
+			token = ft_new_token(ft_substr(input, start, idx - start));
+			ft_token_add_back(&tklst, token);
+			start = idx;
+			while (input[++idx] != '\'')
+				continue ;
+			token = ft_new_token(ft_substr(input, start, idx - start + 1));
+			ft_token_add_back(&tklst, token);
+			start = idx + 1;
+		}
+		if (input[idx] == '\"' /*&& double_flag < 0*/)
+		{
+			token = ft_new_token(ft_substr(input, start, idx - start));
+			ft_token_add_back(&tklst, token);
+			start = idx;
+			while (input[++idx] != '\"')
+				continue ;
+			token = ft_new_token(ft_substr(input, start, idx - start + 1));
+			ft_token_add_back(&tklst, token);
+			start = idx + 1;
+		}
+		if (/*(single_flag < 0 && double_flag < 0) && */(!ft_strncmp(input + idx, "<<", 2) || !ft_strncmp(input + idx, ">>", 2)))
 		{
 			if (idx != start)
 			{
@@ -199,7 +222,7 @@ int	count_special_character(t_data *data, char *input)
 			token = ft_new_token(ft_substr(input, idx, 1));
 			ft_token_add_back(&tklst, token);
 			start = idx + 1;
-			idx++;
+			idx = idx + 1;
 		}
 		else if ((single_flag < 0 && double_flag < 0) && (input[idx] == ' ')/*나중에 화이트 스페이스로 변경.*/)
 		{
@@ -209,10 +232,10 @@ int	count_special_character(t_data *data, char *input)
 				ft_token_add_back(&tklst, token);
 			}
 			start = idx + 1;
-			idx++;
+			idx = idx + 1;
 		}
 		else
-			idx++;
+			idx = idx + 1;
 	}
 	token = ft_new_token(ft_substr(input, start, idx - start));
 	ft_token_add_back(&tklst, token);
