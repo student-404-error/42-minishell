@@ -58,7 +58,7 @@ void	ft_token_add_back(t_token **tklst, t_token *new)
 		*tklst = new;
 	}
 	new->next = NULL;
-	printf("token: %s\n", new->value);
+	printf("token: -%s-\n", new->value);
 }
 
 int	ft_dollor_idx(char *s)
@@ -80,7 +80,7 @@ int	ft_dollor_idx(char *s)
 	}
 	return (-1);
 }
-// change function name -> find_env_key
+
 char	*fine_env_key(char *str)
 {
 	int		len;
@@ -148,7 +148,7 @@ void	change_env_vari(t_data *data, t_token **tklst)
 					// printf("value: %s\n", get_env_key(inst_lst->value + dollor_idx));
 				}
 			}
-			printf("return: %s\n", ret);
+			printf("return: -%s-\n", ret);
 			free(ret);
 		}
 		inst_lst = inst_lst->next;
@@ -157,95 +157,206 @@ void	change_env_vari(t_data *data, t_token **tklst)
 	// return (ret);
 }
 
-int	count_special_character(t_data *data, char *input)
+
+// to-do
+// 1. 양 끝에 있는 쿼트 제거 함수 구현
+// 2. enum TOKEN 정해주는 함수 구현
+// 3. 재귀 하향 파싱 구현
+// 4. AST 구현
+// 파싱 끝~
+// test 생성
+void	remove_quote(t_token **tklst)
+{
+	t_token	*inst_lst;
+
+	inst_lst = *tklst;
+	while (inst_lst)
+	{
+		if (inst_lst->token == TOKEN_STRING)
+		{
+			// new token->value(str) malloc -> ft_strtrim
+			// current token->value(str) free -> free()
+			// token change
+		}
+		inst_lst = inst_lst->next;
+	}
+}
+
+void	handle_quote_token(char *input, int *idx, int *start, t_token **tklst, char quote)
+{
+	t_token	*token;
+
+	// 앞 문자열을 토큰화
+	if (*idx != *start)
+	{
+		token = ft_new_token(ft_substr(input, *start, *idx - *start));
+		ft_token_add_back(tklst, token);
+	}
+	// 따옴표로 묶인 문자열을 처리
+	*start = (*idx)++;
+	while (input[*idx] && input[*idx] != quote)
+		(*idx)++;
+	if (input[*idx] == quote)
+	{
+		token = ft_new_token(ft_substr(input, *start, *idx - *start + 1));
+		ft_token_add_back(tklst, token);
+		*start = (*idx) + 1;
+		(*idx)++;
+	}
+	else
+	{
+		printf("Error: Unclosed quote detected.\n");
+		// 에러 처리
+	}
+}
+
+t_token*	tokenize(t_data *data, char *input)
 {
 	int	idx;
 	int	start;
-	int	single_flag;
-	int	double_flag;
-	t_token	*token;
 	t_token	*tklst;
 
 	tklst = NULL;
 	idx = 0;
 	start = 0;
-	single_flag = -1;
-	double_flag = -1;
+
 	while (input[idx])
 	{
-		// if (input[idx] == '\'' && double_flag < 0)
-		// 	single_flag *= -1;
-		// else if(input[idx] == '\"' && single_flag < 0)
-		// 	double_flag *= -1;
-		
-		if (input[idx] == '\'' /*&& double_flag < 0*/)
+		// 공백 처리
+		if (input[idx] == ' '/* && start != 0 && input[idx + 1] != '\0'*/)
 		{
-			token = ft_new_token(ft_substr(input, start, idx - start));
-			ft_token_add_back(&tklst, token);
+			if (idx != start)
+				ft_token_add_back(&tklst, ft_new_token(ft_substr(input, start, idx - start)));
+			while (input[idx] == ' ') idx++;
+			ft_token_add_back(&tklst, ft_new_token(ft_strdup(" ")));
 			start = idx;
-			while (input[++idx] != '\'')
-				continue ;
-			token = ft_new_token(ft_substr(input, start, idx - start + 1));
-			ft_token_add_back(&tklst, token);
-			start = idx + 1;
 		}
-		if (input[idx] == '\"' /*&& double_flag < 0*/)
-		{
-			token = ft_new_token(ft_substr(input, start, idx - start));
-			ft_token_add_back(&tklst, token);
-			start = idx;
-			while (input[++idx] != '\"')
-				continue ;
-			token = ft_new_token(ft_substr(input, start, idx - start + 1));
-			ft_token_add_back(&tklst, token);
-			start = idx + 1;
-		}
-		if (/*(single_flag < 0 && double_flag < 0) && */(!ft_strncmp(input + idx, "<<", 2) || !ft_strncmp(input + idx, ">>", 2)))
+		// 따옴표 처리
+		else if (input[idx] == '\'' || input[idx] == '\"')
+			handle_quote_token(input, &idx, &start, &tklst, input[idx]);
+		// 연속된 특수 문자 처리 (<<, >>)
+		else if (!ft_strncmp(input + idx, "<<", 2) || !ft_strncmp(input + idx, ">>", 2))
 		{
 			if (idx != start)
-			{
-				token = ft_new_token(ft_substr(input, start, idx - start));
-				ft_token_add_back(&tklst, token);
-			}
-			token = ft_new_token(ft_substr(input, idx, 2));
-			ft_token_add_back(&tklst, token);
-			start = idx + 2;
-			idx += 2;
+				ft_token_add_back(&tklst, ft_new_token(ft_substr(input, start, idx - start)));
+			ft_token_add_back(&tklst, ft_new_token(ft_substr(input, idx, 2)));
+			start = (idx += 2);
 		}
-		else if ((single_flag < 0 && double_flag < 0) && (!ft_strncmp(input + idx, "<", 1) || !ft_strncmp(input + idx, ">", 1) || !ft_strncmp(input + idx, "|", 1)))
+		// 단일 특수 문자 처리 (<, >, |)
+		else if (input[idx] == '<' || input[idx] == '>' || input[idx] == '|')
 		{
 			if (idx != start)
-			{
-				token = ft_new_token(ft_substr(input, start, idx - start));
-				ft_token_add_back(&tklst, token);
-			}
-			token = ft_new_token(ft_substr(input, idx, 1));
-			ft_token_add_back(&tklst, token);
-			start = idx + 1;
-			idx = idx + 1;
+				ft_token_add_back(&tklst, ft_new_token(ft_substr(input, start, idx - start)));
+			ft_token_add_back(&tklst, ft_new_token(ft_substr(input, idx, 1)));
+			start = ++idx;
 		}
-		else if ((single_flag < 0 && double_flag < 0) && (input[idx] == ' ')/*나중에 화이트 스페이스로 변경.*/)
-		{
-			if (idx != start)
-			{
-				token = ft_new_token(ft_substr(input, start, idx - start));
-				ft_token_add_back(&tklst, token);
-			}
-			start = idx + 1;
-			idx = idx + 1;
-		}
+		// 일반 문자열
 		else
-			idx = idx + 1;
+			idx++;
 	}
-	token = ft_new_token(ft_substr(input, start, idx - start));
-	ft_token_add_back(&tklst, token);
-
-	if (single_flag == 1 || double_flag == 1)
-		return (-1);
+	// 마지막 남은 문자열 처리
+	if (idx != start)
+		ft_token_add_back(&tklst, ft_new_token(ft_substr(input, start, idx - start)));
 
 	change_env_vari(data, &tklst);
-	return (1);
+	return (tklst);
 }
+//
+// int	count_special_character(t_data *data, char *input)
+// {
+// 	int	idx;
+// 	int	start;
+// 	int len;
+// 	t_token	*token;
+// 	t_token	*tklst;
+//
+// 	tklst = NULL;
+// 	idx = 0;
+// 	start = 0;
+// 	len = (int)ft_strlen(input);
+// 	while (input[idx])
+// 	{
+// 		printf("len-idx-start: %zu-%d-%d\n", ft_strlen(input), idx, start);
+// 		printf("condition: %d\n", input[idx] == '\"' && (idx != 0 && start < len));
+// 		if (input[idx] == ' ' && (idx != 0 && idx != len))
+// 		{
+// 			token = ft_new_token(ft_substr(input, start, idx - start));
+// 			ft_token_add_back(&tklst, token);
+// 			start = idx;
+// 			while (input[idx] == ' ')
+// 				idx++;
+// 			token = ft_new_token(ft_strdup(" "));
+// 			ft_token_add_back(&tklst, token);
+// 			start = idx;
+// 		}
+// 		else if (input[idx] == '\'' && (idx != 0 && start < len))
+// 		{
+// 			token = ft_new_token(ft_substr(input, start, idx - start));
+// 			ft_token_add_back(&tklst, token);
+// 			start = idx;
+// 			while (input[++idx] != '\'')
+// 				continue ;
+// 			token = ft_new_token(ft_substr(input, start, idx - start + 1));
+// 			ft_token_add_back(&tklst, token);
+// 			start = idx + 1;
+// 		}
+// 		else if (input[idx] == '\"' && (idx != 0 && start < len))
+// 		{
+// 			token = ft_new_token(ft_substr(input, start, idx - start));
+// 			ft_token_add_back(&tklst, token);
+// 			start = idx;
+// 			while (input[++idx] != '\"')
+// 				continue ;
+// 			token = ft_new_token(ft_substr(input, start, idx - start + 1));
+// 			ft_token_add_back(&tklst, token);
+// 			start = idx + 1;
+// 		}
+// 		if ((!ft_strncmp(input + idx, "<<", 2) || !ft_strncmp(input + idx, ">>", 2)))
+// 		{
+// 			if (idx != start)
+// 			{
+// 				token = ft_new_token(ft_substr(input, start, idx - start));
+// 				ft_token_add_back(&tklst, token);
+// 			}
+// 			token = ft_new_token(ft_substr(input, idx, 2));
+// 			ft_token_add_back(&tklst, token);
+// 			start = idx + 2;
+// 			idx = idx + 2;
+// 		}
+// 		else if ((!ft_strncmp(input + idx, "<", 1) || !ft_strncmp(input + idx, ">", 1) || !ft_strncmp(input + idx, "|", 1)))
+// 		{
+// 			if (idx != start)
+// 			{
+// 				token = ft_new_token(ft_substr(input, start, idx - start));
+// 				ft_token_add_back(&tklst, token);
+// 			}
+// 			token = ft_new_token(ft_substr(input, idx, 1));
+// 			ft_token_add_back(&tklst, token);
+// 			start = idx + 1;
+// 			idx = idx + 1;
+// 		}
+// 		// else if ((input[idx] == ' ')/*나중에 화이트 스페이스로 변경.*/)
+// 		// {
+// 		// 	if (idx != start)
+// 		// 	{
+// 		// 		token = ft_new_token(ft_substr(input, start, idx - start));
+// 		// 		ft_token_add_back(&tklst, token);
+// 		// 	}
+// 		// 	start = idx + 1;
+// 		// 	idx = idx + 1;
+// 		// }
+// 		else
+// 			idx = idx + 1;
+// 	}
+// 	token = ft_new_token(ft_substr(input, start, idx - start));
+// 	ft_token_add_back(&tklst, token);
+//
+// 	// if (single_flag == 1 || double_flag == 1)
+// 	// 	return (-1);
+//
+// 	change_env_vari(data, &tklst);
+// 	return (1);
+// }
 
 
 //
