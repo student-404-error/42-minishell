@@ -22,7 +22,7 @@ int main(int argc, char *argv[], char **env)
 	while (1)
 	{
 		input = readline("input: ");
-		count_special_character(&data, input);
+		data.tklst = tokenize(&data, input);
 		if (ft_strncmp(input, "env", 3) == 0)
 			builtin_env(data);
 		else if (ft_strncmp(input, "unset", 5) == 0)
