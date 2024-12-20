@@ -12,17 +12,23 @@ OBJS			=	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(FILES)))
 
 CC				=	cc
 RM				=	rm -rf
-CFLAGS			=	-Wall -Wextra -Werror
-INCLUDE			=	-I ./include
+CFLAGS = -Wall -Wextra -Werror -I ./include -I/opt/homebrew/include
+LDFLAGS = -L/opt/homebrew/lib -lcmocka
 RLFLAG			=	-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
 OBJF			=	.cache
+TEST_SRCS		=	src/parse/parse.c src/builtin/*.c
+TESTS			=	tests/test_tokenizer.c
+TARGET			=	run_tests
 
 vpath %.c $(SRC_DIR) $(SRC_DIR)builtin $(SRC_DIR)parse
 
 all				:	$(NAME)
 
 $(NAME)			:	$(LIBFT) $(OBJS)
-					$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) $(LIBFT) -o $(NAME) $(RLFLAG)
+					$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(RLFLAG)
+
+rt: $(TEST_SRCS) $(TESTS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(TARGET) $(TEST_SRCS) $(TESTS) $(LIBFT) $(LDFLAGS)
 
 $(OBJF)			:	
 					mkdir -p $(OBJ_DIR)
