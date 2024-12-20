@@ -20,8 +20,26 @@
 # define ERROR 2
 # define PATH_MAX 1024
 
+typedef enum {
+	TOKEN_STRING,
+	TOKEN_OPTION,
+	TOKEN_VARIABLE,
+	TOKEN_OPERATOR,
+	TOKEN_REDIRECTION,
+	TOKEN_PIPE,
+	TOKEN_HEREDOC,
+}	e_token_type;
+
+typedef struct s_token {
+	e_token_type	type;
+	char			*value;
+	struct s_token	*next;
+	struct s_token	*prev;
+}	t_token;
+
 typedef struct s_data {
 	t_env	*env;
+	t_token	*tklst;
 	int		last_ret;
 }	t_data;
 

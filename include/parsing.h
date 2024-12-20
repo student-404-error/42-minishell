@@ -15,28 +15,10 @@
 
 # include "builtin.h"
 
-typedef enum {
-	TOKEN_STRING,
-	TOKEN_OPTION,
-	TOKEN_VARIABLE,
-	TOKEN_OPERATOR,
-	TOKEN_REDIRECTION,
-	TOKEN_PIPE,
-	TOKEN_HEREDOC,
-}	e_token_type;
-
-typedef struct s_token {
-	e_token_type	type;
-	char			*value;
-	struct s_token	*next;
-	struct s_token	*prev;
-}	t_token;
-
-
 t_token	*ft_new_token(char *value);
 t_token	*ft_tklast(t_token *tklst);
 void	ft_token_add_back(t_token **tklst, t_token *new);
 void	change_env_vari(t_data *data, t_token **tklst);
-int		count_special_character(t_data *data, char *input);
+t_token	*tokenize(t_data *data, char *input);
 
 #endif // !PARSING.15:33:20
