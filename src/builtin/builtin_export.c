@@ -24,28 +24,28 @@
  *
  *
  * */
-
-void	builtin_export(t_data *data, char *str)
-{
-	t_list	*new_node;
-	t_list	*list;
-	int		idx;
-
-	// export 할 때 [env_name]만 입력하면 생성 x -> error 아님
-	// 이상한 이름 입력들어오면 에러
-	// bash: export: `.': not a valid identifier
-	// export에서 env_name=까지만 있어도 생성 o
-	//
-	new_node = ft_lstnew(str);
-	list = data->env;
-	idx = search_env(data->env, str);
-	if (idx == -1)
-		ft_lstadd_back(&data->env, new_node);
-	else
-	{
-		while (idx--)
-			list = list->next;
-		free(list->str);
-		list->str = ft_strdup(str);
-	}
-}
+//
+// void	builtin_export(t_data *data, char *str)
+// {
+// 	t_list	*new_node;
+// 	t_env	*list;
+// 	int		idx;
+//
+// 	// export 할 때 [env_name]만 입력하면 생성 x -> error 아님
+// 	// 이상한 이름 입력들어오면 에러
+// 	// bash: export: `.': not a valid identifier
+// 	// export에서 env_name=까지만 있어도 생성 o
+// 	//
+// 	new_node = ft_lstnew(str);
+// 	list = data->env;
+// 	idx = search_env(data->env, str);
+// 	if (idx == -1)
+// 		ft_lstadd_back(&data->env, new_node);
+// 	else
+// 	{
+// 		while (idx--)
+// 			list = list->next;
+// 		free(list->str);
+// 		list->str = ft_strdup(str);
+// 	}
+// }
