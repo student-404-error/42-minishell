@@ -7,63 +7,66 @@ MAGENTA		:=	\033[35m
 CYAN		:=	\033[36m
 RESET		:=	\033[0m
 
-SRCS		=	ft_atoi.c	\
-				ft_bzero.c	\
-				ft_calloc.c	\
-				ft_memchr.c	\
-				ft_memcmp.c		\
-				ft_memcpy.c		\
-				ft_memmove.c	\
-				ft_memset.c		\
-				ft_putendl_fd.c	\
-				ft_putstr_fd.c	\
-				ft_putnbr_fd.c	\
-				ft_putchar_fd.c		\
-				ft_strmapi.c	\
-				ft_strcmp.c	\
-				ft_strncmp.c	\
-				ft_strnstr.c	\
-				ft_split.c		\
-				ft_strrchr.c	\
-				ft_free_split.c	\
-				ft_error.c		\
-				ft_strchr.c		\
-				ft_strstr.c		\
-				ft_strdup.c		\
-				ft_strtrim.c	\
-				ft_isalpha.c	\
-				ft_isalnum.c	\
-				ft_isdigit.c		\
-				ft_isascii.c		\
-				ft_isprint.c		\
-				ft_printf.c		\
-				ft_printf_utils.c	\
-				ft_print_unsigned.c	\
-				ft_print_hex.c		\
-				ft_print_ptr.c 		\
-				ft_striteri.c		\
-				ft_substr.c			\
-				ft_strjoin.c		\
-				ft_tolower.c		\
-				ft_toupper.c		\
-				ft_strlcat.c		\
-				ft_strlcpy.c		\
-				ft_itoa.c			\
-				ft_strlen.c			\
-				ft_lstnew.c			\
-				ft_lstadd_back.c	\
-				ft_lstadd_front.c	\
-				ft_lstsize.c		\
-				ft_lstlast.c		\
-				get_next_line.c
+FILES		=		ft_atoi			\
+				ft_bzero 		\
+				ft_calloc  		\
+				ft_memchr 		\
+				ft_memcmp 		\
+				ft_memcpy 		\
+				ft_memmove	 	\
+				ft_memset 		\
+				ft_putendl_fd 		\
+				ft_putstr_fd 		\
+				ft_putnbr_fd 		\
+				ft_putchar_fd 		\
+				ft_strmapi 		\
+				ft_strcmp 		\
+				ft_strncmp 		\
+				ft_strnstr	 	\
+				ft_split 		\
+				ft_strchr 		\
+				ft_free_split	 	\
+				ft_error 		\
+				ft_strrchr 		\
+				ft_strstr 		\
+				ft_strdup 		\
+				ft_strtrim 		\
+				ft_isalpha 		\
+				ft_isalnum 		\
+				ft_isdigit 		\
+				ft_isascii 		\
+				ft_isprint 		\
+				ft_printf 		\
+				ft_printf_utils 	\
+				ft_print_unsigned 	\
+				ft_print_hex 		\
+				ft_print_ptr  		\
+				ft_striteri 		\
+				ft_substr		\
+				ft_strjoin 		\
+				ft_tolower 		\
+				ft_toupper 		\
+				ft_strlcat 		\
+				ft_strlcpy 		\
+				ft_itoa 		\
+				ft_strlen 		\
+				ft_lstnew		\
+				ft_lstadd_back 		\
+				ft_lstadd_front 	\
+				ft_lstsize 		\
+				ft_lstlast 		\
+				get_next_line 
 
 INCLUDES	=	../../include
 CC		=	cc
 
 CFLAGS		=	-Wall -Werror -Wextra -fPIC -I$(INCLUDES)
 
-OBJS		=	${SRCS:.c=.o}
-
+SRC_DIR		=	./
+OBJ_DIR		=	../../obj/
+SRCS		=	$(addprefix $(SRC_DIR), $(addsuffix .c, $(FILES)))
+OBJS		=	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(FILES)))
+OBJF		=	.cache
 NAME		=	libft.a
 
 AR		=	ar
@@ -74,24 +77,24 @@ RM		=	rm -f
 
 # ------------ RULE ------------ #
 
-%.o: %.c
-	@$(CC) -c $(CFLAGS) $< -o $@
+$(OBJF):
+	mkdir -p $(OBJ_DIR)
 
-all		:	$(NAME)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME)		:	$(OBJS)
-			@$(AR) $(ARFLAGS) $(NAME) $(OBJS)
+all: $(NAME)
 
-clean		:
-			@$(RM) $(OBJS)
-			
-fclean		:	clean
-			@$(RM) $(NAME)
+$(NAME): $(OBJS)
+	$(AR) $(ARFLAGS) $(NAME) $(OBJS)
 
-re		:	fclean	\
-			all
+clean:
+	$(RM) $(OBJS)
+	$(RM) -r $(OBJ_DIR)
 
-.PHONY		:	all	\
-			fclean	\
-			clean	\
-			re
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: all fclean clean re
