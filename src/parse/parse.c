@@ -6,7 +6,7 @@
 /*   By: seong-ki <seong-ki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2024/12/30 18:14:47 by seong-ki         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:19:59 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,8 +277,8 @@ t_token*	tokenize(t_data *data, char *input)
 
         	if (state.tklst != NULL && ft_tklast(state.tklst)->type != TOKEN_STRING && ft_tklast(state.tklst)->type != TOKEN_COMMAND)
 			state.after_operator = 1;
-		else if (state.tklst != NULL && ft_tklast(state.tklst)->type != TOEKN_SPACE)
-			ft_tklast(state.tklst)->prev->type // bigyo
+//		else if (state.tklst != NULL && ft_tklast(state.tklst)->type != TOEKN_SPACE)
+//			ft_tklast(state.tklst)->prev->type // bigyo
 		else
 			state.after_operator = 0;
 
