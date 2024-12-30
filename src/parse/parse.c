@@ -6,13 +6,13 @@
 /*   By: seong-ki <seong-ki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2024/10/24 15:39:23 by seong-ki         ###   ########.fr       */
+/*   Updated: 2024/12/30 18:14:47 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-e_token_type check_token_type(char *value, int is_first_token, int after_operator) {
+e_token_type check_token_type(char *value, t_tokenizer *state) {
     // 연산자는 항상 고유한 타입
     if (ft_strcmp(value, "<<") == 0)
         return (TOKEN_HEREDOC);
@@ -22,23 +22,26 @@ e_token_type check_token_type(char *value, int is_first_token, int after_operato
         return (TOKEN_REDIRECTION_APPEND);
     else if (ft_strcmp(value, "|") == 0)
         return (TOKEN_PIPE);
+	else if (ft_strcmp(value, " ") == 0)
+		return (TOKEN_SPACE);
 
     // 첫 번째 토큰 또는 연산자 이후의 토큰은 명령어
-    if (is_first_token || after_operator)
+    if (state->is_first_token || state->after_operator)
         return (TOKEN_COMMAND);
 
     // 기본적으로 일반 문자열
     return (TOKEN_STRING);
 }
 
-t_token	*ft_new_token(char *value)
+t_token	*ft_new_token(char *value, t_tokenizer *state)
 {
 	t_token	*token;
 
 	token = (t_token *) malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);		// malloc 할당 에러
-	token->type = check_token_type(token, value);
+	token->type = check_token_type(value, state);
+	state->is_first_token = 0;
 	token->value = ft_strdup(value); // 여기서 strdup안 쓰고 그냥 value 할당 후 free해도 될 수도.
 	free(value);
 	token->next = NULL;
@@ -76,7 +79,7 @@ void	ft_token_add_back(t_token **tklst, t_token *new)
 		*tklst = new;
 	}
 	new->next = NULL;
-	printf("token: -%s-\ntype : -%s-\n", new->value, new->type);
+	printf("token: -%s- type : -%u-\n", new->value, new->type);
 }
 
 int	ft_dollor_idx(char *s)
@@ -200,205 +203,91 @@ void	change_env_vari(t_data *data, t_token **tklst)
 // 	}
 // }
 
-void	handle_quote_token(char *input, int *idx, int *start, t_token **tklst, char quote)
-{
-	t_token	*token;
+// idx, start, tklst -> state->* change;
+void handle_quote_token(char *input, t_tokenizer *state) {
+    char quote = input[state->idx];  // Current quote character
+    t_token *token;
 
-	// 앞 문자열을 토큰화
-	if (*idx != *start)
-	{
-		token = ft_new_token(ft_substr(input, *start, *idx - *start));
-		ft_token_add_back(tklst, token);
-	}
-	// 따옴표로 묶인 문자열을 처리
-	*start = (*idx)++;
-	while (input[*idx] && input[*idx] != quote)
-		(*idx)++;
-	if (input[*idx] == quote)
-	{
-		token = ft_new_token(ft_substr(input, *start, *idx - *start + 1));
-		ft_token_add_back(tklst, token);
-		*start = (*idx) + 1;
-		(*idx)++;
-	}
-	else
-	{
-		printf("Error: Unclosed quote detected.\n");
-		// 에러 처리
-	}
+    // Tokenize the substring before the quote
+    if (state->idx != state->start) {
+        token = ft_new_token(ft_substr(input, state->start, state->idx - state->start), state);
+        ft_token_add_back(&state->tklst, token);
+    }
+
+    // Process the quoted string
+    state->start = ++state->idx;  // Skip the opening quote
+    while (input[state->idx] && input[state->idx] != quote)
+        state->idx++;
+
+    if (input[state->idx] == quote) {
+        token = ft_new_token(ft_substr(input, state->start - 1, state->idx - state->start + 2), state);
+        ft_token_add_back(&state->tklst, token);
+        state->start = ++state->idx;  // Move past the closing quote
+    } else {
+        printf("Error: Unclosed quote detected.\n");
+        // Handle error appropriately (e.g., set error flag in state or exit)
+    }
 }
 
 t_token*	tokenize(t_data *data, char *input)
 {
-	int	idx;
-	int	start;
-	t_token	*tklst;
+	t_tokenizer	state;
 
-	tklst = NULL;
-	idx = 0;
-	start = 0;
-
-	while (input[idx])
+	state.idx = 0;
+	state.start = 0;
+	state.is_first_token = 1;
+	state.after_operator = 0;
+	state.tklst = NULL;
+	while (input[state.idx])
 	{
 		// 공백 처리
-		if (input[idx] == ' '/* && start != 0 && input[idx + 1] != '\0'*/)
+		if (input[state.idx] == ' '/* && start != 0 && input[idx + 1] != '\0'*/)
 		{
-			if (idx != start)
-				ft_token_add_back(&tklst, ft_new_token(ft_substr(input, start, idx - start)));
-			while (input[idx] == ' ') idx++;
-			ft_token_add_back(&tklst, ft_new_token(ft_strdup(" ")));
-			start = idx;
+			if (state.idx != state.start)
+				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+			while (input[state.idx] == ' ') state.idx++;
+			ft_token_add_back(&state.tklst, ft_new_token(ft_strdup(" "), &state));
+			state.start = state.idx;
 		}
 		// 따옴표 처리
-		else if (input[idx] == '\'' || input[idx] == '\"')
-			handle_quote_token(input, &idx, &start, &tklst, input[idx]);
+		else if (input[state.idx] == '\'' || input[state.idx] == '\"')
+			handle_quote_token(input, &state);
 		// 연속된 특수 문자 처리 (<<, >>)
-		else if (!ft_strncmp(input + idx, "<<", 2) || !ft_strncmp(input + idx, ">>", 2))
+		else if (!ft_strncmp(input + state.idx, "<<", 2) || !ft_strncmp(input + state.idx, ">>", 2))
 		{
-			if (idx != start)
-				ft_token_add_back(&tklst, ft_new_token(ft_substr(input, start, idx - start)));
-			ft_token_add_back(&tklst, ft_new_token(ft_substr(input, idx, 2)));
-			start = (idx += 2);
+			if (state.idx != state.start)
+				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+			ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.idx, 2), &state));
+			state.start = (state.idx += 2);
 		}
 		// 단일 특수 문자 처리 (<, >, |)
-		else if (input[idx] == '<' || input[idx] == '>' || input[idx] == '|')
+		else if (input[state.idx] == '<' || input[state.idx] == '>' || input[state.idx] == '|')
 		{
-			if (idx != start)
-				ft_token_add_back(&tklst, ft_new_token(ft_substr(input, start, idx - start)));
-			ft_token_add_back(&tklst, ft_new_token(ft_substr(input, idx, 1)));
-			start = ++idx;
+			if (state.idx != state.start)
+				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+			ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.idx, 1), &state));
+			state.start = ++state.idx;
 		}
 		// 일반 문자열
 		else
-			idx++;
+			state.idx++;
+		// change is_first_token, after_operator here
+		// 상태 관리: 연산자 후에는 명령어가 와야 함
+		printf("%d %d\n", state.after_operator, state.is_first_token);
+
+        	if (state.tklst != NULL && ft_tklast(state.tklst)->type != TOKEN_STRING && ft_tklast(state.tklst)->type != TOKEN_COMMAND)
+			state.after_operator = 1;
+		else if (state.tklst != NULL && ft_tklast(state.tklst)->type != TOEKN_SPACE)
+			ft_tklast(state.tklst)->prev->type // bigyo
+		else
+			state.after_operator = 0;
 
 	}
-	// 마지막 남은 문자열 처리
-	if (idx != start)
-		ft_token_add_back(&tklst, ft_new_token(ft_substr(input, start, idx - start)));
+    // 마지막 남은 문자열 처리
+    if (state.idx != state.start)
+        ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
 
-	change_env_vari(data, &tklst);
-	return (tklst);
+    // 환경 변수 치환 처리
+    change_env_vari(data, &state.tklst);
+	return (state.tklst);
 }
-//
-// int	count_special_character(t_data *data, char *input)
-// {
-// 	int	idx;
-// 	int	start;
-// 	int len;
-// 	t_token	*token;
-// 	t_token	*tklst;
-//
-// 	tklst = NULL;
-// 	idx = 0;
-// 	start = 0;
-// 	len = (int)ft_strlen(input);
-// 	while (input[idx])
-// 	{
-// 		printf("len-idx-start: %zu-%d-%d\n", ft_strlen(input), idx, start);
-// 		printf("condition: %d\n", input[idx] == '\"' && (idx != 0 && start < len));
-// 		if (input[idx] == ' ' && (idx != 0 && idx != len))
-// 		{
-// 			token = ft_new_token(ft_substr(input, start, idx - start));
-// 			ft_token_add_back(&tklst, token);
-// 			start = idx;
-// 			while (input[idx] == ' ')
-// 				idx++;
-// 			token = ft_new_token(ft_strdup(" "));
-// 			ft_token_add_back(&tklst, token);
-// 			start = idx;
-// 		}
-// 		else if (input[idx] == '\'' && (idx != 0 && start < len))
-// 		{
-// 			token = ft_new_token(ft_substr(input, start, idx - start));
-// 			ft_token_add_back(&tklst, token);
-// 			start = idx;
-// 			while (input[++idx] != '\'')
-// 				continue ;
-// 			token = ft_new_token(ft_substr(input, start, idx - start + 1));
-// 			ft_token_add_back(&tklst, token);
-// 			start = idx + 1;
-// 		}
-// 		else if (input[idx] == '\"' && (idx != 0 && start < len))
-// 		{
-// 			token = ft_new_token(ft_substr(input, start, idx - start));
-// 			ft_token_add_back(&tklst, token);
-// 			start = idx;
-// 			while (input[++idx] != '\"')
-// 				continue ;
-// 			token = ft_new_token(ft_substr(input, start, idx - start + 1));
-// 			ft_token_add_back(&tklst, token);
-// 			start = idx + 1;
-// 		}
-// 		if ((!ft_strncmp(input + idx, "<<", 2) || !ft_strncmp(input + idx, ">>", 2)))
-// 		{
-// 			if (idx != start)
-// 			{
-// 				token = ft_new_token(ft_substr(input, start, idx - start));
-// 				ft_token_add_back(&tklst, token);
-// 			}
-// 			token = ft_new_token(ft_substr(input, idx, 2));
-// 			ft_token_add_back(&tklst, token);
-// 			start = idx + 2;
-// 			idx = idx + 2;
-// 		}
-// 		else if ((!ft_strncmp(input + idx, "<", 1) || !ft_strncmp(input + idx, ">", 1) || !ft_strncmp(input + idx, "|", 1)))
-// 		{
-// 			if (idx != start)
-// 			{
-// 				token = ft_new_token(ft_substr(input, start, idx - start));
-// 				ft_token_add_back(&tklst, token);
-// 			}
-// 			token = ft_new_token(ft_substr(input, idx, 1));
-// 			ft_token_add_back(&tklst, token);
-// 			start = idx + 1;
-// 			idx = idx + 1;
-// 		}
-// 		// else if ((input[idx] == ' ')/*나중에 화이트 스페이스로 변경.*/)
-// 		// {
-// 		// 	if (idx != start)
-// 		// 	{
-// 		// 		token = ft_new_token(ft_substr(input, start, idx - start));
-// 		// 		ft_token_add_back(&tklst, token);
-// 		// 	}
-// 		// 	start = idx + 1;
-// 		// 	idx = idx + 1;
-// 		// }
-// 		else
-// 			idx = idx + 1;
-// 	}
-// 	token = ft_new_token(ft_substr(input, start, idx - start));
-// 	ft_token_add_back(&tklst, token);
-//
-// 	// if (single_flag == 1 || double_flag == 1)
-// 	// 	return (-1);
-//
-// 	change_env_vari(data, &tklst);
-// 	return (1);
-// }
-
-
-//
-// void	read_input(char *input)
-// {
-// 	int	i;
-//
-// 	i = 0;
-// 	while (input[i])
-// 	{
-// 		printf("%c\n", input[i]);
-// 		if (strncmp(input + i, "<<", 2) == 0)
-// 			printf("heredoc!!\n");
-// 		else if (strncmp(input + i, ">>", 2) == 0)
-// 			printf("redirection!!\n");
-// 		else if (input[i] == '>' || input[i] == '<')
-// 			printf("redirection!!\n");
-// 		else if (input[i] == '|')
-// 			printf("pipe!!\n");
-// 		else if (input[i] == '\'' || input[i] == '\"')
-// 			printf("qoute!!\n");
-// 		i++;
-// 	}
-// 	return ;
-// }
-
