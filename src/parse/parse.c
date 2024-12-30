@@ -12,6 +12,25 @@
 
 #include "parsing.h"
 
+e_token_type check_token_type(char *value, int is_first_token, int after_operator) {
+    // 연산자는 항상 고유한 타입
+    if (ft_strcmp(value, "<<") == 0)
+        return (TOKEN_HEREDOC);
+    else if (ft_strcmp(value, "<") == 0 || ft_strcmp(value, ">") == 0)
+        return (TOKEN_REDIRECTION);
+    else if (ft_strcmp(value, ">>") == 0)
+        return (TOKEN_REDIRECTION_APPEND);
+    else if (ft_strcmp(value, "|") == 0)
+        return (TOKEN_PIPE);
+
+    // 첫 번째 토큰 또는 연산자 이후의 토큰은 명령어
+    if (is_first_token || after_operator)
+        return (TOKEN_COMMAND);
+
+    // 기본적으로 일반 문자열
+    return (TOKEN_STRING);
+}
+
 t_token	*ft_new_token(char *value)
 {
 	t_token	*token;
@@ -19,9 +38,8 @@ t_token	*ft_new_token(char *value)
 	token = (t_token *) malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);		// malloc 할당 에러
-	token->type = TOKEN_STRING;// enum으로 잘 적용. 아마 if else?
-	// check_token_type(token, value);
-	token->value = ft_strdup(value);//ft_strdup(str);
+	token->type = check_token_type(token, value);
+	token->value = ft_strdup(value); // 여기서 strdup안 쓰고 그냥 value 할당 후 free해도 될 수도.
 	free(value);
 	token->next = NULL;
 	token->prev = NULL;
@@ -58,7 +76,7 @@ void	ft_token_add_back(t_token **tklst, t_token *new)
 		*tklst = new;
 	}
 	new->next = NULL;
-	printf("token: -%s-\n", new->value);
+	printf("token: -%s-\ntype : -%s-\n", new->value, new->type);
 }
 
 int	ft_dollor_idx(char *s)
@@ -165,22 +183,22 @@ void	change_env_vari(t_data *data, t_token **tklst)
 // 4. AST 구현
 // 파싱 끝~
 // test 생성
-void	remove_quote(t_token **tklst)
-{
-	t_token	*inst_lst;
-
-	inst_lst = *tklst;
-	while (inst_lst)
-	{
-		if (inst_lst->token == TOKEN_STRING)
-		{
-			// new token->value(str) malloc -> ft_strtrim
-			// current token->value(str) free -> free()
-			// token change
-		}
-		inst_lst = inst_lst->next;
-	}
-}
+// void	remove_quote(t_token **tklst)
+// {
+// 	t_token	*inst_lst;
+//
+// 	inst_lst = *tklst;
+// 	while (inst_lst)
+// 	{
+// 		if (inst_lst->token == TOKEN_STRING)
+// 		{
+// 			// new token->value(str) malloc -> ft_strtrim
+// 			// current token->value(str) free -> free()
+// 			// token change
+// 		}
+// 		inst_lst = inst_lst->next;
+// 	}
+// }
 
 void	handle_quote_token(char *input, int *idx, int *start, t_token **tklst, char quote)
 {
@@ -253,6 +271,7 @@ t_token*	tokenize(t_data *data, char *input)
 		// 일반 문자열
 		else
 			idx++;
+
 	}
 	// 마지막 남은 문자열 처리
 	if (idx != start)
