@@ -26,7 +26,11 @@ e_token_type check_token_type(char *value, t_tokenizer *state) {
 		return (TOKEN_SPACE);
 
     // 첫 번째 토큰 또는 연산자 이후의 토큰은 명령어
-    if (state->is_first_token || state->after_operator)
+	if (state->after_operator == 3)
+		return (TOKEN_EOF);
+	if (state->after_operator == 2)
+		return (TOKEN_FILENAME);
+    if (state->is_first_token || state->after_operator == 1)
         return (TOKEN_COMMAND);
 
     // 기본적으로 일반 문자열
@@ -229,6 +233,34 @@ void handle_quote_token(char *input, t_tokenizer *state) {
     }
 }
 
+void	check_state(t_tokenizer *state)
+{
+	t_token *last_token;
+
+	if (state->tklst == NULL)
+		return ;
+	last_token = ft_tklast(state->tklst);
+	if (last_token->type == TOKEN_SPACE && state->is_first_token == 0)
+	{
+		if (last_token->prev == NULL || (last_token->prev->type == 4 || last_token->prev->type == 5))
+			state->after_operator = 1; // bigyo
+		else if (last_token->prev == NULL || last_token->prev->type == 6 || last_token->prev->type == 7)
+			state->after_operator = 2;
+		else if (last_token->prev == NULL || last_token->prev->type == 8)
+			state->after_operator = 3;
+		else
+			state->after_operator = 0;
+	}
+	else if (last_token->type == 4 || last_token->type == 5) // STRING or COMMAND
+		state->after_operator = 1;
+	else if (last_token->type == 6 || last_token->type == 7)
+		state->after_operator = 2;
+	else if (last_token->type == 8)
+		state->after_operator = 3;							// TOKEN_EOF
+	else
+		state->after_operator = 0;
+}
+
 t_token*	tokenize(t_data *data, char *input)
 {
 	t_tokenizer	state;
@@ -241,7 +273,7 @@ t_token*	tokenize(t_data *data, char *input)
 	while (input[state.idx])
 	{
 		// 공백 처리
-		if (input[state.idx] == ' '/* && start != 0 && input[idx + 1] != '\0'*/)
+		if (input[state.idx] == ' '/* && input[idx + 1] != '\0'*/)
 		{
 			if (state.idx != state.start)
 				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
@@ -273,15 +305,7 @@ t_token*	tokenize(t_data *data, char *input)
 			state.idx++;
 		// change is_first_token, after_operator here
 		// 상태 관리: 연산자 후에는 명령어가 와야 함
-		printf("%d %d\n", state.after_operator, state.is_first_token);
-
-        	if (state.tklst != NULL && ft_tklast(state.tklst)->type != TOKEN_STRING && ft_tklast(state.tklst)->type != TOKEN_COMMAND)
-			state.after_operator = 1;
-//		else if (state.tklst != NULL && ft_tklast(state.tklst)->type != TOEKN_SPACE)
-//			ft_tklast(state.tklst)->prev->type // bigyo
-		else
-			state.after_operator = 0;
-
+		check_state(&state);
 	}
     // 마지막 남은 문자열 처리
     if (state.idx != state.start)
