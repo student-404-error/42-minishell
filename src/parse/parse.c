@@ -190,6 +190,7 @@ void	change_env_vari(t_data *data, t_token **tklst)
 // 4. AST 구현
 // 파싱 끝~
 // test 생성
+
 // void	remove_quote(t_token **tklst)
 // {
 // 	t_token	*inst_lst;
@@ -197,8 +198,13 @@ void	change_env_vari(t_data *data, t_token **tklst)
 // 	inst_lst = *tklst;
 // 	while (inst_lst)
 // 	{
-// 		if (inst_lst->token == TOKEN_STRING)
+// 		if (inst_lst->type < 2)
 // 		{
+// 			if (inst_lst->value[0] == '\'' || inst_lst->value[0] == '\"')	
+// 			{
+// 				// free(inst_lst->value);
+// 				// inst_lst->value = ft_strtrim();
+// 			}
 // 			// new token->value(str) malloc -> ft_strtrim
 // 			// current token->value(str) free -> free()
 // 			// token change
