@@ -45,6 +45,7 @@ t_token	*ft_new_token(char *value, t_tokenizer *state)
 	if (!token)
 		return (NULL);		// malloc 할당 에러
 	token->type = check_token_type(value, state);
+	token->is_env_vari = 0;
 	state->is_first_token = 0;
 	token->value = ft_strdup(value); // 여기서 strdup안 쓰고 그냥 value 할당 후 free해도 될 수도.
 	free(value);
@@ -184,12 +185,29 @@ void	change_env_vari(t_data *data, t_token **tklst)
 
 
 // to-do
-// 1. 양 끝에 있는 쿼트 제거 함수 구현
-// 2. enum TOKEN 정해주는 함수 구현
-// 3. 재귀 하향 파싱 구현
-// 4. AST 구현
-// 파싱 끝~
-// test 생성
+// 1. 양 끝에 있는 쿼트 제거 함수 구현 ->> 구현 완료.
+// 2. enum TOKEN 정해주는 함수 구현    ->> 구현 완료.
+// 2.5 치환해야하는 환경 변수인지 아닌지 구분하는 변수를 넣어둬야함.
+// 일단 지금 어케 나누지? 와우 이거 또 복잡해지나?
+// 아니 근데 일단 그냥
+// 작은 따옴표 안에 들어있으면 무조건 환경변수 몇개든간에 1이고
+// 그냥 환경변수만 따로 있으면 그냥 1이고
+// 큰 따옴표(문자열취급)만 0이면 되는거고.
+// 나머지, 환경변수가 아닌 것들은 바꾸지 않으면 되는거니까
+// 그러면 그냥 모든 토큰 반복하면서 (스페이스 건너뜀)
+// 아니면 이렇게 하지말고 그냥 enum type을 새로 하나 만들어서
+// TOKEN_ENV_VARI로 만든다음에 위와 동일하게 1인경우 type설정만 해주고
+// 실행 파트일 때 그냥 type만 보고 변경하든 말든 하면 될 듯 한데?
+//
+// 아마 enum타입을 새로 만들 듯?
+//
+// 추가 구현 함수
+// 1. 환경변수 치환해야하는지 검사하는 함수 구현
+// 2. 에러 검사 함수
+// 3. free함수
+// 4. 재귀 하향 파싱 함수
+// 5. AST구현 함수
+//
 
 // void	remove_quote(t_token **tklst)
 // {
@@ -317,7 +335,7 @@ t_token*	tokenize(t_data *data, char *input)
     if (state.idx != state.start)
         ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
 
-    // 환경 변수 치환 처리
-    change_env_vari(data, &state.tklst);
+    // 환경 변수 치환 처리 -> 실행 파트에서 치환 하는 걸로.
+	// change_env_vari(data, &state.tklst);
 	return (state.tklst);
 }
