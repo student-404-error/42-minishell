@@ -31,6 +31,7 @@ typedef enum {
 	TOKEN_REDIRECTION_APPEND,
 	TOKEN_HEREDOC,
 	TOKEN_EOF,
+	TOKEN_ENV_VARI,
 }	e_token_type;
 
 typedef struct s_token {

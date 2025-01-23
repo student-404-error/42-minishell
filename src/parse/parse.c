@@ -12,6 +12,20 @@
 
 #include "parsing.h"
 
+int	is_env_variable(char *value)
+{
+	// If value is not env_variable, It will return 0.
+	// If value begin with single quote -> return 0.
+	// And if doesn't exist dollor sign, return 0.
+	if (*value == '\'')
+		return (0);
+	// Else check all characters and if dollor is found, return 1.
+	// If value is env_variable, It will return 1.
+	if (ft_strchr(value, '$') != NULL) // If return NULL -> can't find
+		return (1);
+	return (0);
+}
+
 e_token_type check_token_type(char *value, t_tokenizer *state) {
     // 연산자는 항상 고유한 타입
     if (ft_strcmp(value, "<<") == 0)
@@ -26,6 +40,8 @@ e_token_type check_token_type(char *value, t_tokenizer *state) {
 		return (TOKEN_SPACE);
 
     // 첫 번째 토큰 또는 연산자 이후의 토큰은 명령어
+	if (is_env_variable(value))
+		return (TOKEN_ENV_VARI);
 	if (state->after_operator == 3)
 		return (TOKEN_EOF);
 	if (state->after_operator == 2)
@@ -45,7 +61,6 @@ t_token	*ft_new_token(char *value, t_tokenizer *state)
 	if (!token)
 		return (NULL);		// malloc 할당 에러
 	token->type = check_token_type(value, state);
-	token->is_env_vari = 0;
 	state->is_first_token = 0;
 	token->value = ft_strdup(value); // 여기서 strdup안 쓰고 그냥 value 할당 후 free해도 될 수도.
 	free(value);
@@ -190,9 +205,9 @@ void	change_env_vari(t_data *data, t_token **tklst)
 // 2.5 치환해야하는 환경 변수인지 아닌지 구분하는 변수를 넣어둬야함.
 // 일단 지금 어케 나누지? 와우 이거 또 복잡해지나?
 // 아니 근데 일단 그냥
-// 작은 따옴표 안에 들어있으면 무조건 환경변수 몇개든간에 1이고
+// 큰 따옴표 안에 들어있으면 무조건 환경변수 몇개든간에 1이고
 // 그냥 환경변수만 따로 있으면 그냥 1이고
-// 큰 따옴표(문자열취급)만 0이면 되는거고.
+// 작은 따옴표(문자열취급)만 0이면 되는거고.
 // 나머지, 환경변수가 아닌 것들은 바꾸지 않으면 되는거니까
 // 그러면 그냥 모든 토큰 반복하면서 (스페이스 건너뜀)
 // 아니면 이렇게 하지말고 그냥 enum type을 새로 하나 만들어서
@@ -268,7 +283,7 @@ void	check_state(t_tokenizer *state)
 	{
 		if (last_token->prev == NULL || (last_token->prev->type == 4 || last_token->prev->type == 5))
 			state->after_operator = 1; // bigyo
-		else if (last_token->prev == NULL || last_token->prev->type == 6 || last_token->prev->type == 7)
+		else if (last_token->prev == NULL || last_token->prev->type == 6 || last_token->prev->type == 7) // last_token->prev == NULL은 굳이 여기선 비교 안해도 될 듯
 			state->after_operator = 2;
 		else if (last_token->prev == NULL || last_token->prev->type == 8)
 			state->after_operator = 3;
@@ -334,7 +349,7 @@ t_token*	tokenize(t_data *data, char *input)
     // 마지막 남은 문자열 처리
     if (state.idx != state.start)
         ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
-
+	printf("nothing_ %d", data->last_ret);
     // 환경 변수 치환 처리 -> 실행 파트에서 치환 하는 걸로.
 	// change_env_vari(data, &state.tklst);
 	return (state.tklst);
