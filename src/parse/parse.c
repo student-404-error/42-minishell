@@ -217,34 +217,50 @@ void	change_env_vari(t_data *data, t_token **tklst)
 // 아마 enum타입을 새로 만들 듯?
 //
 // 추가 구현 함수
-// 1. 환경변수 치환해야하는지 검사하는 함수 구현
+// 1. 환경변수 치환해야하는지 검사하는 함수 구현 완료
+//
 // 2. 에러 검사 함수
 // 3. free함수
 // 4. 재귀 하향 파싱 함수
 // 5. AST구현 함수
 //
 
-// void	remove_quote(t_token **tklst)
-// {
-// 	t_token	*inst_lst;
-//
-// 	inst_lst = *tklst;
-// 	while (inst_lst)
-// 	{
-// 		if (inst_lst->type < 2)
-// 		{
-// 			if (inst_lst->value[0] == '\'' || inst_lst->value[0] == '\"')	
-// 			{
-// 				// free(inst_lst->value);
-// 				// inst_lst->value = ft_strtrim();
-// 			}
-// 			// new token->value(str) malloc -> ft_strtrim
-// 			// current token->value(str) free -> free()
-// 			// token change
-// 		}
-// 		inst_lst = inst_lst->next;
-// 	}
-// }
+/*
+ * 모든 토큰 반복하면서 '," 제거하기
+ * 제거 한 후
+ * 모든 토큰 반복하면서 커맨드, 스트링 이어붙이기
+ * 이어 붙인 후
+ * 모든 토큰 반복하면서 공백 제거? ** 미정
+ *
+ * ->
+ * 에러 검사.
+ *
+ *
+ * 
+ */
+
+
+void	remove_quote(t_token **tklst)
+{
+	t_token	*inst_lst;
+	char	*new_value;
+
+	inst_lst = *tklst;
+	while (inst_lst)
+	{
+		if (inst_lst->type < 3)
+		{
+			if (inst_lst->value[0] == '\'' || inst_lst->value[0] == '\"')	
+			{
+				new_value = ft_substr(inst_lst->value, 1, ft_strlen(inst_lst->value) - 2);
+				free(inst_lst->value);
+				inst_lst->value = new_value;
+			}
+			printf("remove_quote: %s\n", inst_lst->value);
+		}
+		inst_lst = inst_lst->next;
+	}
+}
 
 // idx, start, tklst -> state->* change;
 void handle_quote_token(char *input, t_tokenizer *state) {
@@ -324,7 +340,7 @@ t_token*	tokenize(t_data *data, char *input)
 		else if (input[state.idx] == '\'' || input[state.idx] == '\"')
 			handle_quote_token(input, &state);
 		// 연속된 특수 문자 처리 (<<, >>)
-		else if (!ft_strncmp(input + state.idx, "<<", 2) || !ft_strncmp(input + state.idx, ">>", 2))
+		else if (!ft_strncmp(input + state.idx, "<<", 2) || !ft_strncmp(input + state.idx, ">>", 2)) // &&, || 추가하기
 		{
 			if (state.idx != state.start)
 				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
@@ -349,8 +365,9 @@ t_token*	tokenize(t_data *data, char *input)
     // 마지막 남은 문자열 처리
     if (state.idx != state.start)
         ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
-	printf("nothing_ %d", data->last_ret);
+	remove_quote(&state.tklst);
     // 환경 변수 치환 처리 -> 실행 파트에서 치환 하는 걸로.
 	// change_env_vari(data, &state.tklst);
+	printf("%d\n", data->last_ret);
 	return (state.tklst);
 }
