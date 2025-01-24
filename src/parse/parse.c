@@ -6,7 +6,7 @@
 /*   By: seong-ki <seong-ki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2024/12/30 18:19:59 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:39:54 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,31 +28,31 @@ int	is_env_variable(char *value)
 
 e_token_type check_token_type(char *value, t_tokenizer *state)
 {
-    if (ft_strcmp(value, "<<") == 0)
-        return (TOKEN_HEREDOC);
-    else if (ft_strcmp(value, "<") == 0 || ft_strcmp(value, ">") == 0)
-        return (TOKEN_REDIRECTION);
-    else if (ft_strcmp(value, "&&") == 0 || ft_strcmp(value, "||") == 0)
-        return (TOKEN_OPERATOR);
-    else if (ft_strcmp(value, ">>") == 0)
-        return (TOKEN_REDIRECTION_APPEND);
-    else if (ft_strcmp(value, "|") == 0)
-        return (TOKEN_PIPE);
+	if (ft_strcmp(value, "<<") == 0)
+		return (TOKEN_HEREDOC);
+	else if (ft_strcmp(value, "<") == 0 || ft_strcmp(value, ">") == 0)
+		return (TOKEN_REDIRECTION);
+	else if (ft_strcmp(value, "&&") == 0 || ft_strcmp(value, "||") == 0)
+		return (TOKEN_OPERATOR);
+	else if (ft_strcmp(value, ">>") == 0)
+		return (TOKEN_REDIRECTION_APPEND);
+	else if (ft_strcmp(value, "|") == 0)
+		return (TOKEN_PIPE);
 	else if (ft_strcmp(value, " ") == 0)
 		return (TOKEN_SPACE);
 
-    // 첫 번째 토큰 또는 연산자 이후의 토큰은 명령어
+	// 첫 번째 토큰 또는 연산자 이후의 토큰은 명령어
 	if (is_env_variable(value))
 		return (TOKEN_ENV_VARI);
 	if (state->after_operator == 3)
 		return (TOKEN_EOF);
 	if (state->after_operator == 2)
 		return (TOKEN_FILENAME);
-    if (state->is_first_token || state->after_operator == 1)
-        return (TOKEN_COMMAND);
+	if (state->is_first_token || state->after_operator == 1)
+		return (TOKEN_COMMAND);
 
-    // 기본적으로 일반 문자열
-    return (TOKEN_STRING);
+	// 기본적으로 일반 문자열
+	return (TOKEN_STRING);
 }
 
 t_token	*ft_new_token(char *value, t_tokenizer *state)
@@ -243,21 +243,56 @@ void	change_env_vari(t_data *data, t_token **tklst)
 
 // 공백 토큰 제거를 먼저 하느냐. 아니면 나중에 하느냐 아예 안 하느냐.
 
+t_token	*ft_print_tokens(t_token *tklst)
+{
+	t_token	*list_ptr;
+
+	if (!tklst)
+		return (NULL);
+	list_ptr = tklst;
+	while (list_ptr)
+	{
+		printf("lexing: token: %s | type: %d\n", list_ptr->value, list_ptr->type);
+		list_ptr = list_ptr->next;
+	}
+	return (list_ptr);
+}
+
 void	join_cmd_str(t_token **tklst)
 {
-	t_token	*inst_lst;
+	t_token	*now_token;
+	t_token	*prev_token;
+	char	*new_str;
 
-	inst_lst = *tklst;
-	while (inst_lst)
+	now_token = (*tklst)->next;
+	if (now_token != NULL)
+		prev_token = now_token->prev;
+	else
+		prev_token = NULL;
+	while (now_token)
 	{
-		if (inst_lst->type < 3)
+		if (prev_token && prev_token->type < 3 && now_token->type < 3)
 		{
-			// 다음 토큰을 가져와서 지금 토큰의 value와 이어줌.
-			// 다음 토큰을 삭제함.
-			// 다음 토큰 삭제 -> 1. value free
+			new_str = ft_strjoin(prev_token->value, now_token->value);
+			if (prev_token->prev == NULL)
+			{
+				*tklst = now_token;
+				now_token->prev = NULL;
+			}
+			else
+			{
+				prev_token->prev->next = now_token;
+				now_token->prev = prev_token->prev;
+			}
+			free(prev_token->value);
+			now_token->type = prev_token->type; 
+			free(prev_token);
+			free(now_token->value);
+			now_token->value = new_str;
 		}
+		prev_token = now_token;
+		now_token = now_token->next;
 	}
-	return ;
 }
 
 void	remove_quote(t_token **tklst)
@@ -283,34 +318,36 @@ void	remove_quote(t_token **tklst)
 }
 
 // idx, start, tklst -> state->* change;
-void handle_quote_token(char *input, t_tokenizer *state) {
-    char quote = input[state->idx];  // Current quote character
-    t_token *token;
+void	handle_quote_token(char *input, t_tokenizer *state)
+{
+	char	quote;
+	t_token	*token;
 
-    // Tokenize the substring before the quote
-    if (state->idx != state->start) {
-        token = ft_new_token(ft_substr(input, state->start, state->idx - state->start), state);
-        ft_token_add_back(&state->tklst, token);
-    }
+	quote = input[state->idx];  // Current quote character
+	if (state->idx != state->start) {
+		token = ft_new_token(ft_substr(input, state->start, state->idx - state->start), state);
+	ft_token_add_back(&state->tklst, token);
+	}
 
-    // Process the quoted string
-    state->start = ++state->idx;  // Skip the opening quote
-    while (input[state->idx] && input[state->idx] != quote)
-        state->idx++;
+	state->start = ++state->idx;  // Skip the opening quote
+	while (input[state->idx] && input[state->idx] != quote)
+	state->idx++;
 
-    if (input[state->idx] == quote) {
-        token = ft_new_token(ft_substr(input, state->start - 1, state->idx - state->start + 2), state);
-        ft_token_add_back(&state->tklst, token);
-        state->start = ++state->idx;  // Move past the closing quote
-    } else {
-        printf("Error: Unclosed quote detected.\n");
-        // Handle error appropriately (e.g., set error flag in state or exit)
-    }
+	if (input[state->idx] == quote)
+	{
+		token = ft_new_token(ft_substr(input, state->start - 1, state->idx - state->start + 2), state);
+		ft_token_add_back(&state->tklst, token);
+		state->start = ++state->idx;  // Move past the closing quote
+	}
+	else
+	{
+		printf("Error: Unclosed quote detected.\n");
+	}
 }
 
 void	check_state(t_tokenizer *state)
 {
-	t_token *last_token;
+	t_token	*last_token;
 
 	if (state->tklst == NULL)
 		return ;
@@ -383,9 +420,13 @@ t_token*	tokenize(t_data *data, char *input)
 		check_state(&state);
 	}
     // 마지막 남은 문자열 처리
-    if (state.idx != state.start)
-        ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+	if (state.idx != state.start)
+	{
+	ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+	}
 	remove_quote(&state.tklst);
+	join_cmd_str(&state.tklst);
+	ft_print_tokens(state.tklst);
     // 환경 변수 치환 처리 -> 실행 파트에서 치환 하는 걸로.
 	// change_env_vari(data, &state.tklst);
 	printf("%d\n", data->last_ret);
