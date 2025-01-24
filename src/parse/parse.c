@@ -26,12 +26,14 @@ int	is_env_variable(char *value)
 	return (0);
 }
 
-e_token_type check_token_type(char *value, t_tokenizer *state) {
-    // 연산자는 항상 고유한 타입
+e_token_type check_token_type(char *value, t_tokenizer *state)
+{
     if (ft_strcmp(value, "<<") == 0)
         return (TOKEN_HEREDOC);
     else if (ft_strcmp(value, "<") == 0 || ft_strcmp(value, ">") == 0)
         return (TOKEN_REDIRECTION);
+    else if (ft_strcmp(value, "&&") == 0 || ft_strcmp(value, "||") == 0)
+        return (TOKEN_OPERATOR);
     else if (ft_strcmp(value, ">>") == 0)
         return (TOKEN_REDIRECTION_APPEND);
     else if (ft_strcmp(value, "|") == 0)
@@ -226,7 +228,7 @@ void	change_env_vari(t_data *data, t_token **tklst)
 //
 
 /*
- * 모든 토큰 반복하면서 '," 제거하기
+ * [x]모든 토큰 반복하면서 '," 제거하기
  * 제거 한 후
  * 모든 토큰 반복하면서 커맨드, 스트링 이어붙이기
  * 이어 붙인 후
@@ -239,6 +241,24 @@ void	change_env_vari(t_data *data, t_token **tklst)
  * 
  */
 
+// 공백 토큰 제거를 먼저 하느냐. 아니면 나중에 하느냐 아예 안 하느냐.
+
+void	join_cmd_str(t_token **tklst)
+{
+	t_token	*inst_lst;
+
+	inst_lst = *tklst;
+	while (inst_lst)
+	{
+		if (inst_lst->type < 3)
+		{
+			// 다음 토큰을 가져와서 지금 토큰의 value와 이어줌.
+			// 다음 토큰을 삭제함.
+			// 다음 토큰 삭제 -> 1. value free
+		}
+	}
+	return ;
+}
 
 void	remove_quote(t_token **tklst)
 {
@@ -340,7 +360,7 @@ t_token*	tokenize(t_data *data, char *input)
 		else if (input[state.idx] == '\'' || input[state.idx] == '\"')
 			handle_quote_token(input, &state);
 		// 연속된 특수 문자 처리 (<<, >>)
-		else if (!ft_strncmp(input + state.idx, "<<", 2) || !ft_strncmp(input + state.idx, ">>", 2)) // &&, || 추가하기
+		else if (!ft_strncmp(input + state.idx, "<<", 2) || !ft_strncmp(input + state.idx, ">>", 2) || !ft_strncmp(input + state.idx, "&&", 2) || !ft_strncmp(input + state.idx, "||", 2)) // &&, || 추가하기
 		{
 			if (state.idx != state.start)
 				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
