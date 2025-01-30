@@ -26,6 +26,81 @@ int	is_env_variable(char *value)
 	return (0);
 }
 
+void check_state_after_space(t_tokenizer *state, t_token *last_token)
+{
+	if (last_token->prev == NULL || (last_token->prev->type == TOKEN_PIPE))
+		state->after_operator = 1; // Command expected
+	else if (last_token->prev->type == TOKEN_REDIRECTION_IN ||
+			 last_token->prev->type == TOKEN_REDIRECTION_OUT ||
+			 last_token->prev->type == TOKEN_REDIRECTION_APPEND)
+		state->after_operator = 2; // Filename expected
+	else if (last_token->prev->type == TOKEN_HEREDOC)
+		state->after_operator = 3; // EOF expected
+	else
+		state->after_operator = 0; // No special state
+}
+
+void check_state(t_tokenizer *state)
+{
+	t_token *last_token;
+
+	if (state->tklst == NULL)
+		return ;
+
+	last_token = ft_tklast(state->tklst);
+
+	if (last_token->type == TOKEN_SPACE && state->is_first_token == 0)
+		check_state_after_space(state, last_token);
+	else if (last_token->type == TOKEN_PIPE)
+		state->after_operator = 1;
+	else if (last_token->type == TOKEN_REDIRECTION_IN ||
+			 last_token->type == TOKEN_REDIRECTION_OUT ||
+			 last_token->type == TOKEN_REDIRECTION_APPEND)
+		state->after_operator = 2;
+	else if (last_token->type == TOKEN_HEREDOC)
+		state->after_operator = 3;
+	else
+		state->after_operator = 0;
+}
+
+e_token_type check_token_directly(char *value)
+{
+	if (ft_strcmp(value, "<<") == 0)
+		return (TOKEN_HEREDOC);
+	else if (ft_strcmp(value, "<") == 0)
+		return (TOKEN_REDIRECTION_IN);
+	else if (ft_strcmp(value, ">") == 0)
+		return (TOKEN_REDIRECTION_OUT);
+	else if (ft_strcmp(value, ">>") == 0)
+		return (TOKEN_REDIRECTION_APPEND);
+	else if (ft_strcmp(value, "|") == 0)
+		return (TOKEN_PIPE);
+	else if (ft_strcmp(value, " ") == 0)
+		return (TOKEN_SPACE);
+	else
+		return (TOKEN_UNKNOWN); // 안전한 처리
+}
+
+e_token_type check_token_type(char *value, t_tokenizer *state)
+{
+	e_token_type direct_type = check_token_directly(value);
+	if (direct_type != TOKEN_UNKNOWN)
+		return (direct_type);
+
+	// Handle dynamic or state-dependent tokens
+	if (is_env_variable(value))
+		return (TOKEN_ENV_VARI);
+	else if (state->after_operator == 3)
+		return (TOKEN_EOF);
+	else if (state->after_operator == 2)
+		return (TOKEN_FILENAME);
+	else if (state->is_first_token || state->after_operator == 1)
+		return (TOKEN_COMMAND);
+	else
+		return (TOKEN_STRING);
+}
+
+/*
 e_token_type check_token_type(char *value, t_tokenizer *state)
 {
 	if (ft_strcmp(value, "<<") == 0)
@@ -53,7 +128,7 @@ e_token_type check_token_type(char *value, t_tokenizer *state)
 
 	// 기본적으로 일반 문자열
 	return (TOKEN_STRING);
-}
+}*/
 
 t_token	*ft_new_token(char *value, t_tokenizer *state)
 {
@@ -250,11 +325,13 @@ t_token	*ft_print_tokens(t_token *tklst)
 	if (!tklst)
 		return (NULL);
 	list_ptr = tklst;
+	printf("\n\n===========RESULT===========")
 	while (list_ptr)
 	{
 		printf("lexing: token: %s | type: %d\n", list_ptr->value, list_ptr->type);
 		list_ptr = list_ptr->next;
 	}
+	printf("\n\n");
 	return (list_ptr);
 }
 
@@ -344,7 +421,7 @@ void	handle_quote_token(char *input, t_tokenizer *state)
 		printf("Error: Unclosed quote detected.\n");
 	}
 }
-
+/*
 void	check_state(t_tokenizer *state)
 {
 	t_token	*last_token;
@@ -354,11 +431,11 @@ void	check_state(t_tokenizer *state)
 	last_token = ft_tklast(state->tklst);
 	if (last_token->type == TOKEN_SPACE && state->is_first_token == 0)
 	{
-		if (last_token->prev == NULL || (last_token->prev->type == 4 || last_token->prev->type == 5))
+		if (last_token->prev == NULL || (last_token->prev->type >= 4 || last_token->prev->type <= 6))
 			state->after_operator = 1; // bigyo
-		else if (last_token->prev == NULL || last_token->prev->type == 6 || last_token->prev->type == 7) // last_token->prev == NULL은 굳이 여기선 비교 안해도 될 듯
+		else if (last_token->prev == NULL || last_token->prev->type >= 7 || last_token->prev->type <= 9) // last_token->prev == NULL은 굳이 여기선 비교 안해도 될 듯
 			state->after_operator = 2;
-		else if (last_token->prev == NULL || last_token->prev->type == 8)
+		else if (last_token->prev == NULL || last_token->prev->type == 10)
 			state->after_operator = 3;
 		else
 			state->after_operator = 0;
@@ -372,7 +449,7 @@ void	check_state(t_tokenizer *state)
 	else
 		state->after_operator = 0;
 }
-
+*/
 t_token*	tokenize(t_data *data, char *input)
 {
 	t_tokenizer	state;
@@ -421,13 +498,17 @@ t_token*	tokenize(t_data *data, char *input)
 	}
     // 마지막 남은 문자열 처리
 	if (state.idx != state.start)
-	{
-	ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
-	}
+		ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
 	remove_quote(&state.tklst);
 	join_cmd_str(&state.tklst);
 	ft_print_tokens(state.tklst);
     // 환경 변수 치환 처리 -> 실행 파트에서 치환 하는 걸로.
+	// 환경변수 치환 처리 실행파트에서 하려고 했는데그냥 파싱에서 하고 넘겨도 될 듯 함
+	//
+	// 보너스파트 안 할거면 그냥 실행에서 하든지 파싱파트에서 하든지 아무상관없을듯
+	// 보너스파트 안할거니까 그냥 넘기기.
+	// 바로 ast만들어서 넘겨주기
+	//
 	// change_env_vari(data, &state.tklst);
 	printf("%d\n", data->last_ret);
 	return (state.tklst);
