@@ -141,6 +141,7 @@ t_token	*ft_new_token(char *value, t_tokenizer *state)
 	state->is_first_token = 0;
 	token->value = ft_strdup(value); // 여기서 strdup안 쓰고 그냥 value 할당 후 free해도 될 수도.
 	free(value);
+	// ft_strdup 안해도 됨.
 	token->next = NULL;
 	token->prev = NULL;
 	return (token);
@@ -176,7 +177,6 @@ void	ft_token_add_back(t_token **tklst, t_token *new)
 		*tklst = new;
 	}
 	new->next = NULL;
-	printf("token: -%s- type : -%u-\n", new->value, new->type);
 }
 
 int	ft_dollor_idx(char *s)
@@ -199,7 +199,7 @@ int	ft_dollor_idx(char *s)
 	return (-1);
 }
 
-char	*fine_env_key(char *str)
+char	*find_env_key(char *str)
 {
 	int		len;
 	char	*env_name;
@@ -224,8 +224,6 @@ char	*get_env_value(t_data *data, char *key)
 		if (ft_strcmp(env->key, key) == 0)
 			return (ft_strdup(env->value));
 			// return (env->key + (ft_strlen(key) + 1)); //이렇게 되면 반환값이 메모리가 어떻게 되는건지 모르겠음.
-		// 이게 malloc이 되어있는건지 아니면 어떻게 메모리 릭이 안나는건지 너무 애매함.
-		// 메모리 릭 안나면 너무 사기같은데 ...
 		env = env->next;
 	}
 	return (ft_strdup(""));
@@ -241,6 +239,11 @@ void	change_env_vari(t_data *data, t_token **tklst)
 	inst_lst = *tklst;
 	while (inst_lst)
 	{
+		// "$" <- 이 입력이 들어오면 그냥 "$"가 되어야함. 
+		// 지금 내 코드는 맨 앞의 "만 저장함
+		// 지금 해줘야할 것은 $만 있으면 환경변수가 아닌 $로 냅두는 기능
+		// "$PATH dfkj"일 때 dfkj를 뒤에 붙여주는 기능
+		// 두개를 만들어야함.
 		dollor_idx = ft_dollor_idx(inst_lst->value);
 		if (dollor_idx >= 0)
 		{
@@ -249,7 +252,7 @@ void	change_env_vari(t_data *data, t_token **tklst)
 			// printf("value: %s\n", get_env_key(inst_lst->value + dollor_idx));
 			// 2. dollor 환경변수 값 조회 후 join.
 			str = ret;
-			ret = ft_strjoin(ret, get_env_value(data, fine_env_key(inst_lst->value + dollor_idx)));
+			ret = ft_strjoin(ret, get_env_value(data, find_env_key(inst_lst->value + dollor_idx)));
 			free(str);
 			// 3. 남은 dollor 확인하러 아래의 while문 입장.
 			while (1)
@@ -260,14 +263,15 @@ void	change_env_vari(t_data *data, t_token **tklst)
 				else {
 					dollor_idx += ft_dollor_idx(inst_lst->value + dollor_idx);
 					str = ret;
-					ret = ft_strjoin(ret, get_env_value(data, fine_env_key(inst_lst->value + dollor_idx)));
+					ret = ft_strjoin(ret, get_env_value(data, find_env_key(inst_lst->value + dollor_idx)));
 					free(str);
 					// 4. dollor 환경변수 값 조회 후 str에 join.
 					// printf("value: %s\n", get_env_key(inst_lst->value + dollor_idx));
 				}
 			}
-			printf("return: -%s-\n", ret);
-			free(ret);
+			printf("return: =%s=\n", ret);
+			free(inst_lst->value);
+			inst_lst->value = ret;
 		}
 		inst_lst = inst_lst->next;
 	}
@@ -325,7 +329,7 @@ t_token	*ft_print_tokens(t_token *tklst)
 	if (!tklst)
 		return (NULL);
 	list_ptr = tklst;
-	printf("\n\n===========RESULT===========")
+	printf("\n\n===========RESULT===========\n");
 	while (list_ptr)
 	{
 		printf("lexing: token: %s | type: %d\n", list_ptr->value, list_ptr->type);
@@ -401,9 +405,10 @@ void	handle_quote_token(char *input, t_tokenizer *state)
 	t_token	*token;
 
 	quote = input[state->idx];  // Current quote character
-	if (state->idx != state->start) {
+	if (state->idx != state->start)
+	{
 		token = ft_new_token(ft_substr(input, state->start, state->idx - state->start), state);
-	ft_token_add_back(&state->tklst, token);
+		ft_token_add_back(&state->tklst, token);
 	}
 
 	state->start = ++state->idx;  // Skip the opening quote
@@ -417,9 +422,7 @@ void	handle_quote_token(char *input, t_tokenizer *state)
 		state->start = ++state->idx;  // Move past the closing quote
 	}
 	else
-	{
 		printf("Error: Unclosed quote detected.\n");
-	}
 }
 /*
 void	check_state(t_tokenizer *state)
@@ -450,9 +453,9 @@ void	check_state(t_tokenizer *state)
 		state->after_operator = 0;
 }
 */
-t_token*	tokenize(t_data *data, char *input)
+t_token* tokenize(t_data *data, char *input)
 {
-	t_tokenizer	state;
+	t_tokenizer state;
 
 	state.idx = 0;
 	state.start = 0;
@@ -462,11 +465,11 @@ t_token*	tokenize(t_data *data, char *input)
 	while (input[state.idx])
 	{
 		// 공백 처리
-		if (input[state.idx] == ' '/* && input[idx + 1] != '\0'*/)
+		if ((input[state.idx] >= 9 && input[state.idx] <= 13) || input[state.idx] == ' '/* && input[idx + 1] != '\0'*/)
 		{
 			if (state.idx != state.start)
 				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
-			while (input[state.idx] == ' ') state.idx++;
+			while ((input[state.idx] >= 9 && input[state.idx] <= 13) || input[state.idx] == ' ') state.idx++;
 			ft_token_add_back(&state.tklst, ft_new_token(ft_strdup(" "), &state));
 			state.start = state.idx;
 		}
@@ -474,7 +477,7 @@ t_token*	tokenize(t_data *data, char *input)
 		else if (input[state.idx] == '\'' || input[state.idx] == '\"')
 			handle_quote_token(input, &state);
 		// 연속된 특수 문자 처리 (<<, >>)
-		else if (!ft_strncmp(input + state.idx, "<<", 2) || !ft_strncmp(input + state.idx, ">>", 2) || !ft_strncmp(input + state.idx, "&&", 2) || !ft_strncmp(input + state.idx, "||", 2)) // &&, || 추가하기
+		else if (!ft_strncmp(input + state.idx, "<<", 2) || !ft_strncmp(input + state.idx, ">>", 2))
 		{
 			if (state.idx != state.start)
 				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
@@ -499,17 +502,78 @@ t_token*	tokenize(t_data *data, char *input)
     // 마지막 남은 문자열 처리
 	if (state.idx != state.start)
 		ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+	change_env_vari(data, &state.tklst);
 	remove_quote(&state.tklst);
 	join_cmd_str(&state.tklst);
 	ft_print_tokens(state.tklst);
     // 환경 변수 치환 처리 -> 실행 파트에서 치환 하는 걸로.
 	// 환경변수 치환 처리 실행파트에서 하려고 했는데그냥 파싱에서 하고 넘겨도 될 듯 함
-	//
 	// 보너스파트 안 할거면 그냥 실행에서 하든지 파싱파트에서 하든지 아무상관없을듯
 	// 보너스파트 안할거니까 그냥 넘기기.
 	// 바로 ast만들어서 넘겨주기
-	//
-	// change_env_vari(data, &state.tklst);
-	printf("%d\n", data->last_ret);
 	return (state.tklst);
 }
+//
+// t_token*	tokenize(t_data *data, char *input)
+// {
+// 	t_tokenizer	state;
+//
+// 	state.idx = 0;
+// 	state.start = 0;
+// 	state.is_first_token = 1;
+// 	state.after_operator = 0;
+// 	state.tklst = NULL;
+// 	while (input[state.idx])
+// 	{
+// 		// 공백 처리
+// 		if (input[state.idx] == ' '/* && input[idx + 1] != '\0'*/)
+// 		{
+// 			if (state.idx != state.start)
+// 				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+// 			while (input[state.idx] == ' ') state.idx++;
+// 			ft_token_add_back(&state.tklst, ft_new_token(ft_strdup(" "), &state));
+// 			state.start = state.idx;
+// 		}
+// 		// 따옴표 처리
+// 		else if (input[state.idx] == '\'' || input[state.idx] == '\"')
+// 			handle_quote_token(input, &state);
+// 		// 연속된 특수 문자 처리 (<<, >>)
+// 		else if (!ft_strncmp(input + state.idx, "<<", 2) || !ft_strncmp(input + state.idx, ">>", 2))
+// 		{
+// 			if (state.idx != state.start)
+// 				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+// 			ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.idx, 2), &state));
+// 			state.start = (state.idx += 2);
+// 		}
+// 		// 단일 특수 문자 처리 (<, >, |)
+// 		else if (input[state.idx] == '<' || input[state.idx] == '>' || input[state.idx] == '|')
+// 		{
+// 			if (state.idx != state.start)
+// 				ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+// 			ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.idx, 1), &state));
+// 			state.start = ++state.idx;
+// 		}
+// 		// 일반 문자열
+// 		else
+// 			state.idx++;
+// 		// change is_first_token, after_operator here
+// 		// 상태 관리: 연산자 후에는 명령어가 와야 함
+// 		check_state(&state);
+// 	}
+//     // 마지막 남은 문자열 처리
+// 	if (state.idx != state.start)
+// 		ft_token_add_back(&state.tklst, ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
+// 	remove_quote(&state.tklst);
+// 	join_cmd_str(&state.tklst);
+// 	ft_print_tokens(state.tklst);
+//     // 환경 변수 치환 처리 -> 실행 파트에서 치환 하는 걸로.
+// 	// 환경변수 치환 처리 실행파트에서 하려고 했는데그냥 파싱에서 하고 넘겨도 될 듯 함
+// 	//
+// 	// 보너스파트 안 할거면 그냥 실행에서 하든지 파싱파트에서 하든지 아무상관없을듯
+// 	// 보너스파트 안할거니까 그냥 넘기기.
+// 	// 바로 ast만들어서 넘겨주기
+// 	//
+// 	// change_env_vari(data, &state.tklst);
+// 	printf("%d\n", data->last_ret);
+// 	return (state.tklst);
+// }
