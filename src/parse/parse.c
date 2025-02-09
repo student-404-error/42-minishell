@@ -218,6 +218,8 @@ char	*get_env_value(t_data *data, char *key)
 {
 	t_env	*env;
 
+	if (ft_strcmp(key, "") == 0)
+		return (ft_strdup("$"));
 	env = data->env;
 	while (env != NULL)
 	{
@@ -232,14 +234,14 @@ char	*get_env_value(t_data *data, char *key)
 void	change_env_vari(t_data *data, t_token **tklst)
 {
 	int		dollor_idx;
-	char	*str;
-	char	*ret;
+	char	ret[2048];
 	t_token	*inst_lst;
 
 	inst_lst = *tklst;
 	while (inst_lst)
 	{
-		// "$" <- 이 입력이 들어오면 그냥 "$"가 되어야함. 
+		ft_memset(ret, 0, sizeof(ret));
+		// "$" <- 이 입력이 들어오면 그냥 "$"가 되어야함.
 		// 지금 내 코드는 맨 앞의 "만 저장함
 		// 지금 해줘야할 것은 $만 있으면 환경변수가 아닌 $로 냅두는 기능
 		// "$PATH dfkj"일 때 dfkj를 뒤에 붙여주는 기능
@@ -247,13 +249,11 @@ void	change_env_vari(t_data *data, t_token **tklst)
 		dollor_idx = ft_dollor_idx(inst_lst->value);
 		if (dollor_idx >= 0)
 		{
-			ret = ft_substr(inst_lst->value, 0, dollor_idx - 1); // ret malloc됨.
+			ft_strlcpy(ret, inst_lst->value, dollor_idx - 1);
 			// 1. 첫번째 dollor 전까지 str에 복사.
 			// printf("value: %s\n", get_env_key(inst_lst->value + dollor_idx));
 			// 2. dollor 환경변수 값 조회 후 join.
-			str = ret;
-			ret = ft_strjoin(ret, get_env_value(data, find_env_key(inst_lst->value + dollor_idx)));
-			free(str);
+			ft_strlcpy(ret + ft_strlen(ret), get_env_value(data, find_env_key(inst_lst->value + dollor_idx)), sizeof(ret) - ft_strlen(ret));
 			// 3. 남은 dollor 확인하러 아래의 while문 입장.
 			while (1)
 			{
@@ -262,16 +262,16 @@ void	change_env_vari(t_data *data, t_token **tklst)
 					break;
 				else {
 					dollor_idx += ft_dollor_idx(inst_lst->value + dollor_idx);
-					str = ret;
-					ret = ft_strjoin(ret, get_env_value(data, find_env_key(inst_lst->value + dollor_idx)));
-					free(str);
+					ft_strlcpy(ret + ft_strlen(ret), get_env_value(data, find_env_key(inst_lst->value + dollor_idx)), sizeof(ret) - ft_strlen(ret));
 					// 4. dollor 환경변수 값 조회 후 str에 join.
 					// printf("value: %s\n", get_env_key(inst_lst->value + dollor_idx));
 				}
 			}
 			printf("return: =%s=\n", ret);
+			printf("value : =%s=\n", inst_lst->value);
+			// 남은 문자열 다 넣기.
 			free(inst_lst->value);
-			inst_lst->value = ret;
+			inst_lst->value = ft_strdup(ret);
 		}
 		inst_lst = inst_lst->next;
 	}
@@ -279,7 +279,60 @@ void	change_env_vari(t_data *data, t_token **tklst)
 	// return (ret);
 }
 
-
+//
+// void	change_env_vari(t_data *data, t_token **tklst)
+// {
+// 	int		dollor_idx;
+// 	char	*str;
+// 	char	*ret;
+// 	t_token	*inst_lst;
+//
+// 	inst_lst = *tklst;
+// 	while (inst_lst)
+// 	{
+// 		// "$" <- 이 입력이 들어오면 그냥 "$"가 되어야함. 
+// 		// 지금 내 코드는 맨 앞의 "만 저장함
+// 		// 지금 해줘야할 것은 $만 있으면 환경변수가 아닌 $로 냅두는 기능
+// 		// "$PATH dfkj"일 때 dfkj를 뒤에 붙여주는 기능
+// 		// 두개를 만들어야함.
+// 		dollor_idx = ft_dollor_idx(inst_lst->value);
+// 		if (dollor_idx >= 0)
+// 		{
+// 			ret = ft_substr(inst_lst->value, 0, dollor_idx - 1); // ret malloc됨.
+// 			// 1. 첫번째 dollor 전까지 str에 복사.
+// 			// printf("value: %s\n", get_env_key(inst_lst->value + dollor_idx));
+// 			// 2. dollor 환경변수 값 조회 후 join.
+// 			str = ret;
+// 			ret = ft_strjoin(ret, get_env_value(data, find_env_key(inst_lst->value + dollor_idx)));
+// 			free(str);
+// 			// 3. 남은 dollor 확인하러 아래의 while문 입장.
+// 			while (1)
+// 			{
+// 				// 5. dollor가 더 이상 없으면 break;
+// 				if (ft_dollor_idx(inst_lst->value + dollor_idx) == -1)
+// 					break;
+// 				else {
+// 					dollor_idx += ft_dollor_idx(inst_lst->value + dollor_idx);
+// 					str = ret;
+// 					ret = ft_strjoin(ret, get_env_value(data, find_env_key(inst_lst->value + dollor_idx)));
+// 					free(str);
+// 					// 4. dollor 환경변수 값 조회 후 str에 join.
+// 					// printf("value: %s\n", get_env_key(inst_lst->value + dollor_idx));
+// 				}
+// 			}
+// 			printf("return: =%s=\n", ret);
+// 			// 남은 문자열 다 넣기.
+//
+// 			free(inst_lst->value);
+// 			inst_lst->value = ret;
+// 		}
+// 		inst_lst = inst_lst->next;
+// 	}
+// 	// 6. break 후 inst_lst->value를 str로 update;
+// 	// return (ret);
+// }
+//
+//
 // to-do
 // 1. 양 끝에 있는 쿼트 제거 함수 구현 ->> 구현 완료.
 // 2. enum TOKEN 정해주는 함수 구현    ->> 구현 완료.
