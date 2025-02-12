@@ -267,8 +267,9 @@ void	change_env_vari(t_data *data, t_token **tklst)
 					// printf("value: %s\n", get_env_key(inst_lst->value + dollor_idx));
 				}
 			}
-			printf("return: =%s=\n", ret);
-			printf("value : =%s=\n", inst_lst->value);
+			while (*(inst_lst->value + dollor_idx) != ' ')
+				dollor_idx++;
+			ft_strlcpy(ret + ft_strlen(ret), inst_lst->value + dollor_idx, ft_strlen(inst_lst->value));
 			// 남은 문자열 다 넣기.
 			free(inst_lst->value);
 			inst_lst->value = ft_strdup(ret);
