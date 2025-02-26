@@ -27,6 +27,7 @@ typedef struct s_list {
 typedef struct s_env {
 	char			*key;
 	char			*value;
+	int				length;
 	struct s_env	*next;
 }	t_env;
 

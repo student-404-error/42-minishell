@@ -20,7 +20,23 @@
 # define ERROR 2
 # define PATH_MAX 1024
 
-typedef enum {
+typedef enum e_ast_node_type {
+	AST_COMMAND,
+	AST_PIPE,
+	AST_REDIRECTION_IN,
+	AST_REDIRECTION_OUT,
+	AST_REDIRECTION_APPEND,
+	AST_HEREDOC,
+}	t_ast_node_type;
+
+typedef struct s_ast_node {
+	t_ast_node_type		type;
+	char				*value;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
+}	t_ast_node;
+
+typedef enum e_token_type {
 	TOKEN_COMMAND,
 	TOKEN_STRING,
 	TOKEN_FILENAME,
@@ -33,10 +49,10 @@ typedef enum {
 	TOKEN_ENV_VARI,
 	TOKEN_EOF,
 	TOKEN_UNKNOWN,
-}	e_token_type;
+}	t_token_type;
 
 typedef struct s_token {
-	e_token_type	type;
+	t_token_type	type;
 	char			*value;
 	struct s_token	*next;
 	struct s_token	*prev;
