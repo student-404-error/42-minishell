@@ -16,7 +16,6 @@ size_t	ft_strlcpy(char *dst, char *src, size_t dstsize)
 		i++;
 	}
 	dst[i] = '\0';
-	printf("%s\n", dst);
 	return (len);
 }
 
@@ -70,16 +69,16 @@ int	count_total_length(char *token)
 	length = 0;
 	while (get_dollar_idx(token + idx + 1) != -1)
 	{
-		printf("%d\n", get_dollar_idx(token + idx + 1)); 
-		idx += get_dollar_idx(token + idx + 1);
-		printf("idx: %d\n", idx);
-		length += idx;
-		printf("length: %d\n", length);
+		printf("--------------------\n");
+		printf("1: dollar: %d\n", get_dollar_idx(token + idx + 1) - 1);
+		length += get_dollar_idx(token + idx + 1);
+		idx += get_dollar_idx(token + idx + 1) + 1;
+		printf("2: dollar: %d\n", get_dollar_idx(token + idx + 1) - 1);
+		printf("1: length: %d\n", length);
 		key = get_env_key(token + idx + 1);
+		length +=/* get_env_value_len(env, key)*/8;
 		idx += strlen(key);
-		printf("idx + strlen(key): %d = %d + %s\n", idx, idx - strlen(key), key);
-		length +=/* get_env_value_len(env, key)*/8 - strlen(key);
-		printf("length: %d\n", length);
+		printf("2: length: %d\n", length);
 		free(key);
 	}
 	return (length);
@@ -87,9 +86,16 @@ int	count_total_length(char *token)
 int	main(void)
 {
 	char	*str;
+	char	*key;
 
 	str = malloc(30 * sizeof(char));
+	key = malloc(9 * sizeof(char));
 	str = "hello $USER HELLO $USER $USER";
+	//     6을 더하고, 6 + 8 + 7 + 8 + 1 + 8
+	key = "seong-ki";
+	printf("%d\n", strlen(str));
 	printf("%d\n", count_total_length(str));
+	printf("%d\n", strlen("hello seong-ki"));
+	printf("%d\n", strlen("hello seong-ki HELLO seong-ki seong-ki"));
 	return (0);
 }
