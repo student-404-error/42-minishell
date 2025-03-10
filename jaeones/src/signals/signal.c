@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:11:30 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/20 16:01:29 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/10 17:24:27 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int sg_readline_event(void)
 SIGINT (Ctrl+C) -> sg_input_handler 실행
 SIGQUIT (Ctrl+\) 및 SIGTSTP (Ctrl+Z) -> 무시
 */
-void sg_init_signal(void)
+void ft_init_signal(void)
 {
     rl_event_hook = sg_readline_event; // Readline 이벤트 훅 설정
     signal(SIGINT, sg_input_handler);

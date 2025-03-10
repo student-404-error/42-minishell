@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/10 14:18:44 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/10 17:24:14 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_env
 {
 	char			*id;
 	char			*value;
-	int				length;
+	char			*raw;
 	struct s_env	*next;
 }	t_env;
 
@@ -84,7 +84,7 @@ typedef struct s_data
 extern t_signals	g_signals;
 
 /* minishell 주요 함수 */
-int		ms_setup_exec(t_data *data, t_token **token);
+int		ft_setup_exec(t_data *data, t_token **token);
 int		handle_pipeline(t_data *data, char *line);
 int		handle_loop(t_data *data);
 int		parser(t_token **token);
