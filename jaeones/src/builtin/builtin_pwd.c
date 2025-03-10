@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 15:26:25 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/20 16:13:30 by jaoh             ###   ########.fr       */
+/*   Created: 2024/09/11 14:28:39 by seong-ki          #+#    #+#             */
+/*   Updated: 2025/03/10 14:19:44 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		parser(t_token **token)
+int	builtin_pwd()
 {
-    (void)token;
-    printf("parsing again and again...\n");
-    return (0);
+	char	path[PATH_MAX];
+
+	if (getcwd(path, PATH_MAX))
+	{
+		printf("%s\n", path);
+		return (0);
+	}
+	else 
+	{
+		perror("pwd");
+		return (1);
+	}
 }

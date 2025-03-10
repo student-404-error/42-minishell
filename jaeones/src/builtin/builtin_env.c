@@ -6,12 +6,11 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:29:25 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/10 14:49:11 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/10 14:16:57 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include <stdlib.h>
+#include "minishell.h"
 
 size_t	key_length(char *key_value)
 {
@@ -68,18 +67,18 @@ int	builtin_unset(t_data *data, char *target)
 		printf("minishell: unset: `%s': not a valid identifier\n", target);
 		return (ERROR);
 	}
-	env_list = data->env;
+	env_list = data->envp;
 	tmp = NULL;
-	if (ft_strcmp(env_list->key, target) == 0)
-		data->env = env_list->next;
+	if (ft_strcmp(env_list->id, target) == 0)
+		data->envp = env_list->next;
 	else
 	{
-		while (env_list->next->next && ft_strcmp(env_list->next->key, target) != 0)
+		while (env_list->next->next && ft_strcmp(env_list->next->id, target) != 0)
 			env_list = env_list->next;
 		tmp = env_list->next;
 		env_list->next = tmp->next;
 	}
-	return (free(tmp->key), free(tmp->value), free(tmp), SUCCESS);
+	return (free(tmp->id), free(tmp->value), free(tmp), SUCCESS);
 }
 
 // 자 지금 구현해야하는게
@@ -142,7 +141,7 @@ t_env	*ft_new_env(char *str)
 
 	new_env = malloc(sizeof(t_env));
 	len = key_length(str);
-	new_env->key = ft_substr(str, 0, len);
+	new_env->id = ft_substr(str, 0, len);
 	new_env->value = ft_substr(str, len + 1, ft_strlen(str));
 	new_env->length = ft_strlen(new_env->value);
 	new_env->next = NULL;
@@ -180,25 +179,25 @@ void	init_env(t_data *data, char **env_list)
 	t_env	*new_env;
 
 	i = 0;
-	data->env = NULL;
+	data->envp = NULL;
 	while (env_list[i])
 	{
 		new_env = ft_new_env(env_list[i]);
-		ft_env_add_back(&data->env, new_env);
+		ft_env_add_back(&data->envp, new_env);
 		i++;
 	}
 }
 
-int	builtin_env(t_data data)
+int	builtin_env(t_data *data)
 {
 	t_env	*env_list;
 
-	env_list = data.env;
+	env_list = data->envp;
 	if (!env_list)
 		return (1);
 	while (env_list)
 	{
-		printf("%s=%s\n", env_list->key, env_list->value);
+		printf("%s=%s\n", env_list->id, env_list->value);
 		env_list = env_list->next;
 	}
 	return (0);

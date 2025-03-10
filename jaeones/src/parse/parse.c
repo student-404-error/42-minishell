@@ -6,11 +6,11 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/10 14:49:04 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/10 13:57:18 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "minishell.h"
 
 int	is_env_variable(char *value)
 {
@@ -58,7 +58,7 @@ void check_state(t_tokenizer *state)
 		state->after_operator = 0;
 }
 
-t_token_type check_token_type(char *value, t_tokenizer *state)
+t_tok_type check_token_type(char *value, t_tokenizer *state)
 {
 	if (ft_strcmp(value, "<<") == 0)
 		return (TOKEN_HEREDOC);
@@ -170,10 +170,10 @@ char	*get_env_value(t_data *data, char *key)
 
 	if (ft_strcmp(key, "") == 0)
 		return (ft_strdup("$"));
-	env = data->env;
+	env = data->envp;
 	while (env != NULL)
 	{
-		if (ft_strcmp(env->key, key) == 0)
+		if (ft_strcmp(env->id, key) == 0)
 			return (ft_strdup(env->value));
 		env = env->next;
 	}
@@ -496,4 +496,16 @@ t_token* tokenize(t_data *data, char *input)
 	ft_print_tokens(state.tklst);
 	printf("\n\n%d\n\n", data->last_ret);
 	return (state.tklst);
+}
+
+void	tok_free_list(t_token *token)
+{
+	t_token	*tmp;
+
+	while (token != NULL)
+	{
+		tmp = token;
+		token = token->next;
+		tok_free_one(tmp);
+	}
 }
