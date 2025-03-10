@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/20 16:01:08 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/10 17:24:14 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@
 
 # include "libft.h"
 
-# include "token.h"
+# include "builtin.h"
 # include "exec.h"
-# include "builtins.h"
 # include "builder.h"
 # include "signals.h"
+# include "parsing.h"
 
 # define P_NAME "charles mishell"
 # define BROWN_A    "\033[1;33m"
@@ -77,12 +77,14 @@ typedef struct s_data
 	int				pid_count;
 	t_exec			*exec;
 	t_env			*envp;
+	t_token			*tklst;
+	int				last_ret;
 }	t_data;
 
 extern t_signals	g_signals;
 
 /* minishell 주요 함수 */
-int		ms_setup_exec(t_data *data, t_token **token);
+int		ft_setup_exec(t_data *data, t_token **token);
 int		handle_pipeline(t_data *data, char *line);
 int		handle_loop(t_data *data);
 int		parser(t_token **token);

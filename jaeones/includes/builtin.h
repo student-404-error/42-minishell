@@ -5,20 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/11 14:31:11 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/10 14:49:32 by jaoh             ###   ########.fr       */
+/*   Created: 2025/01/29 14:00:41 by jaoh              #+#    #+#             */
+/*   Updated: 2025/03/10 21:18:52 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-# include "libft.h"
-# include <stdio.h>
-
 # define SUCCESS 1
 # define ERROR 2
-# define PATH_MAX 1024
+# define PATH_MAX 4096
+
+typedef struct s_data	t_data;
 
 typedef enum e_ast_node_type {
 	AST_COMMAND,
@@ -48,27 +47,22 @@ typedef enum e_token_type {
 	TOKEN_HEREDOC,
 	TOKEN_ENV_VARI,
 	TOKEN_EOF,
-	TOKEN_UNKNOWN,
-}	t_token_type;
+}	t_tok_type;
 
 typedef struct s_token {
-	t_token_type	type;
+	t_tok_type		type;
 	char			*value;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
-
-typedef struct s_data {
-	t_env	*env;
-	t_token	*tklst;
-	int		last_ret;
-}	t_data;
 
 void	init_env(t_data *data, char **env);
 // builtin function prototypes
 // void	builtin_export(t_data *data, char *str);
 int		builtin_unset(t_data *data, char *target);
 int		builtin_pwd(void);
-int		builtin_env(t_data data);
+int		builtin_env(t_data *data);
 int		builtin_cd(char *path, t_data *data);
+int		bi_is_builtin(char *cmd);
+
 #endif // !BUILTIN_H

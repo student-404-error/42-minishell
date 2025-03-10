@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:33:08 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/10 14:49:21 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/10 14:00:41 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ t_token	*ft_tklast(t_token *tklst);
 void	ft_token_add_back(t_token **tklst, t_token *new);
 void	change_env_vari(t_data *data, t_token **tklst);
 t_token	*tokenize(t_data *data, char *input);
+void	tok_free_list(t_token *token);
 
 #endif // !PARSING.15:33:20

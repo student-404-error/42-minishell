@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:32:39 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/20 16:12:30 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/10 21:48:16 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_signals	g_signals = {0};
 
-int	ms_setup_exec(t_data *data, t_token **token)
+int	ft_setup_exec(t_data *data, t_token **token)
 {
 	// 토큰을 기반으로 실행 리스트를 생성
 	data->exec = builder(*token);
@@ -37,21 +37,17 @@ int	ms_setup_exec(t_data *data, t_token **token)
 // 파이프라인을 처리하는 함수
 int	handle_pipeline(t_data *data, char *line)
 {
-	t_token	*token;
-	int		error;
-	token = tokenize(data, line);
+	t_ast_node *ast;
+	
+	data->tklst = tokenize(data, line);
 	free(line);
-	if (token == NULL)
+	if (data->tklst == NULL)
 		return (0);
-	error = parser(&token);
-	if (error != 0)
-	{
-		tok_free_list(token);
-		if (error == 2)
-			return (0);
+	ast = build_ast(data->tklst);
+	if (!ast)
 		return (1);
-	}
-	if (ms_setup_exec(data, &token) != 0)
+	free(line);
+	if (ft_setup_exec(data, &token) != 0)
 		return (1);
 	ex_run_exec(data); // 실행부부 함수 호출
 	ms_clear(data, token); // 실행 후 데이터 정리
@@ -66,7 +62,7 @@ int	handle_loop(t_data *data)
 	line = NULL;
 	while (1)
 	{
-		sg_init_signal();
+		ft_init_signal();
 		line = readline(PROMPT);
 		if (line == NULL)
 			break ;

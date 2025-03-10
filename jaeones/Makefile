@@ -6,7 +6,7 @@
 #    By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/29 17:32:17 by jaoh              #+#    #+#              #
-#    Updated: 2025/02/20 16:03:40 by jaoh             ###   ########.fr        #
+#    Updated: 2025/03/10 14:49:16 by jaoh             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,13 +36,11 @@ NAME 		= minishell
 
 SRCS_M		= main.c
 
-SRCS_BT		= builtin.c bi_utils.c bi_errors.c bi_check.c
+SRCS_BT		= builtin_cd.c builtin_env.c builtin_export.c builtin_pwd.c 
 
 SRCS_EX 	= exec.c exec_redirect.c exec_pipe.c exec_child_utils.c exec_errors.c exec_utils.c
 
-SRCS_TOK 	= token.c token_utils.c token_utils2.c
-
-SRCS_PAR 	= parser.c
+SRCS_PAR 	= parse.c
 
 SRCS_UTI 	= utils1.c utils2.c env.c env_utils.c
 
@@ -50,15 +48,17 @@ SRCS_BLD 	= builder.c builder_utils.c file.c args.c
 
 SRCS_SIG 	= signal.c
 
+SRCS_AST	= ast.c
+
 SRC 		= src/
 
-BUILTINS_PATH	= src/builtins/
+BUILTINS_PATH	= src/builtin/
 EXEC_PATH		= src/exec/
-TOKEN_PATH		= src/token/
-PARSE_PATH		= src/parser/
+PARSE_PATH		= src/parse/
 UTILS_PATH		= src/utils/
 BUILDER_PATH	= src/builder/
 SIGNAL_PATH		= src/signals/
+AST_PATH		= src/ast/
 
 SRCS		= $(addprefix $(SRC), $(SRCS_M)) \
 		  $(addprefix $(BUILTINS_PATH), $(SRCS_BT)) \
@@ -68,8 +68,9 @@ SRCS		= $(addprefix $(SRC), $(SRCS_M)) \
 		  $(addprefix $(UTILS_PATH), $(SRCS_UTI)) \
 		  $(addprefix $(BUILDER_PATH), $(SRCS_BLD)) \
 		  $(addprefix $(SIGNAL_PATH), $(SRCS_SIG)) \
+		  $(addprefix $(AST_PATH), $(SRCS_AST)) \
 
-HEADERS		= builder.h builtins.h exec.h token.h minishell.h signals.h
+HEADERS		= builder.h builtin.h exec.h parsing.h minishell.h signals.h
 
 OBJS		= $(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:10:16 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/19 17:33:17 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/10 16:45:13 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ ex_dup2_close(exec->fd_out, STDOUT_FILENO)를 사용하여 STDOUT_FILENO을 새 
 */
 void	ex_redirection(t_exec *exec, t_file *file)
 {
-	if (file->type == INFILE || file->type == N_HEREDOC) // 입력 리디렉션 처리
+	if (file->type == TOKEN_REDIRECTION_IN || file->type == TOKEN_FILENAME) // 입력 리디렉션 처리
 	{
 		if (exec->fd_in != STDIN_FILENO)
 			close (exec->fd_in);
@@ -62,9 +62,9 @@ void	ex_redirection(t_exec *exec, t_file *file)
 	{
 		if (exec->fd_out != STDOUT_FILENO)
 			close(exec->fd_out);
-		if (file->type == OUTFILE) // > : 덮어쓰기 모드
+		if (file->type == TOKEN_REDIRECTION_OUT) // > : 덮어쓰기 모드
 			exec->fd_out = open(file->path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else if (file->type == APPEND) // >> : 추가 모드
+		else if (file->type == TOKEN_REDIRECTION_APPEND) // >> : 추가 모드
 			exec->fd_out
 				= open(file->path, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (exec->fd_out == -1)

@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:53:28 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/19 17:41:54 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/10 21:48:14 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static int	bd_handle_redirs(t_exec *exec, t_token *token)
 
 	// 리디렉션 토큰이면서 다음 토큰에 파일명이 존재하는 경우
 	if (token->next && token->next->value != NULL
-		&& (token->type == APPEND || token->type == N_HEREDOC
-			|| token->type == INFILE || token->type == OUTFILE))
+		&& (token->type == TOKEN_REDIRECTION_APPEND || token->type == TOKEN_HEREDOC
+			|| token->type == TOKEN_REDIRECTION_IN || token->type == TOKEN_REDIRECTION_OUT))
 	{
 		tmp = file_create(token->next->value, token->type);
 		if (!tmp)
@@ -37,7 +37,7 @@ static int	bd_handle_args(t_exec *exec, t_token *token)
 	t_args	*new;
 
 	new = NULL;
-	if (token->type == ARGUMENT)
+	if (token->type == TOKEN_STRING)
 	{
 		new = arg_create(token->value);
 		if (!new)
@@ -47,6 +47,9 @@ static int	bd_handle_args(t_exec *exec, t_token *token)
 	return (0);
 }
 
+// 실행 구조체를 생성하는 함수
+// 입력된 토큰을 분석하여 t_exec 구조체를 생성
+// 파이프가 나오면 재귀적으로 다음 명령을 생성
 t_exec	*builder(t_token *token)
 {
 	t_exec	*exec;
@@ -56,12 +59,12 @@ t_exec	*builder(t_token *token)
 		return (NULL);
 	while (token != NULL)
 	{
-		if (token->type == PIPE) //if 파이프가 다음 명령을 재귀로 생성
+		if (token->type == TOKEN_PIPE) //if 파이프가 다음 명령을 재귀로 생성
 		{
 			exec->next = builder(token->next);
 			break ;
 		}
-		else if (token->type == COMMAND) //if 명령어, 저장
+		else if (token->type == TOKEN_COMMAND) //if 명령어, 저장
 		{
 			exec->cmd = ft_strdup(token->value);
 			if (!exec->cmd)
