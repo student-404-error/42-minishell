@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 17:34:11 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 15:33:16 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 16:59:41 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,20 @@ int	bi_is_builtin(char *cmd)
 
 int	bi_do_builtin(t_data *data, char *cmd, t_args *args)
 {
-	// if (!ft_strcmp(cmd, "echo"))
-	// 	return (builtin_echo(args));
+	if (!ft_strcmp(cmd, "echo"))
+		return (builtin_echo(args));
 	if (!ft_strcmp(cmd, "cd"))
 		return (builtin_cd(data, args));
 	else if (!ft_strcmp(cmd, "pwd"))
 		return (builtin_pwd(args));
-	// else if (!ft_strcmp(cmd, "export"))
-	// 	return (bi_export(data, args));
+	else if (!ft_strcmp(cmd, "export"))
+		return (bi_export(data, args));
 	else if (!ft_strcmp(cmd, "unset"))
 		return (builtin_unset(data, args));
 	else if (!ft_strcmp(cmd, "env"))
 		return (builtin_env(data, args));
-	// else if (!ft_strcmp(cmd, "exit"))
-	// 	return (bi_exit(data, args));
+	else if (!ft_strcmp(cmd, "exit"))
+		return (bi_exit(data, args));
 	else
 		return (0);
 }

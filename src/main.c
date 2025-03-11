@@ -5,101 +5,84 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/28 18:17:26 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 16:16:47 by seong-ki         ###   ########.fr       */
+/*   Created: 2024/12/28 16:32:39 by jaoh              #+#    #+#             */
+/*   Updated: 2025/03/11 18:13:41 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/readline.h>
-#include "parsing.h"
+#include "minishell.h"
 
-int main(int argc, char *argv[], char **env)
+int	ft_setup_exec(t_data *data, t_token **token)
+{
+	data->exec = builder(*token);
+	tok_free_list(*token);
+	*token = NULL;
+	if (!data->exec)
+		return (1);
+	data->exec_count = bd_lstsize(data->exec);
+	data->pids = malloc(sizeof(pid_t) * (data->exec_count + 1));
+	if (!data->pids)
+		return (1);
+	data->pid_count = 0;
+	return (0);
+}
+
+// 파이프라인을 처리하는 함수
+int	handle_pipeline(t_data *data, char *line)
 {
 	t_data	data;
-	char	*input;
 
-	init_env(&data, env);
+	data->tklst = tokenize(data, line);
+	free(line);
+	if (data->tklst == NULL)
+		return (0);
+	free(line);
+	if (ft_setup_exec(data, data->tklst) != 0)
+		return (1);
+	ex_run_exec(data);
+	ms_clear(data, data->tklst);
+	return (0);
+}
+
+// 입력 루프를 처리하는 함수
+int	handle_loop(t_data *data)
+{
+	char	*line;
+
+	line = NULL;
 	while (1)
 	{
-		input = readline("input: ");
-		data.tklst = tokenize(&data, input);
-		ft_print_tokens(data.tklst);
-		if (ft_strncmp(input, "env", 3) == 0)
-			builtin_env(data);
-		else if (ft_strncmp(input, "unset", 5) == 0)
+		ft_init_signal();
+		line = readline(PROMPT);
+		if (line == NULL)
+			break ;
+		else if (ms_check_line(line) == 0)
 		{
-			builtin_unset(&data, input + 6);
+			add_history(line);
+			if (handle_pipeline(data, line) != 0)
+			{
+				ft_putstr_fd("Parsing error!\n", 2);
+				data->exit_code = 2;
+			}
+			line = NULL;
 		}
-		free(input);
+		if (line)
+			free(line);
 	}
-	(void) argc;
-	(void) argv;
-	return 0;
+	return (0);
 }
-//
-// int main(int argc, char *argv[])
-// {
-// 	char	*str1 = "11<22>33|44";
-// 	char	*str2 = "1 1    <22\'3 45\'<< 44\"5 6 > 7\"|88>33|44";
-// 	char	*str3 = "e\'\'\"\"11<22>33|44";
-// printf("========================\n");
-// 	count_special_character("ls -l");
-// printf("========================\n");
-//     count_special_character("echo Hello World");
-// printf("========================\n");
-//     count_special_character("cat file.txt");
-// printf("========================\n");
-//     count_special_character("pwd");
-// printf("========================\n");
-//     count_special_character("grep 'pattern' file.txt");
-//
-// printf("========================\n");
-//     // 테스트 케이스 6 ~ 10: 리다이렉션과 파이프
-//     count_special_character("cat file.txt > output.txt");
-// printf("========================\n");
-//     count_special_character("ls -l | grep \"test\" > result.txt");
-// printf("========================\n");
-//     count_special_character("echo \"some text\" >> log.txt");
-// printf("========================\n");
-//     count_special_character("cat < input.txt | grep \"pattern\"");
-// printf("========================\n");
-//     count_special_character("echo \"line1\" > file1 | echo \"line2\" >> file1");
-// printf("============1===========\n");
-//
-//     // 테스트 케이스 11 ~ 15: 따옴표 및 환경변수
-//     count_special_character("echo \"Hello $USER\"");
-// printf("============2===========\n");
-//     count_special_character("echo 'Hello $USER'");
-// printf("========================\n");
-//     count_special_character("echo \"A 'single quote' inside\"");
-// printf("========================\n");
-//     count_special_character("echo 'A \"double quote\" inside'");
-// printf("========================\n");
-//     count_special_character("echo '' > empty.txt");
-// printf("========================\n");
-//
-//     // 테스트 케이스 16 ~ 20: 복합 케이스
-//     count_special_character("cat << EOF > file.txt");
-// printf("========================\n");
-//     count_special_character("echo \"Multiple commands\" | grep \"commands\" | sort > sorted.txt");
-// printf("========================\n");
-//     count_special_character("ls | grep \"txt\" | wc -l");
-// printf("============3===========\n");
-//     count_special_character("echo $PATH | tr \":\" \"\\n\"");
-// printf("========================\n");
-//     count_special_character("echo 'First part' && echo \"Second part\" | cat > final_output.txt");
-// printf("========================\n");
-// count_special_character("ls-l|grep.txt>output.txt"); // (수정 전) bash에서 실행 불가한 형태
-// printf("========================\n");
-//     count_special_character("ls -l|grep.txt>output.txt"); // (수정 후)
-// printf("========================\n");
-//     count_special_character("echo\"HelloWorld\"|cat>file.txt");
-// printf("========================\n");
-//     count_special_character("cat<file1|grep\"test\"|wc-l");
-// printf("============4===========\n");
-//     count_special_character("echo\"$HOME$PATH$PATH$WOW$YES$FUCK/test\"|cut-d'/'-f2");
-// printf("========================\n");
-//     count_special_character("echo\"Hello\"&&echo\"World\"|cat>log.txt");
-// printf("========================\n");
-// 	return EXIT_SUCCESS;
-// }
+
+int	main(int ac, char **av, char **envp)
+{
+	t_data	*data;
+
+	(void)ac;
+	(void)av;
+	data = ms_init_data(envp);
+	if (!data)
+		return (EXIT_FAILURE);
+	handle_loop(data);
+	ms_free_all(data);
+	ft_putstr_fd("exit\n", 2);
+	return (EXIT_SUCCESS);
+}

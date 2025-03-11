@@ -5,7 +5,23 @@ OBJ_DIR			=	obj/
 LFT_DIR			=	src/libft/
 LIBFT			=	$(LFT_DIR)libft.a
 
-FILES			=	main builtin_cd builtin_pwd builtin_env parse#builtin_export parse
+SRCS_M			= main.c
+
+SRCS_BT			= builtin_cd.c builtin_env.c builtin_export.c builtin_pwd.c 
+
+SRCS_EX 		= exec.c exec_redirect.c exec_pipe.c exec_child_utils.c exec_errors.c exec_utils.c
+
+SRCS_PAR 		= parse.c
+
+SRCS_UTI 		= utils1.c utils2.c env.c env_utils.c
+
+SRCS_BLD 		= builder.c builder_utils.c file.c args.c
+
+SRCS_SIG 		= signal.c
+
+FILES			=	main builtin_cd builtin_pwd builtin_env parse /
+					exec exec_redirect exec_pipe exec_child_utils /
+					exec_errors exec_utils
 
 SRCS			=	$(addprefix $(SRC_DIR), $(addsuffix .c, $(FILES)))
 OBJS			=	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(FILES)))

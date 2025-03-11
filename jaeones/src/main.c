@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:32:39 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 15:04:10 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 16:57:35 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,17 @@ int	ft_setup_exec(t_data *data, t_token **token)
 // 파이프라인을 처리하는 함수
 int	handle_pipeline(t_data *data, char *line)
 {
-	t_ast_node	*ast;
+	t_data	data;
 
 	data->tklst = tokenize(data, line);
 	free(line);
 	if (data->tklst == NULL)
 		return (0);
-	ast = build_ast(data->tklst);
-	if (!ast)
-		return (1);
 	free(line);
-	if (ft_setup_exec(data, &token) != 0)
+	if (ft_setup_exec(data, data->tklst) != 0)
 		return (1);
 	ex_run_exec(data);
-	ms_clear(data, token);
+	ms_clear(data, data->tklst);
 	return (0);
 }
 
