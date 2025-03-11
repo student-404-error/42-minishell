@@ -6,27 +6,20 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:32:39 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/10 21:48:16 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 15:04:10 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_signals	g_signals = {0};
-
 int	ft_setup_exec(t_data *data, t_token **token)
 {
-	// 토큰을 기반으로 실행 리스트를 생성
 	data->exec = builder(*token);
 	tok_free_list(*token);
 	*token = NULL;
 	if (!data->exec)
 		return (1);
-
-	// 실행할 명령어 개수를 저장
 	data->exec_count = bd_lstsize(data->exec);
-
-	// 프로세스 ID를 저장할 메모리 할당
 	data->pids = malloc(sizeof(pid_t) * (data->exec_count + 1));
 	if (!data->pids)
 		return (1);
@@ -37,8 +30,8 @@ int	ft_setup_exec(t_data *data, t_token **token)
 // 파이프라인을 처리하는 함수
 int	handle_pipeline(t_data *data, char *line)
 {
-	t_ast_node *ast;
-	
+	t_ast_node	*ast;
+
 	data->tklst = tokenize(data, line);
 	free(line);
 	if (data->tklst == NULL)
@@ -49,8 +42,8 @@ int	handle_pipeline(t_data *data, char *line)
 	free(line);
 	if (ft_setup_exec(data, &token) != 0)
 		return (1);
-	ex_run_exec(data); // 실행부부 함수 호출
-	ms_clear(data, token); // 실행 후 데이터 정리
+	ex_run_exec(data);
+	ms_clear(data, token);
 	return (0);
 }
 
@@ -66,7 +59,7 @@ int	handle_loop(t_data *data)
 		line = readline(PROMPT);
 		if (line == NULL)
 			break ;
-		else if (ms_check_line(line) == 0) // 빈 입력이 아닐 경우 처리
+		else if (ms_check_line(line) == 0)
 		{
 			add_history(line);
 			if (handle_pipeline(data, line) != 0)

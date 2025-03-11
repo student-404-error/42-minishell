@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:10:21 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/19 17:33:17 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 14:57:08 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	ex_err_exec(char *path, int err_no)
 
 void	ex_unlink_heredoc(t_data *data)
 {
-	t_exec		*exec;
+	t_exec	*exec;
 	t_file	*tmp;
 
 	exec = data->exec;
@@ -74,7 +74,7 @@ void	ex_unlink_heredoc(t_data *data)
 		tmp = exec->redirs;
 		while (tmp)
 		{
-			if (tmp->type == N_HEREDOC)
+			if (tmp->type == TOKEN_HEREDOC)
 				unlink(tmp->path);
 			tmp = tmp->next;
 		}
