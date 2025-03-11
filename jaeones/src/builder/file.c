@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:51:43 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/20 15:31:33 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 15:06:52 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	file_free(t_file *file)
 t_file	*file_create(char *path, t_tok_type type)
 {
 	t_file	*filename;
-	char		*new;
+	char	*new;
 
 	filename = malloc(sizeof(t_file));
 	if (filename == NULL)

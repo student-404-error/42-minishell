@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:53:28 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/10 21:48:14 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 15:06:31 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,16 @@ static int	bd_handle_redirs(t_exec *exec, t_token *token)
 {
 	t_file	*tmp;
 
-	// 리디렉션 토큰이면서 다음 토큰에 파일명이 존재하는 경우
 	if (token->next && token->next->value != NULL
-		&& (token->type == TOKEN_REDIRECTION_APPEND || token->type == TOKEN_HEREDOC
-			|| token->type == TOKEN_REDIRECTION_IN || token->type == TOKEN_REDIRECTION_OUT))
+		&& (token->type == TOKEN_REDIRECTION_APPEND
+			|| token->type == TOKEN_HEREDOC
+			|| token->type == TOKEN_REDIRECTION_IN
+			|| token->type == TOKEN_REDIRECTION_OUT))
 	{
 		tmp = file_create(token->next->value, token->type);
 		if (!tmp)
 			return (-1);
-		file_add_back(&(exec->redirs), tmp); // 리스트에 추가
+		file_add_back(&(exec->redirs), tmp);
 		return (1);
 	}
 	return (0);
@@ -42,7 +43,7 @@ static int	bd_handle_args(t_exec *exec, t_token *token)
 		new = arg_create(token->value);
 		if (!new)
 			return (-1);
-		arg_add_back(&(exec->args), new); // 리스트에 추가
+		arg_add_back(&(exec->args), new);
 	}
 	return (0);
 }
@@ -59,21 +60,20 @@ t_exec	*builder(t_token *token)
 		return (NULL);
 	while (token != NULL)
 	{
-		if (token->type == TOKEN_PIPE) //if 파이프가 다음 명령을 재귀로 생성
+		if (token->type == TOKEN_PIPE)
 		{
 			exec->next = builder(token->next);
 			break ;
 		}
-		else if (token->type == TOKEN_COMMAND) //if 명령어, 저장
+		else if (token->type == TOKEN_COMMAND)
 		{
 			exec->cmd = ft_strdup(token->value);
 			if (!exec->cmd)
 				return (NULL);
 		}
-		// 리디렉션 및 인자 처리
 		bd_handle_redirs(exec, token);
 		bd_handle_args(exec, token);
-		token = token->next; 
+		token = token->next;
 	}
 	return (exec);
 }

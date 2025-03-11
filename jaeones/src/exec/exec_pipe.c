@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:10:05 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/17 16:47:34 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 14:59:26 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 void	ex_create_pipe(int fd_pipe[2])
 {
 	if (pipe(fd_pipe) == -1)
-		ex_err_pipe(errno); // 파이프 생성 실패 시 오류 처리
+		ex_err_pipe(errno);
 }
 
 // 자식 프로세스를 설정하는 함수
@@ -32,19 +32,19 @@ void	ex_setup_child(t_data *data, t_exec *exec)
 
 	fd_pipe[0] = -1;
 	fd_pipe[1] = -1;
-	ex_create_pipe(fd_pipe); // 파이프 생성
-	signal(SIGINT, sg_exec_handler); // SIGINT 핸들러 설정
-	data->pids[data->pid_count] = fork(); // 자식 프로세스 생성
+	ex_create_pipe(fd_pipe);
+	signal(SIGINT, sg_exec_handler);
+	data->pids[data->pid_count] = fork();
 	if (data->pids[data->pid_count] == -1)
-		ex_err_fork(errno); // fork() 실패 시 오류 처리
+		ex_err_fork(errno);
 	else if (!data->pids[data->pid_count])
-		ex_execute_child(data, exec, fd_pipe); // 자식 프로세스 실행
+		ex_execute_child(data, exec, fd_pipe);
 	else
 	{
 		if (fd_pipe[0] != -1)
-			dup2(fd_pipe[0], STDIN_FILENO); // 부모 프로세스의 입력을 자식 프로세스의 출력으로 설정
+			dup2(fd_pipe[0], STDIN_FILENO);
 	}
-	ex_close_all_fds(NULL, fd_pipe); // 불필요한 파일 디스크립터 닫기
+	ex_close_all_fds(NULL, fd_pipe);
 }
 
 // 자식 프로세스에서 실행되는 함수
@@ -58,34 +58,34 @@ void	ex_execute_child(t_data *data, t_exec *exec, int fd_pipe[])
 	int	exit_code;
 
 	exit_code = 0;
-	signal(SIGQUIT, SIG_DFL); // SIGQUIT 기본 동작 설정
+	signal(SIGQUIT, SIG_DFL);
 	if (exec->next && exec->fd_out == STDOUT_FILENO && fd_pipe[1] != -1)
-		dup2(fd_pipe[1], STDOUT_FILENO); // 출력을 파이프의 쓰기 끝으로 변경
+		dup2(fd_pipe[1], STDOUT_FILENO);
 	if (ex_init_redir(exec))
 	{
 		ex_close_all_fds(data, fd_pipe);
 		ms_free_all(data);
-		exit(EXIT_FAILURE); // 리디렉션 실패 시 종료
+		exit(EXIT_FAILURE);
 	}
 	ex_close_all_fds(data, fd_pipe);
 	if (bi_is_builtin(exec->cmd))
 	{
 		exit_code = bi_do_builtin(data, exec->cmd, exec->args);
 		ms_free_all(data);
-		exit(exit_code); // 내장 명령어 실행 후 종료
+		exit(exit_code);
 	}
-	exit_code = ex_do_exec(data, exec->cmd, exec->args); // 외부 명령어 실행
+	exit_code = ex_do_exec(data, exec->cmd, exec->args);
 	ms_free_all(data);
 	if (exit_code == -2)
-		exit(IS_A_DIRECTORY); // 실행 대상이 디렉토리일 경우 종료
-	exit(COMMAND_NOT_FOUND); // 명령어를 찾을 수 없는 경우 종료
+		exit(IS_A_DIRECTORY);
+	exit(COMMAND_NOT_FOUND);
 }
 
 // dup2를 실행하고 원본 파일 디스크립터를 닫는 함수
 void	ex_dup2_close(int fd1, int fd2)
 {
-	dup2(fd1, fd2); // fd1을 fd2로 복사
-	close(fd1); // 원본 파일 디스크립터 닫기
+	dup2(fd1, fd2);
+	close(fd1);
 }
 
 // 절대 경로 여부를 확인하는 함수
@@ -95,7 +95,7 @@ int	ex_is_abs_path(char *file)
 	while (*file)
 	{
 		if (*file++ == '/')
-			return (1); // 절대 경로일 경우 1 반환
+			return (1);
 	}
-	return (0); // 상대 경로일 경우 0 반환
+	return (0);
 }
