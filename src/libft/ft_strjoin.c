@@ -6,13 +6,11 @@
 /*   By: seong-ki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 16:06:26 by seong-ki          #+#    #+#             */
-/*   Updated: 2024/07/10 21:27:16 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/11 20:28:20 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
-
 
 char	*ft_strjoin(char *s1, char *s2)
 {

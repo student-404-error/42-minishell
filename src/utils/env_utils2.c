@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/25 16:43:16 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/20 16:03:00 by jaoh             ###   ########.fr       */
+/*   Created: 2025/01/25 16:42:57 by jaoh              #+#    #+#             */
+/*   Updated: 2025/02/20 16:02:41 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*ms_free_double(char **value)
+t_env	*env_default_env(void)
 {
-	int	i;
+	char	*id;
+	char	*value;
+	t_env	*def;
 
-	i = 0;
-	while (value[i] != NULL)
-	{
-		free(value[i]);
-		i++;
-	}
-	free(value);
-	return (NULL);
+	id = env_get_id(DEF_ENV);
+	value = env_get_value(DEF_ENV);
+	def = env_create(id, value, ft_strdup(DEF_ENV));
+	return (def);
 }
 
 /*
@@ -62,7 +60,7 @@ char	*env_get_id(char *raw)
 	return (ft_strndup(raw, eq - raw));
 }
 
-char	*env_get_value(char	*raw)
+char	*env_get_value(char *raw)
 {
 	char	*eq;
 

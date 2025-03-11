@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:33:08 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 15:30:19 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 18:21:38 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_tokenizer {
 	int		start;
 	int		is_first_token;
 	int		after_operator;
-	t_token	*tklst;
+	t_token		*tklst;
 }	t_tokenizer;
 
 t_token	*ft_new_token(char *value, t_tokenizer *state);

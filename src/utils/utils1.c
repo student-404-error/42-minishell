@@ -80,3 +80,17 @@ int	ms_check_line(char *line)
 		return (1);
 	return (0);
 }
+
+void	*ms_free_double(char **value)
+{
+	int	i;
+
+	i = 0;
+	while (value[i] != NULL)
+	{
+		free(value[i]);
+		i++;
+	}
+	free(value);
+	return (NULL);
+}

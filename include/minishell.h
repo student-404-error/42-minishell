@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/10 17:24:14 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 19:52:38 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_env
 	char			*id;
 	char			*value;
 	char			*raw;
+	int			len;
 	struct s_env	*next;
 }	t_env;
 
@@ -102,8 +103,18 @@ t_env	*env_default_env(void);
 void	env_del_one(t_env *env);
 void	env_free(t_env *env);
 int		env_add_back(t_env **head, t_env *new);
-char	*env_get_id(char *raw);
-char	*env_get_value(char	*raw);
+char	*env_get_id(char *raw);		// 이름 겹침 -> env_create_id
+char	*env_get_value(char	*raw);	// 이름 겹침 -> env_create_value
 int		env_lstsize(t_env *env);
+
+/* parsing 주요 함수 */
+t_token	*tokenize(t_data *data, char *input);
+int	handle_single_char_operators(t_tokenizer *state, char *input);
+int	handle_special_operators(t_tokenizer *state, char *input);
+int	handle_env_variable(t_tokenizer *state, char *input);
+int	handle_whitespace(t_tokenizer *state, char *input);
+int	handle_quote_token(t_tokenizer *state, char *input);
+void	remove_quote(t_token **tklst);
+void	concat_token(t_token **tklst);
 
 #endif

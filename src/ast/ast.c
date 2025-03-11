@@ -1,11 +1,8 @@
-#include <stdio.h>
+/*
+ * #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-/* ============================================================
-    1. 토큰 관련 정의 및 유틸리티
-   ============================================================ */
 
 typedef enum e_token_type
 {
@@ -40,10 +37,6 @@ void advance_token(t_token **tokens)
     if (*tokens != NULL)
         *tokens = (*tokens)->next;
 }
-
-/* ============================================================
-    2. AST 관련 정의 및 유틸리티
-   ============================================================ */
 
 typedef enum e_ast_node_type
 {
@@ -101,11 +94,6 @@ void print_ast(t_ast_node *node, int level)
     print_ast(node->right, level + 1);
 }
 
-/* ============================================================
-    3. 재귀 하향 파서 구현
-   ============================================================ */
-
-/* parse_cmd_word: 첫 단어, TOKEN_CMD 또는 TOKEN_STRING 허용 */
 t_ast_node *parse_cmd_word(t_token **tokens)
 {
     t_token *tok;
@@ -119,7 +107,6 @@ t_ast_node *parse_cmd_word(t_token **tokens)
     return (node);
 }
 
-/* parse_arg_word: 인자는 TOKEN_STRING 또는 TOKEN_ENV_VARI 허용 */
 t_ast_node *parse_arg_word(t_token **tokens)
 {
     t_token *tok;
@@ -133,7 +120,6 @@ t_ast_node *parse_arg_word(t_token **tokens)
     return (node);
 }
 
-/* parse_filename: redirection 대상은 TOKEN_FILENAME 또는 TOKEN_ENV_VARI */
 t_ast_node *parse_filename(t_token **tokens)
 {
     t_token *tok;
@@ -147,7 +133,6 @@ t_ast_node *parse_filename(t_token **tokens)
     return (node);
 }
 
-/* parse_heredoc: HEREDOC 대상은 TOKEN_EOF, TOKEN_ENV_VARI 또는 TOKEN_STRING */
 t_ast_node *parse_heredoc(t_token **tokens)
 {
     t_token *tok;
@@ -163,8 +148,6 @@ t_ast_node *parse_heredoc(t_token **tokens)
     return (node);
 }
 
-/* <simple_command> ::= <word> { <word> }
-   첫 단어는 parse_cmd_word, 이후는 parse_arg_word */
 t_ast_node *parse_simple_command(t_token **tokens)
 {
     t_ast_node *first;
@@ -186,8 +169,6 @@ t_ast_node *parse_simple_command(t_token **tokens)
     return (new_ast_node(AST_SIMPLE_COMMAND, NULL, first, NULL));
 }
 
-/* <redirection> ::= (<redir_in>|<redir_out>|<redir_append>|<heredoc>) <word>
-   redirection 대상은 parse_filename() 또는 parse_heredoc() */
 t_ast_node *parse_redirection(t_token **tokens)
 {
     t_token *tok;
@@ -248,7 +229,6 @@ t_ast_node *parse_redirection(t_token **tokens)
     return (NULL);
 }
 
-/* <pre_redirs> ::= { <redirection> } */
 t_ast_node *parse_pre_redirs(t_token **tokens)
 {
     t_ast_node *pre;
@@ -278,7 +258,6 @@ t_ast_node *parse_pre_redirs(t_token **tokens)
     return (pre);
 }
 
-/* <post_redirs> ::= { <redirection> } */
 t_ast_node *parse_post_redirs(t_token **tokens)
 {
     t_ast_node *post;
@@ -308,7 +287,6 @@ t_ast_node *parse_post_redirs(t_token **tokens)
     return (post);
 }
 
-/* <command> ::= { <redirection> } <simple_command> { <redirection> } */
 t_ast_node *parse_command(t_token **tokens)
 {
     t_ast_node *pre;
@@ -339,7 +317,6 @@ t_ast_node *parse_command(t_token **tokens)
     return (cmd);
 }
 
-/* <command_line> ::= <command> { "|" <command> } */
 t_ast_node *parse_command_line(t_token **tokens)
 {
     t_ast_node *cmd;
@@ -359,10 +336,6 @@ t_ast_node *parse_command_line(t_token **tokens)
     }
     return (node);
 }
-
-/* ============================================================
-    4. 예제: 토큰 리스트 구성 및 파서 실행
-   ============================================================ */
 
 t_token *create_token(t_token_type type, const char *lexeme)
 {
@@ -413,8 +386,6 @@ int main(void)
     t_ast_node *ast;
     t_token *token_copy;
 
-    /* 빈 줄 */
-
     t1 = create_token(TOKEN_CMD, "cat");
     t2 = create_token(TOKEN_STRING, "test.txt");
     t3 = create_token(TOKEN_PIPE, "|");
@@ -441,7 +412,6 @@ int main(void)
     t11->next = t12;
     t12->next = NULL;
 
-    /* 원본 토큰 리스트는 t1이고, 복제 포인터(token_copy)는 t1을 가리키게 함 */
     token_copy = t1;
 
     ast = parse_command_line(&token_copy);
@@ -468,3 +438,4 @@ int main(void)
 //                                 환경변수 확장처리해주기
 //                                     정도인것같은데
 //                                         오케이 거의 다 되어가는 것 같구만
+*/
