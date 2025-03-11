@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:31:11 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/10 14:49:32 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 15:15:17 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef enum e_token_type {
 	TOKEN_HEREDOC,
 	TOKEN_ENV_VARI,
 	TOKEN_EOF,
-	TOKEN_UNKNOWN,
 }	t_token_type;
 
 typedef struct s_token {

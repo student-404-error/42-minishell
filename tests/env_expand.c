@@ -1,6 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+char	*ft_substr(char *s, unsigned int start, size_t len)
+{
+	size_t	i;
+	char	*str;
+
+	if (!s)
+		return (NULL);
+	if (start > strlen(s))
+		return (malloc(1));
+	if (len > strlen(s + start))
+		len = strlen(s + start);
+	str = malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		str[i] = s[start + i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
 size_t	ft_strlcpy(char *dst, char *src, size_t dstsize)
 {
 	size_t	i;
@@ -59,43 +84,3 @@ int	get_dollar_idx(char *s)
 	return (-1);
 }
 
-int	count_total_length(char *token)
-{
-	int	length;
-	int	idx;
-	char	*key;
-
-	idx = -1;
-	length = 0;
-	while (get_dollar_idx(token + idx + 1) != -1)
-	{
-		printf("--------------------\n");
-		printf("1: dollar: %d\n", get_dollar_idx(token + idx + 1) - 1);
-		length += get_dollar_idx(token + idx + 1);
-		idx += get_dollar_idx(token + idx + 1) + 1;
-		printf("2: dollar: %d\n", get_dollar_idx(token + idx + 1) - 1);
-		printf("1: length: %d\n", length);
-		key = get_env_key(token + idx + 1);
-		length +=/* get_env_value_len(env, key)*/8;
-		idx += strlen(key);
-		printf("2: length: %d\n", length);
-		free(key);
-	}
-	return (length);
-}
-int	main(void)
-{
-	char	*str;
-	char	*key;
-
-	str = malloc(30 * sizeof(char));
-	key = malloc(9 * sizeof(char));
-	str = "hello $USER HELLO $USER $USER";
-	//     6을 더하고, 6 + 8 + 7 + 8 + 1 + 8
-	key = "seong-ki";
-	printf("%d\n", strlen(str));
-	printf("%d\n", count_total_length(str));
-	printf("%d\n", strlen("hello seong-ki"));
-	printf("%d\n", strlen("hello seong-ki HELLO seong-ki seong-ki"));
-	return (0);
-}

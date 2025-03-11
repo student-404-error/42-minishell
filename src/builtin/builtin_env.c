@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:29:25 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/10 14:49:11 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 15:16:24 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ t_env	*ft_new_env(char *str)
 	len = key_length(str);
 	new_env->key = ft_substr(str, 0, len);
 	new_env->value = ft_substr(str, len + 1, ft_strlen(str));
-	new_env->length = ft_strlen(new_env->value);
+	new_env->len = ft_strlen(new_env->value);
 	new_env->next = NULL;
 	return (new_env);
 }

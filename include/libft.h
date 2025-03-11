@@ -6,7 +6,7 @@
 /*   By: seong-ki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 16:07:23 by seong-ki          #+#    #+#             */
-/*   Updated: 2024/07/10 22:53:09 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/11 15:15:42 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ typedef struct s_list {
 typedef struct s_env {
 	char			*key;
 	char			*value;
-	int				length;
-	struct s_env	*next;
+	int			len;
+	struct s_env		*next;
 }	t_env;
 
 # ifndef BUFFER_SIZE

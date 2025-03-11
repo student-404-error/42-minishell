@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/10 14:49:04 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 15:42:22 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	ft_token_add_back(t_token **tklst, t_token *new)
 	new->next = NULL;
 }
 
-int	ft_dollar_idx(char *s)
+int	get_dollar_idx(char *s)
 {
 	int	i;
 
@@ -151,17 +151,17 @@ int	ft_dollar_idx(char *s)
 
 char	*get_env_key(char *str)
 {
-	int		len;
-	char	*env_name;
+	int	len;
+	char	*key;
 
 	len = 0;
 	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
 		len++;
-	env_name = malloc(sizeof(char) * len + 1);
-	if (env_name == NULL)
+	key = malloc(sizeof(char) * len + 1);
+	if (key == NULL)
 		return (NULL);
-	ft_strlcpy(env_name, str, len + 1);
-	return (env_name);
+	ft_strlcpy(key, str, len + 1);
+	return (key);
 }
 
 char	*get_env_value(t_data *data, char *key)
@@ -180,55 +180,83 @@ char	*get_env_value(t_data *data, char *key)
 	return (ft_strdup(""));
 }
 
+int	get_env_value_len(t_data *data, char *key)
+{
+	t_env	*env;
+
+	if (ft_strcmp(key, "") == 0)
+		return (0);
+	env = data->env;
+	while (env != NULL)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+			return (env->len);
+		env = env->next;
+	}
+	return (-1);
+}
+
+int	count_total_length(t_data *data, char *token)
+{
+	int	length;
+	int	idx;
+	char	*key;
+
+	idx = -1;
+	length = 0;
+	while (get_dollar_idx(token + idx + 1) != -1)
+	{
+		length += get_dollar_idx(token + idx + 1);
+		idx += get_dollar_idx(token + idx + 1) + 1;
+		key = get_env_key(token + idx + 1);
+		length += get_env_value_len(data, key);
+		idx += ft_strlen(key);
+		free(key);
+	}
+	return (length);
+}
+char	*expand_env_vari(t_data *data, char *token)
+{
+	char	*ret;
+	char	*key;
+	char	*value;
+	int	start;
+	int	idx;
+
+	ret = malloc(sizeof(char) * (count_total_length(data, token) + 1));
+	if (ret == NULL)
+		return (NULL);
+	ft_bzero(ret, count_total_length(data, token) + 1);
+	start = 0;
+	idx = -1;
+	while (get_dollar_idx(token + start + idx + 1) != -1)
+	{
+		idx = get_dollar_idx (token + start + 1) + 1;
+		key = ft_substr(token, start, idx);
+		ft_strlcpy(ret + ft_strlen(ret), key, idx + 1);
+		free(key);
+		key = get_env_key(token + start + idx + 1);
+		value = get_env_value(data, key);
+		ft_strlcpy(ret + ft_strlen(ret), value, ft_strlen(value) + 1);
+		start += idx + ft_strlen(key) + 1;
+		free(key);
+		free(value);
+	}
+	return (ret);
+}
 void	change_env_vari(t_data *data, t_token **tklst)
 {
-	int		dollar_idx;
-	char	*str;
-	char	*ret;
 	t_token	*inst_lst;
+	char	*old_str;
 
 	inst_lst = *tklst;
 	while (inst_lst)
 	{
-		dollar_idx = ft_dollar_idx(inst_lst->value);
-		if (dollar_idx >= 0)
+		if (inst_lst->type == 9)
 		{
-			ret = ft_substr(inst_lst->value, 0, dollar_idx - 1); // ret malloc됨.
-			str = ret;
-			ret = ft_strjoin(ret, get_env_value(data, get_env_key(inst_lst->value + dollar_idx)));
-			str = get_env_key(inst_lst->value + dollar_idx + 1);
-			dollar_idx += ft_strlen(str);
-			free(str);
-			while (1)
-			{
-				if (ft_dollar_idx(inst_lst->value + dollar_idx) == -1)
-					break;
-				else 
-				{
-					if (ft_dollar_idx(inst_lst->value + dollar_idx) != 1)
-					{
-						str = ret;
-						ret = ft_strjoin(ret, ft_substr(inst_lst->value, dollar_idx + 1, ft_dollar_idx(inst_lst->value + dollar_idx) - 2));
-						dollar_idx += ft_dollar_idx(inst_lst->value + dollar_idx) - 1;
-						free(str);
-					}
-					else
-					{
-						str = ret;
-						ret = ft_strjoin(ret, get_env_value(data, get_env_key(inst_lst->value + dollar_idx + 1)));
-						dollar_idx += ft_strlen(get_env_key(inst_lst->value + dollar_idx));
-						free(str);
-						break ;
-					}
-				}
-			}
-			// str = ret;
-			// ret = ft_strjoin(ret, inst_lst->value + (ft_strlen(inst_lst->value) - ft_strlen(ft_strrchr(inst_lst->value, '$')) + 0));
-			str = ret;
-			ret = ft_strjoin(ret, inst_lst->value + dollar_idx + ft_strlen(get_env_key(inst_lst->value + dollar_idx + 1)) + 1);
-			free(str);
-			free(inst_lst->value);
-			inst_lst->value = ret;
+			old_str = inst_lst->value;
+			inst_lst->value = expand_env_vari(data, old_str);
+			free(old_str);
 		}
 		inst_lst = inst_lst->next;
 	}
@@ -490,8 +518,8 @@ t_token* tokenize(t_data *data, char *input)
 	if (state.idx != state.start)
 		ft_token_add_back(&state.tklst,
 			ft_new_token(ft_substr(input, state.start, state.idx - state.start), &state));
-	// change_env_vari(data, &state.tklst);
 	remove_quote(&state.tklst);
+	change_env_vari(data, &state.tklst);
 	join_cmd_str(&state.tklst);
 	ft_print_tokens(state.tklst);
 	printf("\n\n%d\n\n", data->last_ret);
