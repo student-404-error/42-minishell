@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:31:11 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 15:15:17 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:25:21 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ typedef enum e_token_type {
 	TOKEN_COMMAND,
 	TOKEN_STRING,
 	TOKEN_FILENAME,
+	TOKEN_ENV_VARI,
 	TOKEN_SPACE,
 	TOKEN_PIPE,
 	TOKEN_REDIRECTION_IN,
 	TOKEN_REDIRECTION_OUT,
 	TOKEN_REDIRECTION_APPEND,
 	TOKEN_HEREDOC,
-	TOKEN_ENV_VARI,
 	TOKEN_EOF,
 }	t_token_type;
 

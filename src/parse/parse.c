@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 16:06:56 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:25:52 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,20 +231,14 @@ char	*expand_env_vari(t_data *data, char *token)
 	idx = -1;
 	while (get_dollar_idx(token + start + 1) != -1)
 	{
-		printf("dollar: %d\n", get_dollar_idx(token + start + 1));
 		idx = get_dollar_idx(token + start + 1);
-		printf("idx: %d\n", idx);
 		key = ft_substr(token, start + 1, idx);
-		printf("key: %s\n", key);
 		ft_strlcpy(ret + ft_strlen(ret), key, idx + 1);
 		free(key);
 		key = get_env_key(token + start + idx + 2);
-		printf("key: %s\n", key);
 		value = get_env_value(data, key);
-		printf("value: %s\n", value);
 		ft_strlcpy(ret + ft_strlen(ret), value, ft_strlen(value) + 1);
 		start += idx + ft_strlen(key) + 1;
-		printf("start: %d\n", start);
 		free(key);
 		free(value);
 	}
@@ -258,7 +252,7 @@ void	change_env_vari(t_data *data, t_token **tklst)
 	inst_lst = *tklst;
 	while (inst_lst)
 	{
-		if (inst_lst->type == 9)
+		if (inst_lst->type == 3)
 		{
 			old_str = inst_lst->value;
 			inst_lst->value = expand_env_vari(data, old_str);
@@ -312,12 +306,12 @@ t_ast_node	*new_ast_node(t_ast_node_type type, char *value, t_ast_node *left, t_
 
 // 공백 토큰 제거를 먼저 하느냐. 아니면 나중에 하느냐 아예 안 하느냐.
 
-t_token	*ft_print_tokens(t_token *tklst)
+void	ft_print_tokens(t_token *tklst)
 {
 	t_token	*list_ptr;
 
 	if (!tklst)
-		return (NULL);
+		return ;
 	list_ptr = tklst;
 	printf("\n\n===========RESULT===========\n");
 	while (list_ptr)
@@ -326,7 +320,7 @@ t_token	*ft_print_tokens(t_token *tklst)
 		list_ptr = list_ptr->next;
 	}
 	printf("\n\n");
-	return (list_ptr);
+	return ;
 }
 
 void	join_cmd_str(t_token **tklst)
@@ -342,7 +336,7 @@ void	join_cmd_str(t_token **tklst)
 		prev_token = NULL;
 	while (now_token)
 	{
-		if (prev_token && prev_token->type < 3 && now_token->type < 3)
+		if (prev_token && prev_token->type < 4 && now_token->type < 4)
 		{
 			new_str = ft_strjoin(prev_token->value, now_token->value);
 			if (prev_token->prev == NULL)
@@ -374,7 +368,7 @@ void	remove_quote(t_token **tklst)
 	inst_lst = *tklst;
 	while (inst_lst)
 	{
-		if (inst_lst->type < 3 || inst_lst->type == 9)
+		if (inst_lst->type < 4)
 		{
 			if (inst_lst->value[0] == '\'' || inst_lst->value[0] == '\"')	
 			{

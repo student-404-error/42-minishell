@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:17:26 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/10 14:49:06 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 16:16:47 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int main(int argc, char *argv[], char **env)
 	{
 		input = readline("input: ");
 		data.tklst = tokenize(&data, input);
+		ft_print_tokens(data.tklst);
 		if (ft_strncmp(input, "env", 3) == 0)
 			builtin_env(data);
 		else if (ft_strncmp(input, "unset", 5) == 0)
