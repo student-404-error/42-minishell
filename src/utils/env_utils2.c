@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils.c                                        :+:      :+:    :+:   */
+/*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:42:57 by jaoh              #+#    #+#             */
-/*   Updated: 2025/02/20 16:02:41 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/11 21:18:56 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ t_env	*env_default_env(void)
 	char	*value;
 	t_env	*def;
 
-	id = env_get_id(DEF_ENV);
-	value = env_get_value(DEF_ENV);
+	id = env_create_id(DEF_ENV);
+	value = env_create_value(DEF_ENV);
 	def = env_create(id, value, ft_strdup(DEF_ENV));
 	return (def);
 }
@@ -46,7 +46,7 @@ t_env	*ms_getenv(char *path, t_env *envp)
 	return (NULL);
 }
 
-char	*env_get_id(char *raw)
+char	*env_create_id(char *raw)
 {
 	char	*eq;
 
@@ -60,7 +60,7 @@ char	*env_get_id(char *raw)
 	return (ft_strndup(raw, eq - raw));
 }
 
-char	*env_get_value(char *raw)
+char	*env_create_value(char *raw)
 {
 	char	*eq;
 

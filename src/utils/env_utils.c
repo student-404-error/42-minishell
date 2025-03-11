@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:43:07 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 18:29:54 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/11 21:18:56 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ t_env	*ms_env_dup(char **envp)
 		return (env_default_env());
 	while (envp[i])
 	{
-		id = env_get_id(envp[i]);
-		value = env_get_value(envp[i]);
+		id = env_create_id(envp[i]);
+		value = env_create_value(envp[i]);
 		tmp = env_create(id, value, ft_strdup(envp[i]));
 		if (!tmp)
 			return (NULL);
