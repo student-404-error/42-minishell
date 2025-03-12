@@ -23,27 +23,6 @@ size_t	key_length(char *key_value)
 	return (len);
 }
 
-// env이름 비교하는 방식이 2개 떠오름
-// 1. 각 env별로 =전까지 추출 후 (name_env function) ft_strcmp로 비교
-// 2. 각 env의 =전까지 길이 비교 후 같으면 ft_strncmp
-
-// int		search_env(t_list *env_list, char *target)
-// {
-// 	int	idx;
-// 	size_t	key_len;
-//
-// 	idx = 0;
-// 	while (env_list)
-// 	{
-// 		key_len = key_length(env_list->str);
-// 		if ((key_length(target) == key_len) && !ft_strncmp(env_list->str, target, key_len)) // find target_env
-// 			return (idx);
-// 		env_list = env_list->next;
-// 		idx++;
-// 	}
-// 	return (-1);
-// }
-//
 int	is_valid_env_key(char *key)
 {
 	while (*key)
@@ -68,10 +47,10 @@ int	builtin_unset(t_data *data, char *target)
 		printf("minishell: unset: `%s': not a valid identifier\n", target);
 		return (ERROR);
 	}
-	env_list = data->env;
+	env_list = data->envp;
 	tmp = NULL;
 	if (ft_strcmp(env_list->key, target) == 0)
-		data->env = env_list->next;
+		data->envp = env_list->next;
 	else
 	{
 		while (env_list->next->next && ft_strcmp(env_list->next->key, target) != 0)
@@ -89,7 +68,6 @@ int	builtin_unset(t_data *data, char *target)
 // 1. 생성
 //    1. 새로운 env 생성
 //    2. 기존 env_list에 추가.
-//    3. 정렬
 // 2. 변경
 //	  1. 검색
 //	  2. 수정
@@ -107,33 +85,6 @@ int	builtin_unset(t_data *data, char *target)
 //		no : 삽입 -> 정렬
 // 
 //
-
-
-
-/*	init_env를 변경해야함.
- *	원래 구조는 t_list->str에 "key=value"로 저장했지만
- *	지금 다시 보니까 그런 것보다 t_env->key, t_env->value로 저장하는게 좋음.
- *	t_env는 아래의 멤버변수를 가짐.
- *	char	*key;
- *	char	*value;
- *	t_env	*next;
- *	(t_env	*prev;) 이건 아마 필요는 없을 듯 함.
- *	필요한 추가 함수들
- *	t_env	*new_env(char *str); str 을 '=' 기준으로 분할 후 key, value값에 저장. next = NULL;
- *	void	ft_env_add_back() ft_lstadd_back을 복사.
- *
- *	t_data: 미니쉘을 사용하면서 필요한 대부분의 변수를 담고 있는 구조체.
- *	아래의 멤버변수를 가짐.
- *	t_env	**env;
- *	t_token	**token;
- *	int		ret;
- *
- *
- *
- *
- *
- */
-
 
 t_env	*ft_new_env(char *str)
 {
@@ -180,11 +131,11 @@ void	init_env(t_data *data, char **env_list)
 	t_env	*new_env;
 
 	i = 0;
-	data->env = NULL;
+	data->envp = NULL;
 	while (env_list[i])
 	{
 		new_env = ft_new_env(env_list[i]);
-		ft_env_add_back(&data->env, new_env);
+		ft_env_add_back(&data->envp, new_env);
 		i++;
 	}
 }
@@ -193,7 +144,7 @@ int	builtin_env(t_data data)
 {
 	t_env	*env_list;
 
-	env_list = data.env;
+	env_list = data.envp;
 	if (!env_list)
 		return (1);
 	while (env_list)

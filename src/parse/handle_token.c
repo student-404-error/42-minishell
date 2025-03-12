@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
 int	handle_quote_token(t_tokenizer *state, char *input)
 {
 	char	quote;

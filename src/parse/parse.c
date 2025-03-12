@@ -107,6 +107,6 @@ t_token	*tokenize(t_data *data, char *input)
 					state.idx - state.start), &state));
 	remove_quote(&state.tklst);
 	change_env_vari(data, &state.tklst);
-	concat_concat(&state.tklst);
+	concat_token(&state.tklst);
 	return (state.tklst);
 }

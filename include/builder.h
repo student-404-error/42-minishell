@@ -12,6 +12,7 @@
 
 #ifndef BUILDER_H
 # define BUILDER_H
+# include "structure.h"
 
 /* builder.c */
 t_exec	*builder(t_token *token);
@@ -22,7 +23,7 @@ void	bd_debug(t_exec *exec);
 
 /* file.c */
 void	file_free(t_file *filenames);
-t_file	*file_create(char *path, t_tok_type type);
+t_file	*file_create(char *path, t_token_type type);
 t_file	*file_last(t_file *filename);
 int		file_add_back(t_file **head, t_file *new);
 int		file_lstsize(t_file *filename);

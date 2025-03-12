@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*   ft_free_all.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seong-ki <seong-ki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/11 14:28:39 by seong-ki          #+#    #+#             */
-/*   Updated: 2024/09/11 14:37:02 by seong-ki         ###   ########.fr       */
+/*   Created: 2025/01/22 17:19:14 by jaoh              #+#    #+#             */
+/*   Updated: 2025/01/22 17:19:19 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	builtin_pwd()
+void	ft_free_all(char **arr)
 {
-	char	path[PATH_MAX];
+	int	i;
 
-	if (getcwd(path, PATH_MAX))
-	{
-		printf("%s\n", path);
-		return (0);
-	}
-	else 
-	{
-		perror("pwd");
-		return (1);
-	}
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
 }

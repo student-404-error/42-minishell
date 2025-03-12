@@ -26,7 +26,7 @@ void	file_free(t_file *file)
 	}
 }
 
-t_file	*file_create(char *path, t_tok_type type)
+t_file	*file_create(char *path, t_token_type type)
 {
 	t_file	*filename;
 	char	*new;

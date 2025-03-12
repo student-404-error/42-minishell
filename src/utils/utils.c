@@ -41,7 +41,7 @@ t_data	*ms_init_data(char **envp)
 void	ms_clear(t_data *data, t_token *token)
 {
 	if (token)
-		tok_free_list(token);
+		ft_free_token_list(token);
 	if (data)
 	{
 		if (data->exec)
