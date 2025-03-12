@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 19:52:38 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/11 21:19:09 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ t_env	*env_default_env(void);
 void	env_del_one(t_env *env);
 void	env_free(t_env *env);
 int		env_add_back(t_env **head, t_env *new);
-char	*env_get_id(char *raw);		// 이름 겹침 -> env_create_id
-char	*env_get_value(char	*raw);	// 이름 겹침 -> env_create_value
+char	*env_create_id(char *raw);
+char	*env_create_value(char	*raw);
 int		env_lstsize(t_env *env);
 
 /* parsing 주요 함수 */

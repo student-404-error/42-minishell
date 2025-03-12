@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expand_variable.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seong-ki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:15:12 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 19:19:09 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/11 21:23:53 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minishell.h"
 
 static char	*expand_env_vari2(t_data *data, char *token, int start)
 {
@@ -49,7 +51,7 @@ void	expand_env_vari(t_data *data, t_token **tklst)
 		if (inst_lst->type == 3)
 		{
 			old_str = inst_lst->value;
-			inst_lst->value = expand_env_vari(data, old_str, -1);
+			inst_lst->value = expand_env_vari2(data, old_str, -1);
 			free(old_str);
 		}
 		inst_lst = inst_lst->next;
