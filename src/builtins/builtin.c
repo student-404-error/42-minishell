@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:48:24 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/14 13:01:59 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/14 13:08:59 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ int	bi_do_builtin(t_data *data, char *cmd, t_args *args)
 {
 	if (!ft_strcmp(cmd, "echo"))
 		return (bi_echo(args));
-	/*if (!ft_strcmp(cmd, "cd"))
+	if (!ft_strcmp(cmd, "cd"))
 		return (bi_cd(data, args));
 	if (!ft_strcmp(cmd, "pwd"))
-		return (bi_pwd(args));*/
+		return (bi_pwd(args));
 	if (!ft_strcmp(cmd, "export"))
 		return (bi_export(data, args));
 	if (!ft_strcmp(cmd, "unset"))
