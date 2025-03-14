@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:48:24 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/14 13:00:29 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/14 13:01:59 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int	bi_env(t_data *data, t_args *args)
 	while (tmp)
 	{
 		if (tmp->value)
-			printf("%s=%s\n", tmp->id, tmp->value);
+			printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 	return (0);
