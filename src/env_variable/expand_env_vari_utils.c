@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	get_dollar_idx(char *s)
+#include "minishell.h"
+
+static int	get_dollar_idx(char *s)
 {
 	int	i;
 

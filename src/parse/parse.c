@@ -106,7 +106,12 @@ t_token	*tokenize(t_data *data, char *input)
 			ft_new_token(ft_substr(input, state.start,
 					state.idx - state.start), &state));
 	remove_quote(&state.tklst);
+<<<<<<< HEAD
+	change_env_vari(data, &state.tklst);
+	concat_token(&state.tklst);
+=======
 	expand_env_vari(data, &state.tklst);
 	concat_concat(&state.tklst);
+>>>>>>> 5600c71d9b0781a85413e3dd04e763c4ccb5c876
 	return (state.tklst);
 }

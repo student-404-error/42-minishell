@@ -36,13 +36,13 @@ NAME 		= minishell
 
 SRCS_M		= main.c
 
-SRCS_BT		= builtin_cd.c builtin_env.c builtin_export.c builtin_pwd.c 
+SRCS_BT		= builtin_cd.c builtin_env.c builtin_export.c builtin_pwd.c builtin_utils.c
 
 SRCS_EX 	= exec.c exec_redirect.c exec_pipe.c exec_child_utils.c exec_errors.c exec_utils.c
 
 SRCS_PAR 	= parse.c
 
-SRCS_UTI 	= utils1.c utils2.c env.c env_utils.c
+SRCS_UTI 	= utils.c env_utils.c env_utils2.c
 
 SRCS_BLD 	= builder.c builder_utils.c file.c args.c
 

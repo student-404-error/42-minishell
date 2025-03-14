@@ -66,7 +66,6 @@ void	remove_quote(t_token **tklst)
 				free(inst_lst->value);
 				inst_lst->value = new_value;
 			}
-			printf("remove_quote: %s\n", inst_lst->value);
 		}
 		inst_lst = inst_lst->next;
 	}

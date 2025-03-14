@@ -14,13 +14,19 @@
 
 t_env	*env_default_env(void)
 {
-	char	*id;
+	char	*key;
 	char	*value;
 	t_env	*def;
 
+<<<<<<< HEAD
+	key = env_get_id(DEF_ENV);
+	value = env_get_value(DEF_ENV);
+	def = env_create(key, value, ft_strdup(DEF_ENV));
+=======
 	id = env_create_id(DEF_ENV);
 	value = env_create_value(DEF_ENV);
 	def = env_create(id, value, ft_strdup(DEF_ENV));
+>>>>>>> 5600c71d9b0781a85413e3dd04e763c4ccb5c876
 	return (def);
 }
 
@@ -39,7 +45,7 @@ t_env	*ms_getenv(char *path, t_env *envp)
 		return (NULL);
 	while (envp != NULL)
 	{
-		if (ft_strcmp(path, envp->id) == 0)
+		if (ft_strcmp(path, envp->key) == 0)
 			return (envp);
 		envp = envp->next;
 	}

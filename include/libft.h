@@ -24,13 +24,6 @@ typedef struct s_list {
 	struct s_list	*next;
 }	t_list;
 
-typedef struct s_env {
-	char			*key;
-	char			*value;
-	int			len;
-	struct s_env		*next;
-}	t_env;
-
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 3
 # endif
@@ -93,6 +86,7 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 // error
 void	ft_error(char *msg);
+void	ft_free_all(char **arr);
 // t_list
 t_list	*ft_lstnew(char *content);
 void	ft_lstadd_back(t_list **lst, t_list *new);

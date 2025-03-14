@@ -15,21 +15,16 @@
 
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <stdlib.h>
-# include <stdio.h>
 # include <string.h>
 # include <unistd.h>
 # include <errno.h>
 # include <ncurses.h>
 # include <termios.h>
-# include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <signal.h>
 # include <fcntl.h>
 # include <limits.h>
-
-# include "libft.h"
 
 # include "builtin.h"
 # include "exec.h"
@@ -53,35 +48,6 @@
 # define PROMPT "\001\033[1;33m\002charles mishell >$ \001\033[0m\002"
 # define DEF_ENV "SHELL=charles mishell"
 
-typedef struct s_signals
-{
-	int	signal_code;
-	int	eof;
-}	t_signals;
-
-typedef struct s_env
-{
-	char			*id;
-	char			*value;
-	char			*raw;
-	int			len;
-	struct s_env	*next;
-}	t_env;
-
-typedef struct s_data
-{
-	int				def_in;
-	int				def_out;
-	int				exec_count;
-	unsigned char	exit_code;
-	pid_t			*pids;
-	int				pid_count;
-	t_exec			*exec;
-	t_env			*envp;
-	t_token			*tklst;
-	int				last_ret;
-}	t_data;
-
 extern t_signals	g_signals;
 
 /* minishell 주요 함수 */
@@ -98,7 +64,7 @@ void	*ms_free_double(char **value);
 t_env	*ms_getenv(char *path, t_env *envp);
 
 /* t_env 함수 */
-t_env	*env_create(char *id, char *value, char *raw);
+t_env	*env_create(char *key, char *value, char *raw);
 t_env	*env_default_env(void);
 void	env_del_one(t_env *env);
 void	env_free(t_env *env);
@@ -116,5 +82,15 @@ int	handle_whitespace(t_tokenizer *state, char *input);
 int	handle_quote_token(t_tokenizer *state, char *input);
 void	remove_quote(t_token **tklst);
 void	concat_token(t_token **tklst);
+void	expand_env_vari(t_data *data, t_token **tklst);
+char	*get_env_key(char *str);
+char	*get_env_value(t_data *data, char *key);
+int	get_env_value_len(t_data *data, char *key);
+int	count_total_length(t_data *data, char *token);
+t_token	*ft_new_token(char *value, t_tokenizer *state);
+t_token	*ft_tklast(t_token *tklst);
+void	ft_token_add_back(t_token **tklst, t_token *new);
+t_token_type	check_token_type(char *value, t_tokenizer *state);
+void	ft_free_token_list(t_token *token);
 
 #endif
