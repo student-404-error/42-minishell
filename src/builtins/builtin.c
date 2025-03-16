@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:48:24 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/14 13:08:59 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/16 17:52:16 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,11 @@ int	bi_pwd(t_args *args)
 {
 	char	*cwd;
 
+	if (args && args->value)
+	{
+		bi_err_pwd(args->value);
+		return (2);
+	}
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
