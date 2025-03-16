@@ -56,7 +56,8 @@ FILES		=		ft_atoi			\
 				ft_lstsize 		\
 				ft_lstlast 		\
 				get_next_line		\
-				ft_free_all
+				ft_free_all		\
+				ft_advanced_sort_string_tab
 
 INCLUDES	=	../../include
 CC		=	cc

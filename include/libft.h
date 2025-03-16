@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seong-ki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 16:07:23 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 15:15:42 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/16 18:00:44 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstadd_front(t_list **lst, t_list *new);
 t_list	*ft_lstlast(t_list *lst);
 int		ft_lstsize(t_list *lst);
+// sort
+void	ft_advanced_sort_string_tab(char **tab,
+	int (*cmp)(const char *, const char *));
 #endif
