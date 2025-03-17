@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:32:39 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/12 20:47:24 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:37:29 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	handle_pipeline(t_data *data, char *line)
 	free(line);
 	if (data->tklst == NULL)
 		return (0);
-	free(line);
 	if (ft_setup_exec(data, &data->tklst) != 0)
 		return (1);
 	ex_run_exec(data);

@@ -53,7 +53,7 @@ SRCS			=	$(addprefix $(SRC_DIR), $(SRCS_M))			\
 			 	 	$(addprefix $(TOKEN_PATH), $(SRCS_TOKEN))	\
 			 	 	$(addprefix $(ENV_VARI_PATH), $(SRCS_ENV_VARI_PATH))
 
-HEADERS			=	builder.h builtin.h exec.h parsing.h minishell.h signals.h
+HEADERS			=	builder.h builtin.h exec.h parsing.h minishell.h signals.h structure.h
 HEAD			=	includes/
 H_DEPS			=	$(addprefix $(HEAD), $(HEADERS))
 
@@ -67,6 +67,9 @@ OBJF			=	.cache
 
 all:	$(NAME)
 
+$(LIBFT):
+	@make -C $(LFT_DIR)
+
 $(NAME): $(LIBFT) $(OBJS) $(H_DEPS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(RLFLAG)
 	@echo -e "${FBlue}${NAME}${Blue} compiled\n${RESET}"
@@ -76,9 +79,6 @@ $(OBJF):
 
 $(OBJ_DIR)%.o: %.c | $(OBJF)
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
-
-$(LIBFT):
-	@make -C $(LFT_DIR)
 
 clean:
 	@$(RM) $(OBJ_DIR)

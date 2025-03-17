@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 21:24:16 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/17 15:41:18 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,7 @@ t_token	*tokenize(t_data *data, char *input)
 			ft_new_token(ft_substr(input, state.start,
 					state.idx - state.start), &state));
 	remove_quote(&state.tklst);
-<<<<<<< HEAD
-	change_env_vari(data, &state.tklst);
-	concat_token(&state.tklst);
-=======
 	expand_env_vari(data, &state.tklst);
-	concat_concat(&state.tklst);
->>>>>>> 5600c71d9b0781a85413e3dd04e763c4ccb5c876
+	concat_token(&state.tklst);
 	return (state.tklst);
 }

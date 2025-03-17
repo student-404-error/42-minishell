@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seong-ki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:16:29 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 18:17:32 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:54:00 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minishell.h"
 
 t_token	*ft_new_token(char *value, t_tokenizer *state)
 {

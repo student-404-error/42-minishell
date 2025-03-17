@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 21:19:09 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/17 15:55:23 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include "builder.h"
 # include "signals.h"
 # include "parsing.h"
+# include "structure.h"
 
 # define P_NAME "charles mishell"
 # define BROWN_A    "\033[1;33m"

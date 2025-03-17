@@ -6,13 +6,12 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 17:34:10 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 15:22:03 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/17 15:55:38 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILDER_H
 # define BUILDER_H
-# include "structure.h"
 
 /* builder.c */
 t_exec	*builder(t_token *token);

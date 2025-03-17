@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:42:57 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 21:18:56 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/17 15:45:13 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,9 @@ t_env	*env_default_env(void)
 	char	*value;
 	t_env	*def;
 
-<<<<<<< HEAD
-	key = env_get_id(DEF_ENV);
-	value = env_get_value(DEF_ENV);
-	def = env_create(key, value, ft_strdup(DEF_ENV));
-=======
-	id = env_create_id(DEF_ENV);
+	key = env_create_id(DEF_ENV);
 	value = env_create_value(DEF_ENV);
-	def = env_create(id, value, ft_strdup(DEF_ENV));
->>>>>>> 5600c71d9b0781a85413e3dd04e763c4ccb5c876
+	def = env_create(key, value, ft_strdup(DEF_ENV));
 	return (def);
 }
 
