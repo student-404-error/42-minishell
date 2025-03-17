@@ -60,7 +60,7 @@ FILES		=		ft_atoi			\
 				ft_advanced_sort_string_tab \
 				ft_strndup
 
-INCLUDES	=	../../include
+INCLUDES	=	../../includes
 CC		=	cc
 
 CFLAGS		=	-Wall -Werror -Wextra -fPIC -I$(INCLUDES)

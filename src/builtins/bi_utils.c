@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 18:02:54 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/16 17:49:32 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/17 16:47:18 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	bi_add_var(char *value, t_env **env)
 
 	arg_id = env_create_id(value);
 	if (!arg_id || !bi_check_id(arg_id))
-		return (free(arg_id), bi_err_export(value));
+		return (free(arg_id), bi_error_export(value));
 	arg_raw = ft_strdup(value);
 	if (!arg_raw)
 		return (free(arg_id), 1);

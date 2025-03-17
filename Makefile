@@ -3,7 +3,7 @@ NAME			=	minishell
 SRC_DIR			=	src/
 OBJ_DIR			=	obj/
 LFT_DIR			=	src/libft/
-BUILTINS_PATH	=	src/builtin/
+BUILTINS_PATH	=	src/builtins/
 EXEC_PATH		=	src/exec/
 PARSE_PATH		=	src/parse/
 UTILS_PATH		=	src/utils/
@@ -17,7 +17,7 @@ LIBFT			=	$(LFT_DIR)libft.a
 
 SRCS_M			=	main.c
 
-SRCS_BT			=	builtin_cd.c builtin_env.c builtin_export.c builtin_pwd.c 
+SRCS_BT			=	builtin.c bi_errors.c bi_utils.c bi_check. 
 
 SRCS_EX 		=	exec.c exec_redirect.c exec_pipe.c exec_child_utils.c exec_errors.c exec_utils.c
 

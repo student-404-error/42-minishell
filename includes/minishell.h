@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/17 15:55:23 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/17 16:49:56 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <signal.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <stdio.h>
 
 # include "builtin.h"
 # include "exec.h"
@@ -32,6 +33,7 @@
 # include "signals.h"
 # include "parsing.h"
 # include "structure.h"
+# include "libft.h"
 
 # define P_NAME "charles mishell"
 # define BROWN_A    "\033[1;33m"

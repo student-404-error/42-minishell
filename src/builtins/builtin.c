@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:48:24 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/16 17:52:16 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/17 16:49:31 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,10 @@ int	bi_cd(t_data *data, t_args *args)
 	if ((!ac || !ft_strcmp(args->value, "--")) && home && home->value)
 		chdir(home->value);
 	else if ((!ac || !ft_strcmp(args->value, "--")) && (!home || !home->value))
-		return (bi_err_cd(errno, "HOME"), free(cwd), 1);
+		return (bi_error_cd(errno, "HOME"), free(cwd), 1);
 	else if (chdir(args->value) < 0)
 	{
-		bi_err_cd(errno, args->value);
+		bi_error_cd(errno, args->value);
 		return (free(cwd), 1);
 	}
 	if (bi_update_pwd(data, cwd))
@@ -101,7 +101,7 @@ int	bi_pwd(t_args *args)
 
 	if (args && args->value)
 	{
-		bi_err_pwd(args->value);
+		bi_error_pwd(args->value);
 		return (2);
 	}
 	cwd = getcwd(NULL, 0);
@@ -160,7 +160,7 @@ int	bi_env(t_data *data, t_args *args)
 	tmp = data->envp;
 	if (args)
 	{
-		bi_err_env(args->value);
+		bi_error_env(args->value);
 		return (127);
 	}
 	while (tmp)
@@ -187,7 +187,7 @@ int	bi_exit(t_data *data, t_args *args)
 		exit_code = ft_atoi(args->value);
 	else if (args && bi_check_exitcode(args->value))
 	{
-		bi_err_exit(args->value);
+		bi_error_exit(args->value);
 		exit_code = 2;
 	}
 	ex_close_all_fds(data, NULL);
