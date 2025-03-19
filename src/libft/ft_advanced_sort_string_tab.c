@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:12:56 by jaoh              #+#    #+#             */
-/*   Updated: 2025/01/22 17:13:53 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/19 18:46:53 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	ft_swap_pointer(char **a1, char **a2)
 }
 
 void	ft_advanced_sort_string_tab(char **tab,
-	int (*cmp)(const char *, const char *))
+	int (*cmp)(char *, char *))
 {
 	int	i;
 	int	j;

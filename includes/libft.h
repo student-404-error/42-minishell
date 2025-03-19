@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 16:07:23 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/17 15:52:41 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/19 18:43:37 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,5 @@ t_list	*ft_lstlast(t_list *lst);
 int		ft_lstsize(t_list *lst);
 // sort
 void	ft_advanced_sort_string_tab(char **tab,
-	int (*cmp)(const char *, const char *));
+	int (*cmp)(char *, char *));
 #endif
