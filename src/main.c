@@ -31,6 +31,7 @@ int	ft_setup_exec(t_data *data, t_token **token)
 int	handle_pipeline(t_data *data, char *line)
 {
 	data->tklst = tokenize(data, line);
+	ft_print_tokens(data->tklst);
 	free(line);
 	if (data->tklst == NULL)
 		return (0);
