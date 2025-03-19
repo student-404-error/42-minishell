@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int	get_dollar_idx(char *s)
+int	get_dollar_idx(char *s)
 {
 	int	i;
 
@@ -45,32 +45,32 @@ char	*get_env_key(char *str)
 
 char	*get_env_value(t_data *data, char *key)
 {
-	t_env	*env;
+	t_env	*envp;
 
 	if (ft_strcmp(key, "") == 0)
 		return (ft_strdup("$"));
-	env = data->env;
-	while (env != NULL)
+	envp = data->envp;
+	while (envp != NULL)
 	{
-		if (ft_strcmp(env->key, key) == 0)
-			return (ft_strdup(env->value));
-		env = env->next;
+		if (ft_strcmp(envp->key, key) == 0)
+			return (ft_strdup(envp->value));
+		envp = envp->next;
 	}
 	return (ft_strdup(""));
 }
 
 int	get_env_value_len(t_data *data, char *key)
 {
-	t_env	*env;
+	t_env	*envp;
 
 	if (ft_strcmp(key, "") == 0)
 		return (0);
-	env = data->env;
-	while (env != NULL)
+	envp = data->envp;
+	while (envp != NULL)
 	{
-		if (ft_strcmp(env->key, key) == 0)
-			return (env->len);
-		env = env->next;
+		if (ft_strcmp(envp->key, key) == 0)
+			return (envp->len);
+		envp = envp->next;
 	}
 	return (-1);
 }

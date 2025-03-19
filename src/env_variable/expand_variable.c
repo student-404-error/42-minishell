@@ -6,12 +6,13 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:15:12 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 21:23:53 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/19 20:42:39 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+// " $USER dkfj " 이런 입력에 대해 처리해줘야함.
+// 마지막 것만 붙이면 됨.
 static char	*expand_env_vari2(t_data *data, char *token, int start)
 {
 	int		idx;
