@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:15:12 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/17 16:47:26 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/19 18:37:56 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	bi_error_cd(int err_no, char *filename)
 		printf("%s: cd: %s not set\n", P_NAME, filename);
 	else
 		printf("%s: cd: %s: %s\n", P_NAME, filename, strerror(err_no));
-	exe_dup2_close(fd_tmp, STDOUT_FILENO);
+	ex_dup2_close(fd_tmp, STDOUT_FILENO);
 }
 
 void	bi_error_pwd(char *option)
@@ -63,5 +63,5 @@ void	bi_error_pwd(char *option)
 	fd_tmp = dup(STDOUT_FILENO);
 	dup2(STDERR_FILENO, STDOUT_FILENO);
 	printf("%s: pwd: %s: invalid option\n", P_NAME, option);
-	exe_dup2_close(fd_tmp, STDOUT_FILENO);
+	ex_dup2_close(fd_tmp, STDOUT_FILENO);
 }
