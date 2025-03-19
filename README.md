@@ -22,8 +22,8 @@ Success 0/100
 
 ## Installation
 ```bash
-git clone https://git~~~
-cd MiniShell
+git clone https://github.com/student-404-error/42-minishell.git
+cd 42-miniShell
 make
 ```
 
@@ -43,23 +43,23 @@ make
 
 ### Built-in
 
-- [ ] implement "cd"  
+- [x] implement "cd"  
 - [x] implement "pwd"  
 - [x] implement "unset"  
-- [ ] implement "echo"  
+- [x] implement "echo"  
 - [x] implement "export"  
 - [x] implement "env"  
-- [ ] implement "exit"  
+- [x] implement "exit"  
 
 ### Parsing
 
-- [ ] Tokenize
-- [ ] Lexer
-- [ ] Parser
+- [x] Tokenize
+- [x] Lexer
+- [x] Parser
 
 ### Signal
 
-- [ ] cntl - C
-- [ ] cntl - D
-- [ ] cntl - \
+- [x] cntl - C
+- [x] cntl - D
+- [x] cntl - \
 
