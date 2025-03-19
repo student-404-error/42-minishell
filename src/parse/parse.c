@@ -11,50 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-void print_ast(t_ast_node *node, int level)
-{
-	if (!node)
-		return;
-	
-	for (int i = 0; i < level; i++)
-		printf("  ");
-	
-	// 노드 타입과 값 출력
-	printf("[%d] %s\n", node->type, node->value ? node->value : "NULL");
-	print_ast(node->left, level + 1);
-	print_ast(node->right, level + 1);
-}
-
-t_ast_node	*new_ast_node(t_ast_node_type type, char *value, t_ast_node *left, t_ast_node *right)
-{
-	t_ast_node *node;
-
-	node = malloc(sizeof(t_ast_node));
-	if (!node)
-	{
-		fprintf(stderr, "Memory allocation error in new_ast_node\n");
-		exit(EXIT_FAILURE);
-	}
-	node->type = type;
-	if (value)
-	{
-		node->value = ft_strdup(value);
-		if (!node->value)
-		{
-			fprintf(stderr, "Memory allocation error in new_ast_node (value)\n");
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-		node->value = NULL;
-	node->left = left;
-	node->right = right;
-	return (node);
-}
-*/
-
-// 공백 토큰 제거를 먼저 하느냐. 아니면 나중에 하느냐 아예 안 하느냐.
 
 void	ft_print_tokens(t_token *tklst)
 {
