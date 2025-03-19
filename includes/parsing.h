@@ -28,7 +28,5 @@ void	ft_print_tokens(t_token *tklst);
 t_token	*ft_new_token(char *value, t_tokenizer *state);
 t_token	*ft_tklast(t_token *tklst);
 void	ft_token_add_back(t_token **tklst, t_token *new);
-void	expand_env_vari(t_data *data, t_token **tklst);
-t_token	*tokenize(t_data *data, char *input);
 
 #endif // !PARSING.15:33:20

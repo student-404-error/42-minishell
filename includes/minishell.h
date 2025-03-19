@@ -6,15 +6,13 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/17 16:49:56 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/19 20:11:03 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <string.h>
 # include <unistd.h>
 # include <errno.h>
@@ -26,6 +24,8 @@
 # include <fcntl.h>
 # include <limits.h>
 # include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # include "builtin.h"
 # include "exec.h"
@@ -95,5 +95,6 @@ t_token	*ft_tklast(t_token *tklst);
 void	ft_token_add_back(t_token **tklst, t_token *new);
 t_token_type	check_token_type(char *value, t_tokenizer *state);
 void	ft_free_token_list(t_token *token);
+int	get_dollar_idx(char *s);
 
 #endif
