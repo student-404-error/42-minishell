@@ -6,13 +6,12 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:11:30 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/19 20:20:57 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/21 17:21:55 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_signals	g_signals;
 // Readline 이벤트 훅에서 호출되는 간단한 함수 (현재는 EXIT_SUCCESS만 반환)
 // 이벤트 루프가 돌면서 시그널을 감지함
 int	sg_readline_event(void)

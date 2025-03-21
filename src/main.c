@@ -6,11 +6,13 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:32:39 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/17 15:37:29 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/21 17:23:06 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_signals	g_signals = {0};
 
 int	ft_setup_exec(t_data *data, t_token **token)
 {
