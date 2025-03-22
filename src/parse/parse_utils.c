@@ -74,16 +74,18 @@ void	remove_quote(t_token **tklst)
 void	remove_space_token(t_token **tklst)
 {
 	t_token	*inst_lst;
+	t_token	*free_lst;
 
-	inst_lst = tklst;
+	inst_lst = *tklst;
 	while (inst_lst)
 	{
+		free_lst = inst_lst->next;
 		if (inst_lst->type == TOKEN_SPACE)
 		{
 			if (inst_lst->prev == NULL)
 			{
 				*tklst = inst_lst->next;
-				*tklst->prev = NULL;
+				(*tklst)->prev = NULL;
 			}
 			else if (inst_lst->next == NULL)
 				inst_lst->prev->next = NULL;
@@ -94,6 +96,7 @@ void	remove_space_token(t_token **tklst)
 			}
 			ft_free_token(inst_lst);
 		}
+		inst_lst = free_lst;
 	}
 }
 
