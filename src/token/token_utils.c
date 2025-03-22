@@ -23,6 +23,7 @@ t_token	*ft_new_token(char *value, t_tokenizer *state)
 	state->is_first_token = 0;
 	token->value = value;
 	token->next = NULL;
+	token->prev = NULL;
 	return (token);
 }
 
@@ -46,9 +47,15 @@ void	ft_token_add_back(t_token **tklst, t_token *new)
 	if (!new)
 		return ;
 	if (last_token)
+	{
+		new->prev = last_token;
 		last_token->next = new;
+	}
 	else
+	{
+		new->prev = NULL;
 		*tklst = new;
+	}
 	new->next = NULL;
 }
 
@@ -58,7 +65,6 @@ static void	ft_free_token(t_token *token)
 		free(token->value);
 	free(token);
 }
-
 void	ft_free_token_list(t_token *token)
 {
 	t_token	*tmp;
