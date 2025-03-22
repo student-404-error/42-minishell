@@ -65,7 +65,7 @@ t_exec	*builder(t_token *token)
 			exec->next = builder(token->next);
 			break ;
 		}
-		else if (token->type == TOKEN_COMMAND || token->type == TOKEN_STRING)
+		else if (token->type == TOKEN_COMMAND)
 		{
 			exec->cmd = ft_strdup(token->value);
 			if (!exec->cmd)
