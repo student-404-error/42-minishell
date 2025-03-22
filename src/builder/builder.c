@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:53:28 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/22 17:45:15 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/22 18:27:18 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_exec	*builder(t_token *token)
 			exec->next = builder(token->next);
 			break ;
 		}
-		else if (token->type == TOKEN_COMMAND)
+		else if (token->type == TOKEN_COMMAND || token->type == TOKEN_STRING)
 		{
 			exec->cmd = ft_strdup(token->value);
 			if (!exec->cmd)
