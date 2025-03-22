@@ -39,10 +39,7 @@ void	concat_token(t_token **tklst)
 				now_token->prev = prev_token->prev;
 			}
 			free(prev_token->value);
-			if (prev_token->type != TOKEN_COMMAND)
-				now_token->type = TOKEN_STRING;
-			else
-				now_token->type = TOKEN_COMMAND;
+			now_token->type = prev_token->type;
 			free(prev_token);
 			free(now_token->value);
 			now_token->value = new_str;
@@ -100,6 +97,24 @@ void	remove_space_token(t_token **tklst)
 			ft_free_token(inst_lst);
 		}
 		inst_lst = free_lst;
+	}
+}
+
+void	change_env_to_cmd(t_token **tklst)
+{
+	t_token	*inst_lst;
+	int	after_operator;
+
+	inst_lst = *tklst;
+	after_operator = 1;
+	while (inst_lst)
+	{
+		if (after_operator && inst_lst->type == TOKEN_ENV_VARI)
+			inst_lst->type = TOKEN_COMMAND;
+		after_operator = 0;
+		if (inst_lst->type == TOKEN_PIPE)
+			after_operator = 1;
+		inst_lst = inst_lst->next;
 	}
 }
 

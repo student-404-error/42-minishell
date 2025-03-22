@@ -66,5 +66,6 @@ t_token	*tokenize(t_data *data, char *input)
 	expand_env_vari(data, &state.tklst);
 	concat_token(&state.tklst);
 	remove_space_token(&state.tklst);
+	change_env_to_cmd(&state.tklst);
 	return (state.tklst);
 }
