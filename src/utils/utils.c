@@ -76,7 +76,9 @@ void	ms_free_all(t_data *data)
 
 int	ms_check_line(char *line)
 {
-	if (line[0] == '\0')
+	while (*line == ' ')
+		line++;
+	if (*line == '\0')
 		return (1);
 	return (0);
 }
