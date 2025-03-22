@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 20:13:22 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/22 17:42:16 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/22 18:12:47 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ void	concat_token(t_token **tklst)
 				now_token->prev = prev_token->prev;
 			}
 			free(prev_token->value);
-			now_token->type = prev_token->type;
+			if (prev_token->type != TOKEN_COMMAND)
+				now_token->type = TOKEN_STRING;
+			else
+				now_token->type = TOKEN_COMMAND;
 			free(prev_token);
 			free(now_token->value);
 			now_token->value = new_str;
@@ -106,7 +109,7 @@ char	*ft_gen_random()
     int		fd;
 
 	new = "/tmp/heredoc_XXXXXX";
-    fd = mkstemp(new);
+	fd = mkstemp(new);
 	if (fd == -1)
     {
         perror("mkstemp");

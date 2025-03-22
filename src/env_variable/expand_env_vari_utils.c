@@ -72,7 +72,7 @@ int	get_env_value_len(t_data *data, char *key)
 			return (envp->len);
 		envp = envp->next;
 	}
-	return (-1);
+	return (0);
 }
 
 int	count_total_length(t_data *data, char *token)
