@@ -25,8 +25,6 @@ void	check_state_after_space(t_tokenizer *state, t_token *last_token)
 {
 	if (last_token->prev == NULL || (last_token->prev->type == TOKEN_PIPE))
 		state->after_operator = 1;
-	else if (last_token->prev->type == TOKEN_HEREDOC)
-		state->after_operator = 3;
 	else
 		state->after_operator = 0;
 }
@@ -42,8 +40,6 @@ void	check_state(t_tokenizer *state)
 		check_state_after_space(state, last_token);
 	else if (last_token->type == TOKEN_PIPE)
 		state->after_operator = 1;
-	else if (last_token->type == TOKEN_HEREDOC)
-		state->after_operator = 3;
 	else
 		state->after_operator = 0;
 }
@@ -62,10 +58,10 @@ t_token_type	check_token_type(char *value, t_tokenizer *state)
 		return (TOKEN_PIPE);
 	else if (ft_strcmp(value, " ") == 0)
 		return (TOKEN_SPACE);
+	else if (value[0] == '\"')
+		return (TOKEN_DOUBLE_QUOTE);
 	else if (is_env_variable(value))
 		return (TOKEN_ENV_VARI);
-	else if (state->after_operator == 3)
-		return (TOKEN_EOF);
 	else if (state->is_first_token || state->after_operator == 1)
 		return (TOKEN_COMMAND);
 	else
