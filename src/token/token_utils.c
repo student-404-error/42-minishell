@@ -59,12 +59,13 @@ void	ft_token_add_back(t_token **tklst, t_token *new)
 	new->next = NULL;
 }
 
-static void	ft_free_token(t_token *token)
+void	ft_free_token(t_token *token)
 {
 	if (token->value)
 		free(token->value);
 	free(token);
 }
+
 void	ft_free_token_list(t_token *token)
 {
 	t_token	*tmp;

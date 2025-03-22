@@ -70,3 +70,31 @@ void	remove_quote(t_token **tklst)
 		inst_lst = inst_lst->next;
 	}
 }
+
+void	remove_space_token(t_token **tklst)
+{
+	t_token	*inst_lst;
+
+	inst_lst = tklst;
+	while (inst_lst)
+	{
+		if (inst_lst->type == TOKEN_SPACE)
+		{
+			if (inst_lst->prev == NULL)
+			{
+				*tklst = inst_lst->next;
+				*tklst->prev = NULL;
+			}
+			else if (inst_lst->next == NULL)
+				inst_lst->prev->next = NULL;
+			else
+			{
+				inst_lst->prev->next = inst_lst->next;
+				inst_lst->next->prev = inst_lst->prev;
+			}
+			ft_free_token(inst_lst);
+		}
+	}
+}
+
+
