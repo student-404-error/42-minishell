@@ -25,10 +25,6 @@ void	check_state_after_space(t_tokenizer *state, t_token *last_token)
 {
 	if (last_token->prev == NULL || (last_token->prev->type == TOKEN_PIPE))
 		state->after_operator = 1;
-	else if (last_token->prev->type == TOKEN_REDIRECTION_IN
-		|| last_token->prev->type == TOKEN_REDIRECTION_OUT
-		|| last_token->prev->type == TOKEN_REDIRECTION_APPEND)
-		state->after_operator = 2;
 	else if (last_token->prev->type == TOKEN_HEREDOC)
 		state->after_operator = 3;
 	else
@@ -46,10 +42,6 @@ void	check_state(t_tokenizer *state)
 		check_state_after_space(state, last_token);
 	else if (last_token->type == TOKEN_PIPE)
 		state->after_operator = 1;
-	else if (last_token->type == TOKEN_REDIRECTION_IN
-		|| last_token->type == TOKEN_REDIRECTION_OUT
-		|| last_token->type == TOKEN_REDIRECTION_APPEND)
-		state->after_operator = 2;
 	else if (last_token->type == TOKEN_HEREDOC)
 		state->after_operator = 3;
 	else
@@ -74,8 +66,6 @@ t_token_type	check_token_type(char *value, t_tokenizer *state)
 		return (TOKEN_ENV_VARI);
 	else if (state->after_operator == 3)
 		return (TOKEN_EOF);
-	else if (state->after_operator == 2)
-		return (TOKEN_FILENAME);
 	else if (state->is_first_token || state->after_operator == 1)
 		return (TOKEN_COMMAND);
 	else
