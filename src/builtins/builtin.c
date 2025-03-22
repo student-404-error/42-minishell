@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:48:24 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/17 16:49:31 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/22 18:12:04 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ int	bi_unset(t_data *data, t_args *args)
 	{
 		while (args)
 		{
+			if (!ft_strcmp(args->value, "_"))
+				args = args->next;
 			if (bi_delete_var(args->value, &(data->envp)))
 				return (1);
 			args = args->next;

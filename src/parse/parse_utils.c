@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 20:13:22 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/22 17:05:20 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/22 17:42:16 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ char	*ft_gen_random()
 	if (fd == -1)
     {
         perror("mkstemp");
-        return (1);
+        return (NULL);
     }
 	return (new);
 }

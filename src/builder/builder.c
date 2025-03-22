@@ -6,14 +6,14 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:53:28 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 15:06:31 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/22 17:45:15 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // 리디렉션이 나오면 해당 파일명을 t_file에 추가
-static int	bd_handle_redirs(t_exec *exec, t_token *token)
+static int	ft_handle_redirs(t_exec *exec, t_token *token)
 {
 	t_file	*tmp;
 
@@ -33,7 +33,7 @@ static int	bd_handle_redirs(t_exec *exec, t_token *token)
 }
 
 // argument 인 경우 t_args에 추가
-static int	bd_handle_args(t_exec *exec, t_token *token)
+static int	ft_handle_args(t_exec *exec, t_token *token)
 {
 	t_args	*new;
 
@@ -71,8 +71,8 @@ t_exec	*builder(t_token *token)
 			if (!exec->cmd)
 				return (NULL);
 		}
-		bd_handle_redirs(exec, token);
-		bd_handle_args(exec, token);
+		ft_handle_redirs(exec, token);
+		ft_handle_args(exec, token);
 		token = token->next;
 	}
 	return (exec);

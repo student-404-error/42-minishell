@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:37:51 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/22 17:04:21 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/22 17:42:06 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int	ft_handle_heredoc(t_data *data)
 		if (data->tklst->type == TOKEN_HEREDOC)
 		{
 			filename = ft_gen_random();
+			if (!filename)
+				return (1);
 			fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (!fd)
 				return (1);
