@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:37:51 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/22 16:47:26 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/22 17:04:21 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_init_here_doc(int fd, char *eof)
 		line = readline(">");
 		if (!line)
 		{
-			ft_putstr_fd("minishell: here_doc: error no input\n", 2);
+			ft_putstr_fd("minishell: here_doc: no input\n", 2);
 			break ;
 		}
 		if (!ft_strcmp(line, eof) || g_signals.eof == 1)
@@ -61,7 +61,7 @@ int	ft_handle_heredoc(t_data *data)
 	{
 		if (data->tklst->type == TOKEN_HEREDOC)
 		{
-			filename = 
+			filename = ft_gen_random();
 			fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (!fd)
 				return (1);

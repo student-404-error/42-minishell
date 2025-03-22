@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 20:13:22 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/22 16:42:45 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/22 17:05:20 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,17 @@ void	remove_space_token(t_token **tklst)
 	}
 }
 
+char	*ft_gen_random()
+{
+	char	*new; 
+    int		fd;
 
+	new = "/tmp/heredoc_XXXXXX";
+    fd = mkstemp(new);
+	if (fd == -1)
+    {
+        perror("mkstemp");
+        return (1);
+    }
+	return (new);
+}

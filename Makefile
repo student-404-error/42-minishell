@@ -27,15 +27,11 @@ SRCS_BLD 		=	builder.c builder_utils.c file.c args.c
 
 SRCS_SIG 		=	signal.c
 
-SRCS_PARSE		=	parse.c			\
-				handle_token.c	\
-				parse_utils.c
+SRCS_PARSE		=	parse.c handle_token.c parse_utils.c heredoc.c
 
-SRCS_ENV_VARI		=	expand_variable.c \
-				expand_env_vari_utils.c
+SRCS_ENV_VARI	=	expand_variable.c expand_env_vari_utils.c
 
-SRCS_TOKEN		=	token_type_utils.c	\
-				token_utils.c
+SRCS_TOKEN		=	token_type_utils.c token_utils.c
 
 SRCS			=	$(addprefix $(SRC_DIR), $(SRCS_M))			\
 					$(addprefix $(BUILTINS_PATH), $(SRCS_BT))	\
