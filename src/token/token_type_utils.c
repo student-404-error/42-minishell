@@ -79,7 +79,7 @@ t_token_type	check_token_type(char *value, t_tokenizer *state)
 	else if (state->after_operator == 2)
 		return (TOKEN_FILENAME);
 	else if (state->after_operator == 3)
-		return (TOKEN_EOF);
+		return (TOKEN_HEREDOC_END);
 	else
 		return (TOKEN_STRING);
 }

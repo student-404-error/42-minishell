@@ -97,5 +97,5 @@ t_token_type	check_token_type(char *value, t_tokenizer *state);
 void	ft_free_token_list(t_token *token);
 void	ft_free_token(t_token *token);
 int	get_dollar_idx(char *s);
-
+void	check_state(t_tokenizer *state);
 #endif
