@@ -5,7 +5,7 @@
 typedef enum e_token_type {
 	TOKEN_COMMAND,
 	TOKEN_STRING,
-	TOKEN_DOUBLE_QUOTE,
+	TOKEN_FILENAME,
 	TOKEN_ENV_VARI,
 	TOKEN_SPACE,
 	TOKEN_PIPE,
@@ -13,6 +13,7 @@ typedef enum e_token_type {
 	TOKEN_REDIRECTION_OUT,
 	TOKEN_REDIRECTION_APPEND,
 	TOKEN_HEREDOC,
+	TOKEN_HEREDOC_END,
 }	t_token_type;
 
 typedef struct s_args

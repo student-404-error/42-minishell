@@ -45,6 +45,7 @@ t_token	*tokenize(t_data *data, char *input)
 	state_init(&state);
 	while (input[state.idx])
 	{
+		check_state(&state);
 		if (handle_whitespace(&state, input))
 			continue ;
 		if (handle_env_variable(&state, input))
