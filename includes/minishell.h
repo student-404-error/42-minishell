@@ -99,4 +99,5 @@ void	ft_free_token(t_token *token);
 int	get_dollar_idx(char *s);
 void	check_state(t_tokenizer *state);
 void	remove_space_token(t_token **tklst);
+void	change_env_to_cmd(t_token **tklst);
 #endif
