@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:51:43 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 15:06:52 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/22 14:57:51 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,29 +28,29 @@ void	file_free(t_file *file)
 
 t_file	*file_create(char *path, t_token_type type)
 {
-	t_file	*filename;
+	t_file	*file;
 	char	*new;
 
-	filename = malloc(sizeof(t_file));
-	if (filename == NULL)
+	file = malloc(sizeof(t_file));
+	if (file == NULL)
 		return (NULL);
 	new = ft_strdup(path);
 	if (!new)
 	{
-		free(filename);
+		free(file);
 		return (NULL);
 	}
-	filename->path = new;
-	filename->type = type;
-	filename->next = NULL;
-	return (filename);
+	file->path = new;
+	file->type = type;
+	file->next = NULL;
+	return (file);
 }
 
-t_file	*file_last(t_file *filename)
+t_file	*file_last(t_file *file)
 {
-	while (filename->next != NULL)
-		filename = filename->next;
-	return (filename);
+	while (file->next != NULL)
+		file = file->next;
+	return (file);
 }
 
 int	file_add_back(t_file **head, t_file *new)
@@ -64,15 +64,15 @@ int	file_add_back(t_file **head, t_file *new)
 	return (0);
 }
 
-int	file_lstsize(t_file *filename)
+int	file_lstsize(t_file *file)
 {
 	int	i;
 
 	i = 0;
-	while (filename)
+	while (file)
 	{
 		i++;
-		filename = filename->next;
+		file = file->next;
 	}
 	return (i);
 }
