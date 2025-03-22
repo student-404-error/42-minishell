@@ -31,24 +31,19 @@ t_file	*file_create(char *path, t_token_type type)
 	t_file	*file;
 	char	*new;
 
-	if (type == TOKEN_FILENAME)
-	{
-		file = malloc(sizeof(t_file));
-		if (file == NULL)
-			return (NULL);
-		new = ft_strdup(path);
-		if (!new)
-		{
-			free(file);
-			return (NULL);
-		}
-		file->path = new;
-		file->type = type;
-		file->next = NULL;
-		return (file);	
-	}
-	else
+	file = malloc(sizeof(t_file));
+	if (file == NULL)
 		return (NULL);
+	new = ft_strdup(path);
+	if (!new)
+	{
+		free(file);
+		return (NULL);
+	}
+	file->path = new;
+	file->type = type;
+	file->next = NULL;
+	return (file);	
 }
 
 t_file	*file_last(t_file *file)
