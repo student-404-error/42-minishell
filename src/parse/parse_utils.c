@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 20:13:22 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/22 18:13:12 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/23 19:51:34 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	remove_quote(t_token **tklst)
 						ft_strlen(inst_lst->value) - 2);
 				free(inst_lst->value);
 				inst_lst->value = new_value;
+				inst_lst->type = TOKEN_STRING;
 			}
 		}
 		inst_lst = inst_lst->next;
@@ -109,7 +110,7 @@ void	change_env_to_cmd(t_token **tklst)
 	after_operator = 1;
 	while (inst_lst)
 	{
-		if (after_operator && inst_lst->type == TOKEN_ENV_VARI)
+		if (after_operator && (inst_lst->type == TOKEN_ENV_VARI || inst_lst->type == TOKEN_STRING))
 			inst_lst->type = TOKEN_COMMAND;
 		after_operator = 0;
 		if (inst_lst->type == TOKEN_PIPE)
