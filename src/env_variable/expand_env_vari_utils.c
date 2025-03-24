@@ -6,7 +6,7 @@
 /*   By: seong-ki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:51:41 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 18:53:06 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/23 19:43:11 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ char	*get_env_key(char *str)
 	int		len;
 	char	*key;
 
+	if (str[0] == '?')
+		return (ft_strdup("?"));
 	len = 0;
 	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
 		len++;
@@ -46,9 +48,17 @@ char	*get_env_key(char *str)
 char	*get_env_value(t_data *data, char *key)
 {
 	t_env	*envp;
+	char	*ret;
+	char	*tmp;
 
 	if (ft_strcmp(key, "") == 0)
 		return (ft_strdup("$"));
+	if (ft_strcmp(key, "?") == 0)
+	{
+		ret = ft_itoa(data->last_ret);
+		tmp = ft_strdup(ret);
+		return (free(ret), tmp);
+	}
 	envp = data->envp;
 	while (envp != NULL)
 	{
@@ -63,8 +73,8 @@ int	get_env_value_len(t_data *data, char *key)
 {
 	t_env	*envp;
 
-	if (ft_strcmp(key, "") == 0)
-		return (0);
+	//if (ft_strcmp(key, "") == 0)
+	//	return (0);
 	envp = data->envp;
 	while (envp != NULL)
 	{
@@ -92,5 +102,6 @@ int	count_total_length(t_data *data, char *token)
 		idx += ft_strlen(key);
 		free(key);
 	}
+	length += ft_strlen(token + idx + 1);
 	return (length);
 }

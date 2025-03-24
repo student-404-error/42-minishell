@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/19 20:11:03 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/23 18:39:20 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,18 +86,18 @@ int	handle_quote_token(t_tokenizer *state, char *input);
 void	remove_quote(t_token **tklst);
 void	concat_token(t_token **tklst);
 void	expand_env_vari(t_data *data, t_token **tklst);
+void	remove_space_token(t_token **tklst);
+void	change_env_to_cmd(t_token **tklst);
 char	*get_env_key(char *str);
 char	*get_env_value(t_data *data, char *key);
+int	get_dollar_idx(char *s);
 int	get_env_value_len(t_data *data, char *key);
 int	count_total_length(t_data *data, char *token);
 t_token	*ft_new_token(char *value, t_tokenizer *state);
 t_token	*ft_tklast(t_token *tklst);
 void	ft_token_add_back(t_token **tklst, t_token *new);
-t_token_type	check_token_type(char *value, t_tokenizer *state);
 void	ft_free_token_list(t_token *token);
 void	ft_free_token(t_token *token);
-int	get_dollar_idx(char *s);
 void	check_state(t_tokenizer *state);
-void	remove_space_token(t_token **tklst);
-void	change_env_to_cmd(t_token **tklst);
+t_token_type	check_token_type(char *value, t_tokenizer *state);
 #endif
