@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:10:16 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 15:01:03 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/24 16:12:22 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ex_handle_redir(t_exec *exec)
 void	ex_redirection(t_exec *exec, t_file *file)
 {
 	if (file->type == TOKEN_REDIRECTION_IN
-		|| file->type == TOKEN_FILENAME)
+		|| file->type == TOKEN_HEREDOC_END)
 	{
 		if (exec->fd_in != STDIN_FILENO)
 			close (exec->fd_in);

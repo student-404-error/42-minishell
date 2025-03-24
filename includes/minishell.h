@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/23 18:39:20 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/24 15:29:43 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@
 # define IS_A_DIRECTORY 126
 # define COMMAND_NOT_FOUND 127
 # define SIGNAL_OFFSET 128
+
+# define RND_OFFSET 14695981039346656037UL
+# define RND_PRIME 1099511628211UL
 
 # define PROMPT "\001\033[1;33m\002charles mishell >$ \001\033[0m\002"
 # define DEF_ENV "SHELL=charles mishell"

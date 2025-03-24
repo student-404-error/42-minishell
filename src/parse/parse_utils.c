@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 20:13:22 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/23 19:51:34 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/24 15:05:42 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,19 +117,4 @@ void	change_env_to_cmd(t_token **tklst)
 			after_operator = 1;
 		inst_lst = inst_lst->next;
 	}
-}
-
-char	*ft_gen_random()
-{
-	char	*new; 
-    int		fd;
-
-	new = "/tmp/heredoc_XXXXXX";
-	fd = mkstemp(new);
-	if (fd == -1)
-    {
-        perror("mkstemp");
-        return (NULL);
-    }
-	return (new);
 }

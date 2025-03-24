@@ -6,12 +6,35 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:37:51 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/24 14:55:01 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/24 16:30:53 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char	*ft_gen_random_name(char *str)
+{
+	unsigned long	rand;
+	int				i;
+	char			*new;
+
+	if (!str)
+		return (NULL);
+	new = ft_calloc(sizeof(char), 17);
+	if (!new)
+		return (NULL);
+	rand = (unsigned long)str;
+	ft_strlcpy(new, "/tmp/hd_", 9);
+	i = 8;
+	while (i < 16)
+	{
+		rand *= RND_OFFSET + RND_PRIME;
+		new[i] = 'a' + (rand % 26);
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
+}
 
 int	ft_init_here_doc(int fd, char *eof)
 {
@@ -57,12 +80,13 @@ int	ft_handle_heredoc(t_token *token)
 	int		end;
 
 	end = 0;
-	printf("1\n");
 	while (token != NULL && end == 0)
 	{
 		if (token->type == TOKEN_HEREDOC)
 		{
-			filename = ft_gen_random(token->next->value);
+			filename = ft_gen_random_name(token->next->value);
+			if (!filename)
+				return (1);
 			fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (!fd)
 				return (1);
@@ -71,6 +95,7 @@ int	ft_handle_heredoc(t_token *token)
 			close(fd);
 			free(token->next->value);
 			token->next->value = filename;
+			token->type = TOKEN_HEREDOC_END;
 		}
 		token = token->next;
 	}

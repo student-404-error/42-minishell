@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:09:53 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/22 18:42:10 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/24 16:08:36 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	ex_run_pipeline(t_data *data)
 	{
 		if (ex_init_redir(tmp))
 			return (data->exit_code = 1, 1);
+		printf("test 1 ok\n");
 		if (builtin_type == 2)
 			ft_putstr_fd("exit\n", STDERR_FILENO);
 		ex_unlink_heredoc(data);

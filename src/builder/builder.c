@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:53:28 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/24 14:56:56 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/24 16:28:44 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int ft_handle_redirs(t_exec *exec, t_token *token)
 {
 	t_file *tmp;
 
-	if (token->next && token->next->value != NULL && (token->type == TOKEN_REDIRECTION_APPEND || token->type == TOKEN_HEREDOC || token->type == TOKEN_REDIRECTION_IN || token->type == TOKEN_REDIRECTION_OUT))
+	if (token->next && token->next->value != NULL && (token->type == TOKEN_REDIRECTION_APPEND || token->type == TOKEN_HEREDOC_END || token->type == TOKEN_REDIRECTION_IN || token->type == TOKEN_REDIRECTION_OUT))
 	{
 		tmp = file_create(token->next->value, token->type);	
 		if (!tmp)

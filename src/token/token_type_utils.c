@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seong-ki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:18:28 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/23 18:44:54 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:31:08 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,9 @@ void	check_state(t_tokenizer *state)
 		state->after_operator = 1;
 	else if (last_token->type == TOKEN_REDIRECTION_IN
 		|| last_token->type == TOKEN_REDIRECTION_OUT
-		|| last_token->type == TOKEN_REDIRECTION_APPEND)
+		|| last_token->type == TOKEN_REDIRECTION_APPEND
+		|| last_token->type == TOKEN_HEREDOC)
 		state->after_operator = 2;
-	else if (last_token->type == TOKEN_HEREDOC)
-		state->after_operator = 3;
 	else
 		state->after_operator = 0;
 }
@@ -78,8 +77,6 @@ t_token_type	check_token_type(char *value, t_tokenizer *state)
 		return (TOKEN_COMMAND);
 	else if (state->after_operator == 2)
 		return (TOKEN_FILENAME);
-	else if (state->after_operator == 3)
-		return (TOKEN_HEREDOC_END);
 	else
 		return (TOKEN_STRING);
 }

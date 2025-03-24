@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:10:21 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 14:57:08 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/24 15:22:39 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	ex_unlink_heredoc(t_data *data)
 		tmp = exec->redirs;
 		while (tmp)
 		{
-			if (tmp->type == TOKEN_HEREDOC)
+			if (tmp->type == TOKEN_HEREDOC_END)
 				unlink(tmp->path);
 			tmp = tmp->next;
 		}
