@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:37:51 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/22 17:42:06 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/24 14:55:01 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,40 +40,39 @@ int	ft_init_here_doc(int fd, char *eof)
 	return (0);
 }
 
-void	ft_unlink_err(t_data *data)
+void	ft_unlink_err(t_token *token)
 {
-	while (data->tklst)
+	while (token)
 	{
-		if (data->tklst->type == TOKEN_HEREDOC_END)
-			unlink(data->tklst->next->value);
-		data->tklst = data->tklst->next;
+		if (token->type == TOKEN_HEREDOC_END)
+			unlink(token->next->value);
+		token = token->next;
 	}
 }
 
-int	ft_handle_heredoc(t_data *data)
+int	ft_handle_heredoc(t_token *token)
 {
 	char	*filename;
 	int		fd;
 	int		end;
 
 	end = 0;
-	while (data->tklst != NULL && end == 0)
+	printf("1\n");
+	while (token != NULL && end == 0)
 	{
-		if (data->tklst->type == TOKEN_HEREDOC)
+		if (token->type == TOKEN_HEREDOC)
 		{
-			filename = ft_gen_random();
-			if (!filename)
-				return (1);
+			filename = ft_gen_random(token->next->value);
 			fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (!fd)
 				return (1);
-			if (ft_init_here_doc(fd, data->tklst->next->value) != 0)
+			if (ft_init_here_doc(fd, token->next->value) != 0)
 				end = 1;
 			close(fd);
-			free(data->tklst->next->value);
-			data->tklst->next->value = filename;
+			free(token->next->value);
+			token->next->value = filename;
 		}
-		data->tklst = data->tklst->next;
+		token = token->next;
 	}
 	return (end);
 }
