@@ -29,33 +29,32 @@ char	*expand_env_one_vari(t_data *data, t_token *token)
 	key = get_env_key(token->value + 1);
 	if (ft_strcmp(key, "") == 0)
 		if(get_next_token_type(token) != TOKEN_STRING)
-			return (ft_strdup("$"));
+			return (free(key), ft_strdup("$"));
 		else
-			return (ft_strdup(""));
+			return (free(key), ft_strdup(""));
 	else
 		ret = get_env_value(data, key);
-	free(key);
-	return (ret);
+	return (free(key), ret);
 }
 
-static char	*expand_env_more_vari(t_data *data, char *token, int start)
+static char	*expand_env_more_vari(t_data *data, char *token, int start, int idx)
 {
-	int		idx;
+	int		total_length;
 	char	*ret;
 	char	*key;
 	char	*value;
 
-	ret = malloc(sizeof(char) * (count_total_length(data, token) + 1));
+	total_length = count_total_length(data, token);
+	if (total_length == 0)
+		return (ft_strdup(""));
+	ret = malloc(sizeof(char) * (total_length + 1));
 	if (ret == NULL)
 		return (NULL);
-	ft_bzero(ret, count_total_length(data, token) + 1);
-	idx = -1;
+	ft_bzero(ret, total_length + 1);
 	while (get_dollar_idx(token + start + 1) != -1)
 	{
 		idx = get_dollar_idx(token + start + 1);
-		key = ft_substr(token, start + 1, idx);
-		ft_strlcpy(ret + ft_strlen(ret), key, idx + 1);
-		free(key);
+		ft_strlcpy(ret + ft_strlen(ret), token + start + 1, idx + 1);
 		key = get_env_key(token + start + idx + 2);
 		value = get_env_value(data, key);
 		ft_strlcpy(ret + ft_strlen(ret), value, ft_strlen(value) + 1);
@@ -84,7 +83,7 @@ void	expand_env_vari(t_data *data, t_token **tklst)
 		else if (inst_lst->type == TOKEN_STRING)
 		{
 			old_str = inst_lst->value;
-			inst_lst->value = expand_env_more_vari(data, old_str, -1);
+			inst_lst->value = expand_env_more_vari(data, old_str, -1, -1);
 			free(old_str);
 		}
 		inst_lst = inst_lst->next;

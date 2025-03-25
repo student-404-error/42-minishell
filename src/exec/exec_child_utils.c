@@ -40,7 +40,7 @@ int	ex_do_exec(t_data *data, char *cmd, t_args *args)
 		ex_err_exec(path, errno);
 	ft_free_all(cmds);
 	free(path);
-	free(envs);
+	ft_free_all(envs);
 	return (-2);
 }
 
