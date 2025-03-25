@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:53:28 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/24 16:28:44 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/25 17:24:37 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int ft_handle_args(t_exec *exec, t_token *token)
 	t_args *new;
 
 	new = NULL;
-	if (token->type == TOKEN_STRING)
+	if (token->type == TOKEN_STRING || token->type == TOKEN_ENV_VARI)
 	{
 		new = arg_create(token->value);
 		if (!new)
