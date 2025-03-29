@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 20:13:22 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/29 14:59:10 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 17:34:47 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,14 @@ void	remove_space_token(t_token **tklst)
 void	change_env_to_cmd(t_token **tklst)
 {
 	t_token	*inst_lst;
-	int	after_operator;
+	int		after_operator;
 
 	inst_lst = *tklst;
 	after_operator = 1;
 	while (inst_lst)
 	{
-		if (after_operator && (inst_lst->type == TOKEN_ENV_VARI || inst_lst->type == TOKEN_STRING))
+		if (after_operator && (inst_lst->type == TOKEN_ENV_VARI
+				|| inst_lst->type == TOKEN_STRING))
 			inst_lst->type = TOKEN_COMMAND;
 		after_operator = 0;
 		if (inst_lst->type == TOKEN_PIPE)

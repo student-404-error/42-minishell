@@ -17,7 +17,7 @@ LIBFT			=	$(LFT_DIR)libft.a
 
 SRCS_M			=	main.c
 
-SRCS_BT			=	builtin.c bi_errors.c bi_utils.c bi_check.c
+SRCS_BT			=	builtin.c builtin2.c bi_errors.c bi_utils.c bi_utils2.c bi_check.c
 
 SRCS_EX 		=	exec.c exec_redirect.c exec_pipe.c exec_child_utils.c exec_errors.c exec_utils.c
 

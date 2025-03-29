@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_env_vari_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seong-ki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:51:41 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/23 19:43:11 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/29 17:36:19 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ int	get_env_value_len(t_data *data, char *key)
 {
 	t_env	*envp;
 
-	//if (ft_strcmp(key, "") == 0)
-	//	return (0);
 	envp = data->envp;
 	while (envp != NULL)
 	{

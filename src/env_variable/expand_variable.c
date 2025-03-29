@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:15:12 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/23 19:49:26 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/03/29 17:40:24 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ char	*expand_env_one_vari(t_data *data, t_token *token)
 
 	key = get_env_key(token->value + 1);
 	if (ft_strcmp(key, "") == 0)
-		if(get_next_token_type(token) != TOKEN_STRING)
+	{
+		if (get_next_token_type(token) != TOKEN_STRING)
 			return (free(key), ft_strdup("$"));
 		else
 			return (free(key), ft_strdup(""));
+	}
 	else
 		ret = get_env_value(data, key);
 	return (free(key), ret);

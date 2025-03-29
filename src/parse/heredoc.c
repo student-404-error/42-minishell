@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:37:51 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/24 16:30:53 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 17:35:33 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	ft_init_here_doc(int fd, char *eof)
 		write(fd, "\n", 1);
 		free(line);
 	}
-    if (g_signals.eof == 1)
+	if (g_signals.eof == 1)
 		return (g_signals.eof = 0, 1);
 	return (0);
 }
