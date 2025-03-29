@@ -129,6 +129,7 @@ int	bi_export(t_data *data, t_args *args)
 	{
 		while (args)
 		{
+			// if = is not in arg -> err
 			if (bi_add_var(args->value, &(data->envp)))
 				exit_code = 1;
 			args = args->next;

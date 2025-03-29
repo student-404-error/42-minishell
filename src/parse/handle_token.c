@@ -35,7 +35,20 @@ int	handle_quote_token(t_tokenizer *state, char *input)
 			state->start = ++state->idx;
 		}
 		else
-			exit(1); // 잘 안닫혀있음. 에러 메모리 해제.
+		{
+			char	*continue_str;
+			continue_str = readline(">");
+			while (ft_strchr(continue_str, qoute) is not in)
+			{
+				char *new = ft_strjoin(input, continue_str);
+				free(continue_str);
+				token = ft_new_token(ft_substr(----));
+				ft_token_add_back(---);
+				continue_str = readline(">");
+			}
+		//	if continue_str is rest:
+		//		input = ft_strjoin(input, continue_str)
+		}
 		return (1);
 	}
 	return (0);
