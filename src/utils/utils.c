@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:39:30 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/11 15:18:25 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 15:27:36 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,18 +81,4 @@ int	ms_check_line(char *line)
 	if (*line == '\0')
 		return (1);
 	return (0);
-}
-
-void	*ms_free_double(char **value)
-{
-	int	i;
-
-	i = 0;
-	while (value[i] != NULL)
-	{
-		free(value[i]);
-		i++;
-	}
-	free(value);
-	return (NULL);
 }
