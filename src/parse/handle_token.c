@@ -44,6 +44,7 @@ int	handle_quote_token(t_tokenizer *state, char *input)
 			while (continue_str)
 			{
 				new_input = ft_strjoin(input, continue_str);
+				free(input);
 				input = new_input;
 				state->idx = ft_strlen(input) - ft_strlen(continue_str);
 				free(continue_str);
@@ -59,6 +60,9 @@ int	handle_quote_token(t_tokenizer *state, char *input)
 				}
 				continue_str = readline(">");
 			}
+			//	find memory leaks
+			//	devide functions
+			//	if " after "" it will be work with new qoute
 			if (!continue_str)
 			{
 				ft_putstr_fd("Error: Unclosed quote\n", 2);
