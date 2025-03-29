@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:18:28 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/24 16:31:08 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 17:49:45 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ t_token_type	check_token_type(char *value, t_tokenizer *state)
 		return (TOKEN_PIPE);
 	else if (ft_strcmp(value, " ") == 0)
 		return (TOKEN_SPACE);
-//	else if (value[0] == '\"')
-//		return (TOKEN_DOUBLE_QUOTE);
 	else if (is_env_variable(value))
 		return (TOKEN_ENV_VARI);
 	else if (state->is_first_token || state->after_operator == 1)

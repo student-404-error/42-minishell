@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 16:51:43 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/22 19:17:43 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 17:46:20 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_file	*file_create(char *path, t_token_type type)
 {
 	t_file	*file;
 	char	*new;
-	
+
 	file = malloc(sizeof(t_file));
 	if (file == NULL)
 		return (NULL);
@@ -43,7 +43,7 @@ t_file	*file_create(char *path, t_token_type type)
 	file->path = new;
 	file->type = type;
 	file->next = NULL;
-	return (file);	
+	return (file);
 }
 
 t_file	*file_last(t_file *file)
