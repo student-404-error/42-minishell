@@ -18,7 +18,8 @@
 # include <stdarg.h>
 # include <stdint.h>
 
-typedef struct s_list {
+typedef struct s_list
+{
 	char			*str;
 	struct s_list	*prev;
 	struct s_list	*next;
@@ -96,5 +97,5 @@ t_list	*ft_lstlast(t_list *lst);
 int		ft_lstsize(t_list *lst);
 // sort
 void	ft_advanced_sort_string_tab(char **tab,
-	int (*cmp)(char *, char *));
+			int (*cmp)(char *, char *));
 #endif

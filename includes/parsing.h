@@ -16,13 +16,14 @@
 typedef struct s_token	t_token;
 typedef struct s_data	t_data;
 
-typedef struct	s_tokenizer {
-	int	idx;
-	int	start;
-	int	is_first_token;
-	int	after_operator;
+typedef struct s_tokenizer
+{
+	int		idx;
+	int		start;
+	int		is_first_token;
+	int		after_operator;
 	t_token	*tklst;
-} t_tokenizer;
+}	t_tokenizer;
 
 void	ft_print_tokens(t_token *tklst);
 t_token	*ft_new_token(char *value, t_tokenizer *state);

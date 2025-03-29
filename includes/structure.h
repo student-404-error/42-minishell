@@ -2,7 +2,8 @@
 # define STRUCTURE_H
 # include <sys/types.h>
 
-typedef enum e_token_type {
+typedef enum e_token_type
+{
 	TOKEN_COMMAND,
 	TOKEN_STRING,
 	TOKEN_FILENAME,

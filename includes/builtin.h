@@ -16,7 +16,8 @@
 # define SUCCESS 1
 # define ERROR 2
 
-typedef enum e_ast_node_type {
+typedef enum e_ast_node_type
+{
 	AST_COMMAND,
 	AST_PIPE,
 	AST_REDIRECTION_IN,
@@ -25,7 +26,8 @@ typedef enum e_ast_node_type {
 	AST_HEREDOC,
 }	t_ast_node_type;
 
-typedef struct s_ast_node {
+typedef struct s_ast_node
+{
 	t_ast_node_type		type;
 	char				*value;
 	struct s_ast_node	*left;
