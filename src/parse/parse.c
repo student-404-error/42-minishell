@@ -38,6 +38,25 @@ void	state_init(t_tokenizer *state)
 	state->tklst = NULL;
 }
 
+void	parse(t_tokenizer *state, char *input)
+{
+	while (input[state->idx])
+	{
+		check_state(state);
+		if (handle_whitespace(state, input))
+			continue ;
+		if (handle_env_variable(state, input))
+			continue ;
+		if (handle_quote_token(state, input))
+			continue ;
+		if (handle_special_operators(state, input))
+			continue ;
+		if (handle_single_char_operators(state, input))
+			continue ;
+		state->idx++;
+	}
+}
+
 t_token	*tokenize(t_data *data, char *input)
 {
 	t_tokenizer	state;
@@ -53,25 +72,6 @@ t_token	*tokenize(t_data *data, char *input)
 	concat_token(&state.tklst);
 	remove_space_token(&state.tklst);
 	change_env_to_cmd(&state.tklst);
-
+	// syntax error fix
 	return (state.tklst);
-}
-
-int	parse(t_tokenizer *state, char *input)
-{
-	while (input[state->idx])
-	{
-		check_state(&state);
-		if (handle_whitespace(state, input))
-			continue ;
-		if (handle_env_variable(state, input))
-			continue ;
-		if (handle_quote_token(state, input))
-			continue ;
-		if (handle_special_operators(state, input))
-			continue ;
-		if (handle_single_char_operators(state, input))
-			continue ;
-		state->idx++;
-	}
 }

@@ -36,16 +36,17 @@ int	handle_quote_token(t_tokenizer *state, char *input)
 		}
 		else
 		{
-			char	*continue_str;
-			continue_str = readline(">");
-			while (ft_strchr(continue_str, qoute) is not in)
-			{
-				char *new = ft_strjoin(input, continue_str);
-				free(continue_str);
-				token = ft_new_token(ft_substr(----));
-				ft_token_add_back(---);
-				continue_str = readline(">");
-			}
+			exit(1);
+		//	char	*continue_str;
+		//	continue_str = readline(">");
+		//	while (ft_strchr(continue_str, qoute) is not in)
+		//	{
+		//		char *new = ft_strjoin(input, continue_str);
+		//		free(continue_str);
+		//		token = ft_new_token(ft_substr(----));
+		//		ft_token_add_back(---);
+		//		continue_str = readline(">");
+		//	}
 		//	if continue_str is rest:
 		//		input = ft_strjoin(input, continue_str)
 		}
