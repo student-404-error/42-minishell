@@ -64,8 +64,8 @@ static char	*expand_env_more_vari(t_data *data, char *token, int start, int idx)
 		free(key);
 		free(value);
 	}
-	ft_strlcpy(ret + ft_strlen(ret), token + start + 1, ft_strlen(token + start + 1) + 1);
-	return (ret);
+	return (ft_strlcpy(ret + ft_strlen(ret), token + start + 1,
+			ft_strlen(token + start + 1) + 1), ret);
 }
 
 void	expand_env_vari(t_data *data, t_token **tklst)
