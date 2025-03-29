@@ -52,7 +52,7 @@ H_DEPS			=	$(addprefix $(HEAD), $(HEADERS))
 
 CC				=	cc
 RM				=	rm -rf
-CFLAGS			=	-Wall -Wextra -Werror -I ./includes -I/opt/homebrew/include
+CFLAGS			=	-Wall -Wextra -Werror -g3 -I ./includes -I/opt/homebrew/include
 
 RLFLAG			=	-lreadline
 OBJF			=	.cache

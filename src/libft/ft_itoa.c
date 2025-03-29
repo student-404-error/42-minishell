@@ -50,6 +50,8 @@ char	*ft_itoa(int n)
 	char	*s;
 	int		len;
 
+	if (n == 0)
+		return (ft_strdup("0"));
 	len = ft_intlen((long) n);
 	s = malloc(sizeof(char) * (len + 1));
 	if (!s)

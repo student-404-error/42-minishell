@@ -48,17 +48,11 @@ char	*get_env_key(char *str)
 char	*get_env_value(t_data *data, char *key)
 {
 	t_env	*envp;
-	char	*ret;
-	char	*tmp;
 
 	if (ft_strcmp(key, "") == 0)
 		return (ft_strdup("$"));
 	if (ft_strcmp(key, "?") == 0)
-	{
-		ret = ft_itoa(data->last_ret);
-		tmp = ft_strdup(ret);
-		return (free(ret), tmp);
-	}
+		return (ft_itoa(data->exit_code));
 	envp = data->envp;
 	while (envp != NULL)
 	{

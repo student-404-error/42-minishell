@@ -40,9 +40,9 @@ int handle_quote_token(t_tokenizer *state, char *input)
 			while (continue_str)
 			{
 				char *new_input = ft_strjoin(input, continue_str);
-				free(continue_str);
 				input = new_input;
 				state->idx = ft_strlen(input) - ft_strlen(continue_str);
+				free(continue_str);
 				while (input[state->idx] && input[state->idx] != quote)
 					state->idx++;
 				if (input[state->idx] == quote)
