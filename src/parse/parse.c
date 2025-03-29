@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/29 14:47:03 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 15:42:51 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	state_init(t_tokenizer *state)
 	state->tklst = NULL;
 }
 
-void	parse(t_tokenizer *state, char *input)
+void	handle_tokens(t_tokenizer *state, char *input)
 {
 	while (input[state->idx])
 	{
@@ -62,7 +62,7 @@ t_token	*tokenize(t_data *data, char *input)
 	t_tokenizer	state;
 
 	state_init(&state);
-	parse(&state, input);
+	handle_tokens(&state, input);
 	if (state.idx != state.start)
 		ft_token_add_back(&state.tklst,
 			ft_new_token(ft_substr(input, state.start,

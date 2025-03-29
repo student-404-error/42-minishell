@@ -67,7 +67,7 @@ typedef struct s_data
 	int				def_in;
 	int				def_out;
 	int				exec_count;
-	int	exit_code;
+	int				exit_code;
 	pid_t			*pids;
 	int				pid_count;
 	t_exec			*exec;
