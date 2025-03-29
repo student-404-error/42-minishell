@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 17:42:39 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/29 17:43:22 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 18:16:51 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ int	bi_env(t_data *data, t_args *args)
 	t_env	*tmp;
 
 	tmp = data->envp;
+	if (!ms_getenv("PATH", data->envp))
+	{
+		bi_error_env("env");
+		return (127);
+	}
 	if (args)
 	{
 		bi_error_env(args->value);

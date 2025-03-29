@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:15:12 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/22 17:50:51 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 18:23:44 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	bi_error_env(char *filename)
 
 	tmp_fd = dup(STDOUT_FILENO);
 	dup2(STDERR_FILENO, STDOUT_FILENO);
-	printf("env: %s: No such file or directory\n", filename);
+	printf("env: '%s': No such file or directory\n", filename);
 	ex_dup2_close(tmp_fd, STDOUT_FILENO);
 }
 
