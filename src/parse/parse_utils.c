@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 20:13:22 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/24 15:05:42 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 14:59:10 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,27 +77,27 @@ void	remove_space_token(t_token **tklst)
 	t_token	*inst_lst;
 	t_token	*free_lst;
 
-	inst_lst = *tklst;
-	while (inst_lst)
+	free_lst = *tklst;
+	while (free_lst)
 	{
-		free_lst = inst_lst->next;
-		if (inst_lst->type == TOKEN_SPACE)
+		inst_lst = free_lst->next;
+		if (free_lst->type == TOKEN_SPACE)
 		{
-			if (inst_lst->prev == NULL)
+			if (free_lst->prev == NULL)
 			{
-				*tklst = inst_lst->next;
+				*tklst = free_lst->next;
 				(*tklst)->prev = NULL;
 			}
-			else if (inst_lst->next == NULL)
-				inst_lst->prev->next = NULL;
+			else if (free_lst->next == NULL)
+				free_lst->prev->next = NULL;
 			else
 			{
-				inst_lst->prev->next = inst_lst->next;
-				inst_lst->next->prev = inst_lst->prev;
+				free_lst->prev->next = free_lst->next;
+				free_lst->next->prev = free_lst->prev;
 			}
-			ft_free_token(inst_lst);
+			ft_free_token(free_lst);
 		}
-		inst_lst = free_lst;
+		free_lst = inst_lst;
 	}
 }
 

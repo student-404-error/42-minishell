@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/24 14:55:57 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/03/29 14:47:03 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,21 +43,7 @@ t_token	*tokenize(t_data *data, char *input)
 	t_tokenizer	state;
 
 	state_init(&state);
-	while (input[state.idx])
-	{
-		check_state(&state);
-		if (handle_whitespace(&state, input))
-			continue ;
-		if (handle_env_variable(&state, input))
-			continue ;
-		if (handle_quote_token(&state, input))
-			continue ;
-		if (handle_special_operators(&state, input))
-			continue ;
-		if (handle_single_char_operators(&state, input))
-			continue ;
-		state.idx++;
-	}
+	parse(&state, input);
 	if (state.idx != state.start)
 		ft_token_add_back(&state.tklst,
 			ft_new_token(ft_substr(input, state.start,
@@ -67,5 +53,25 @@ t_token	*tokenize(t_data *data, char *input)
 	concat_token(&state.tklst);
 	remove_space_token(&state.tklst);
 	change_env_to_cmd(&state.tklst);
+
 	return (state.tklst);
+}
+
+int	parse(t_tokenizer *state, char *input)
+{
+	while (input[state->idx])
+	{
+		check_state(&state);
+		if (handle_whitespace(state, input))
+			continue ;
+		if (handle_env_variable(state, input))
+			continue ;
+		if (handle_quote_token(state, input))
+			continue ;
+		if (handle_special_operators(state, input))
+			continue ;
+		if (handle_single_char_operators(state, input))
+			continue ;
+		state->idx++;
+	}
 }
