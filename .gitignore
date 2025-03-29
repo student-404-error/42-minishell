@@ -2,6 +2,7 @@
 *.a
 /obj
 *.o
+.vscode
 
 # excute file
 minishell
