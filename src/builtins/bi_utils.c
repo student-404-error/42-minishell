@@ -37,7 +37,7 @@ int	bi_print_export(t_env *env)
 			free(tmp_id);
 		}
 	}
-	free(envs);
+	ft_free_all(envs);
 	return (0);
 }
 
