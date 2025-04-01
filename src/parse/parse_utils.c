@@ -22,7 +22,7 @@ void	concat_token(t_token **tklst)
 	while (now)
 	{
 		prev = now->prev;
-		if (prev && prev->type < 4 && now->type < 4)
+		if (prev && prev->type < TOKEN_SPACE && now->type < TOKEN_SPACE)
 		{
 			new_str = ft_strjoin(prev->value, now->value);
 			now->type = prev->type;
@@ -51,7 +51,7 @@ void	remove_quote(t_token **tklst)
 	inst_lst = *tklst;
 	while (inst_lst)
 	{
-		if (inst_lst->type < 4)
+		if (inst_lst->type < TOKEN_SPACE)
 		{
 			if (inst_lst->value[0] == '\'' || inst_lst->value[0] == '\"')
 			{
@@ -59,7 +59,6 @@ void	remove_quote(t_token **tklst)
 						ft_strlen(inst_lst->value) - 2);
 				free(inst_lst->value);
 				inst_lst->value = new_value;
-				inst_lst->type = TOKEN_STRING;
 			}
 		}
 		inst_lst = inst_lst->next;
@@ -104,8 +103,7 @@ void	change_env_to_cmd(t_token **tklst)
 	after_operator = 1;
 	while (inst_lst)
 	{
-		if (after_operator && (inst_lst->type == TOKEN_ENV_VARI
-				|| inst_lst->type == TOKEN_STRING))
+		if (after_operator && inst_lst->type == TOKEN_STRING)
 			inst_lst->type = TOKEN_COMMAND;
 		after_operator = 0;
 		if (inst_lst->type == TOKEN_PIPE)

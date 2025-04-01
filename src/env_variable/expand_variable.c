@@ -74,17 +74,21 @@ void	expand_env_vari(t_data *data, t_token **tklst)
 	inst_lst = *tklst;
 	while (inst_lst)
 	{
+		printf("type : %d\n", inst_lst->type);
 		if (inst_lst->type == TOKEN_ENV_VARI)
 		{
 			old_str = inst_lst->value;
 			inst_lst->value = expand_env_one_vari(data, inst_lst);
 			free(old_str);
+			inst_lst->type = TOKEN_STRING;
 		}
-		else if (inst_lst->type == TOKEN_STRING)
+		else if (inst_lst->type == TOKEN_DOUBLE_Q)
 		{
+			printf("123123\n");
 			old_str = inst_lst->value;
 			inst_lst->value = expand_env_more_vari(data, old_str, -1, -1);
 			free(old_str);
+			inst_lst->type = TOKEN_STRING;
 		}
 		inst_lst = inst_lst->next;
 	}

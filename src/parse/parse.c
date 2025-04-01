@@ -63,7 +63,6 @@ t_token	*tokenize(t_data *data, char **input)
 
 	state_init(&state);
 	handle_tokens(&state, input);
-	printf("new_input: %s\n", *input);
 	if (state.idx != state.start)
 		ft_token_add_back(&state.tklst,
 			ft_new_token(ft_substr(*input, state.start,
