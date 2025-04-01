@@ -46,24 +46,24 @@ static void add_token(t_tokenizer *state, char *input, char quote)
 	state->start = ++state->idx;
 }
 
-int handle_quote_token(t_tokenizer *state, char *input)
+int handle_quote_token(t_tokenizer *state, char **input)
 {
 	char quote;
 
-	if (input[state->idx] != '\'' && input[state->idx] != '"')
+	if ((*input)[state->idx] != '\'' && (*input)[state->idx] != '"')
 		return (0);
-	quote = input[state->idx];
+	quote = (*input)[state->idx];
 	if (state->idx != state->start)
 		ft_token_add_back(&state->tklst,
-						  ft_new_token(ft_substr(input, state->start,
+						  ft_new_token(ft_substr(*input, state->start,
 												 state->idx - state->start),
 									   state));
 	state->start = ++state->idx;
-	while (input[state->idx] && input[state->idx] != quote)
+	while ((*input)[state->idx] && (*input)[state->idx] != quote)
 		state->idx++;
-	if (input[state->idx] == quote)
-		add_token(state, input, quote);
-	else if (!handle_unclosed_quote(&input, state, quote))
+	if ((*input)[state->idx] == quote)
+		add_token(state, *input, quote);
+	else if (!handle_unclosed_quote(input, state, quote))
 		return (0);
 	return (1);
 }

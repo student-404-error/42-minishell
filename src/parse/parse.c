@@ -38,35 +38,35 @@ void state_init(t_tokenizer *state)
 	state->tklst = NULL;
 }
 
-void handle_tokens(t_tokenizer *state, char *input)
+void handle_tokens(t_tokenizer *state, char **input)
 {
-	while (input[state->idx])
+	while ((*input)[state->idx])
 	{
 		check_state(state);
-		if (handle_whitespace(state, input))
+		if (handle_whitespace(state, *input))
 			continue;
-		if (handle_env_variable(state, input))
+		if (handle_env_variable(state, *input))
 			continue;
-		if (handle_quote_token(state, input))
+		if (handle_quote_token(state, *input))
 			continue;
-		if (handle_special_operators(state, input))
+		if (handle_special_operators(state, *input))
 			continue;
-		if (handle_single_char_operators(state, input))
+		if (handle_single_char_operators(state, *input))
 			continue;
 		state->idx++;
 	}
 }
 
-t_token *tokenize(t_data *data, char *input)
+t_token *tokenize(t_data *data, char **input)
 {
 	t_tokenizer state;
 
 	state_init(&state);
 	handle_tokens(&state, input);
-	printf("new_input: %s\n", input);
+	printf("new_input: %s\n", *input);
 	if (state.idx != state.start)
 		ft_token_add_back(&state.tklst,
-						  ft_new_token(ft_substr(input, state.start,
+						  ft_new_token(ft_substr(*input, state.start,
 												 state.idx - state.start),
 									   &state));
 	remove_quote(&state.tklst);
