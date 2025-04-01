@@ -73,5 +73,6 @@ t_token	*tokenize(t_data *data, char *input)
 	remove_space_token(&state.tklst);
 	change_env_to_cmd(&state.tklst);
 	// syntax error fix
+	syntax_error(state.tklst);
 	return (state.tklst);
 }

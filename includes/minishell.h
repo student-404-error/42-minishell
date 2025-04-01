@@ -103,4 +103,5 @@ void			ft_token_add_back(t_token **tklst, t_token *new);
 void			ft_free_token_list(t_token *token);
 void			ft_free_token(t_token *token);
 void			check_state(t_tokenizer *state);
+void			syntax_error(t_token *tklst);
 #endif

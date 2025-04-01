@@ -12,31 +12,62 @@
 
 #include "minishell.h"
 
-void	print_syntax_error(char *token)
+int	print_syntax_error(char *token)
 {
-	printf("charles mishell: syntax error \
-			near unexpected token \`%s\'", token);
-}
-
-int	check_heredoc_syntax();
-int	check_redir_syntax();
-int	check_pipe_syntax()
-{
-	// 파이프를 기준으로 cmd가 양쪽에 있어야하는거잖아.
-	// 예를 들어
-	// | echo 3 -> syntax_error
-	// echo 3 | -> syntax_error
-	// | -> syntax_error
-	// < |
-	// | |
+	printf("charles mishell: syntax error near unexpected token `%s'", token);
 	return (1);
 }
+/*
+int	check_heredoc_syntax()
+{
+	if (first_token->type = TOKEN_PIPE)
+		return (print_syntax_error("<<"));
+	if (last_token->type = TOKEN_PIPE)
+		return (print_syntax_error("<<"));
+	if (pipe_token->next->type = TOKEN_PIPE)
+		return (print_syntax_error("<<"));
+	if (redir_token->type = TOKEN_PIPE)
+		return (print_syntax_error("<<"));
+}
+
+int	check_redir_syntax()
+{
+	if (first_token->type = TOKEN_PIPE)
+		return (print_syntax_error("|"));
+	if (last_token->type = TOKEN_PIPE)
+		return (print_syntax_error("|"));
+	if (pipe_token->next->type = TOKEN_PIPE)
+		return (print_syntax_error("|"));
+	if (redir_token->type = TOKEN_PIPE)
+		return (print_syntax_error("|"));
+}
+*/
+int	check_pipe_syntax(t_token *tklst)
+{
+	if (tklst->prev == NULL)
+		return (print_syntax_error("|"));
+	if (tklst->next == NULL)
+		return (print_syntax_error("|"));
+	if (tklst->next->type == TOKEN_PIPE)
+		return (print_syntax_error("|"));
+	if (tklst->prev->type >= 6 && tklst->prev->type <= 9)
+		return (print_syntax_error("|"));
+	return (0);
+}
+
 void	syntax_error(t_token *tklst)
 {
-	if (check_pipe_syntax(tklst))
-		return (err);
-	if (check_redir_syntax(tklst))
-		return (err);
-	if (check_heredoc_syntax(tklst))
-		return (err);
+	while (tklst)
+	{
+		if (tklst->type == TOKEN_PIPE)
+			if (check_pipe_syntax(tklst))
+				return /* free tklst or return err*/ ;
+//		if (tklst->type == TOKEN_HEREDOC)
+//			if (check_redir_syntax(tklst))
+//				return (err);
+//		if (tklst->type == TOKEN_REDIRECTION_IN)
+//			if (check_heredoc_syntax(tklst))
+//				return (err);
+		tklst = tklst->next;
+	}
 }
