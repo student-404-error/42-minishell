@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
+static int	handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 {
-	char *continue_str;
-	char *new_input;
+	char	*continue_str;
+	char	*new_input;
 
 	continue_str = readline(">");
 	while (continue_str)
@@ -35,29 +35,29 @@ static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 	return (0);
 }
 
-static void add_token(t_tokenizer *state, char *input)
+static void	add_token(t_tokenizer *state, char *input)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = ft_new_token(ft_substr(input, state->start - 1,
-								   state->idx - state->start + 2),
-						 state);
+				state->idx - state->start + 2),
+			state);
 	ft_token_add_back(&state->tklst, token);
 	state->start = ++state->idx;
 }
 
-int handle_quote_token(t_tokenizer *state, char **input)
+int	handle_quote_token(t_tokenizer *state, char **input)
 {
-	char quote;
+	char	quote;
 
 	if ((*input)[state->idx] != '\'' && (*input)[state->idx] != '"')
 		return (0);
 	quote = (*input)[state->idx];
 	if (state->idx != state->start)
 		ft_token_add_back(&state->tklst,
-						  ft_new_token(ft_substr(*input, state->start,
-												 state->idx - state->start),
-									   state));
+			ft_new_token(ft_substr(*input, state->start,
+					state->idx - state->start),
+				state));
 	state->start = ++state->idx;
 	while ((*input)[state->idx] && (*input)[state->idx] != quote)
 		state->idx++;
@@ -68,16 +68,18 @@ int handle_quote_token(t_tokenizer *state, char **input)
 	return (1);
 }
 
-int handle_whitespace(t_tokenizer *state, char *input)
+int	handle_whitespace(t_tokenizer *state, char *input)
 {
-	if ((input[state->idx] >= 9 && input[state->idx] <= 13) || input[state->idx] == ' ')
+	if ((input[state->idx] >= 9 && input[state->idx] <= 13)
+		|| input[state->idx] == ' ')
 	{
 		if (state->idx != state->start)
 			ft_token_add_back(&state->tklst,
-							  ft_new_token(ft_substr(input, state->start,
-													 state->idx - state->start),
-										   state));
-		while ((input[state->idx] >= 9 && input[state->idx] <= 13) || input[state->idx] == ' ')
+				ft_new_token(ft_substr(input, state->start,
+						state->idx - state->start),
+					state));
+		while ((input[state->idx] >= 9 && input[state->idx] <= 13)
+			|| input[state->idx] == ' ')
 			state->idx++;
 		ft_token_add_back(&state->tklst, ft_new_token(ft_strdup(" "), state));
 		state->start = state->idx;
@@ -86,40 +88,44 @@ int handle_whitespace(t_tokenizer *state, char *input)
 	return (0);
 }
 
-int handle_env_variable(t_tokenizer *state, char *input)
+int	handle_env_variable(t_tokenizer *state, char *input)
 {
 	if (input[state->idx] == '$')
 	{
 		if (state->idx != state->start)
 			ft_token_add_back(&state->tklst,
-							  ft_new_token(ft_substr(input, state->start,
-													 state->idx - state->start),
-										   state));
+				ft_new_token(ft_substr(input, state->start,
+						state->idx - state->start),
+					state));
 		state->start = state->idx;
 		state->idx++;
-		while (input[state->idx] && !(input[state->idx] == ' ' || input[state->idx] == '$' || input[state->idx] == '\'' || input[state->idx] == '"' || input[state->idx] == '<' || input[state->idx] == '>' || input[state->idx] == '|'))
+		while (input[state->idx] && !(input[state->idx] == ' '
+				|| input[state->idx] == '$' || input[state->idx] == '|'
+				|| input[state->idx] == '\'' || input[state->idx] == '"'
+				|| input[state->idx] == '<' || input[state->idx] == '>'))
 			state->idx++;
 		ft_token_add_back(&state->tklst,
-						  ft_new_token(ft_substr(input, state->start,
-												 state->idx - state->start),
-									   state));
+			ft_new_token(ft_substr(input, state->start,
+					state->idx - state->start),
+				state));
 		state->start = state->idx;
 		return (1);
 	}
 	return (0);
 }
 
-int handle_special_operators(t_tokenizer *state, char *input)
+int	handle_special_operators(t_tokenizer *state, char *input)
 {
-	if (!ft_strncmp(input + state->idx, "<<", 2) || !ft_strncmp(input + state->idx, ">>", 2))
+	if (!ft_strncmp(input + state->idx, "<<", 2)
+		|| !ft_strncmp(input + state->idx, ">>", 2))
 	{
 		if (state->idx != state->start)
 			ft_token_add_back(&state->tklst,
-							  ft_new_token(ft_substr(input, state->start,
-													 state->idx - state->start),
-										   state));
+				ft_new_token(ft_substr(input, state->start,
+						state->idx - state->start),
+					state));
 		ft_token_add_back(&state->tklst,
-						  ft_new_token(ft_substr(input, state->idx, 2), state));
+			ft_new_token(ft_substr(input, state->idx, 2), state));
 		state->idx += 2;
 		state->start = state->idx;
 		return (1);
@@ -127,17 +133,18 @@ int handle_special_operators(t_tokenizer *state, char *input)
 	return (0);
 }
 
-int handle_single_char_operators(t_tokenizer *state, char *input)
+int	handle_single_char_operators(t_tokenizer *state, char *input)
 {
-	if (input[state->idx] == '<' || input[state->idx] == '>' || input[state->idx] == '|')
+	if (input[state->idx] == '<' || input[state->idx] == '>'
+		|| input[state->idx] == '|')
 	{
 		if (state->idx != state->start)
 			ft_token_add_back(&state->tklst,
-							  ft_new_token(ft_substr(input, state->start,
-													 state->idx - state->start),
-										   state));
+				ft_new_token(ft_substr(input, state->start,
+						state->idx - state->start),
+					state));
 		ft_token_add_back(&state->tklst,
-						  ft_new_token(ft_substr(input, state->idx, 1), state));
+			ft_new_token(ft_substr(input, state->idx, 1), state));
 		state->idx++;
 		state->start = state->idx;
 		return (1);
