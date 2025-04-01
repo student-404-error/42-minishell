@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 20:13:22 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/04/01 15:49:35 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/01 16:15:54 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,33 @@
 
 void	concat_token(t_token **tklst)
 {
-    t_token	*now;
-    t_token	*prev;
-    char	*new_str;
+	t_token	*now;
+	t_token	*prev;
+	char	*new_str;
 
-    now = (*tklst)->next;
-    while (now)
-    {
-        prev = now->prev;
-        if (prev && prev->type < 4 && now->type < 4)
-        {
-            new_str = ft_strjoin(prev->value, now->value);
-            now->type = prev->type;
-            now->value = ft_free_and_assign(now->value, new_str);
-            if (prev->prev)
-                prev->prev->next = now;
-            else
-                *tklst = now;
-            now->prev = prev->prev;
-            ft_free_token(prev);
-        }
-        now = now->next;
-    }
+	now = (*tklst)->next;
+	while (now)
+	{
+		prev = now->prev;
+		if (prev && prev->type < 4 && now->type < 4)
+		{
+			new_str = ft_strjoin(prev->value, now->value);
+			now->type = prev->type;
+			now->value = ft_free_and_assign(now->value, new_str);
+			if (prev->prev)
+				prev->prev->next = now;
+			else
+				*tklst = now;
+			now->prev = prev->prev;
+			ft_free_token(prev);
+		}
+		now = now->next;
+	}
 }
 
 char	*ft_free_and_assign(char *old, char *new_val)
 {
-    return (free(old), new_val);
+	return (free(old), new_val);
 }
 
 void	remove_quote(t_token **tklst)
