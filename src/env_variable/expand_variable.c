@@ -27,7 +27,8 @@ char	*expand_env_one_vari(t_data *data, t_token *token)
 	key = get_env_key(token->value + 1);
 	if (ft_strcmp(key, "") == 0)
 	{
-		if (get_next_token_type(token) != TOKEN_STRING)
+		if (get_next_token_type(token) != TOKEN_STRING
+			&& get_next_token_type(token) != TOKEN_DOUBLE_Q)
 			return (free(key), ft_strdup("$"));
 		else
 			return (free(key), ft_strdup(""));
