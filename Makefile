@@ -27,7 +27,7 @@ SRCS_BLD 		=	builder.c builder_utils.c file.c args.c
 
 SRCS_SIG 		=	signal.c
 
-SRCS_PARSE		=	parse.c handle_token.c parse_utils.c heredoc.c syntax_error.c
+SRCS_PARSE		=	parse.c handle_token.c parse_utils.c heredoc.c syntax_error.c handle_quote.c
 
 SRCS_ENV_VARI	=	expand_variable.c expand_env_vari_utils.c
 
