@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:32:39 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/29 17:50:06 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/01 15:12:12 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ int	handle_pipeline(t_data *data, char *line)
 	ft_print_tokens(data->tklst);
 	free(line);
 	if (data->tklst == NULL)
-		return (0);
+		return (1);
 	if (ft_handle_heredoc(data->tklst) != 0)
 	{
 		ft_unlink_err(data->tklst);
 		ft_free_token_list(data->tklst);
-		return (0);
+		return (1);
 	}
 	if (ft_setup_exec(data, &data->tklst) != 0)
 		return (1);
@@ -66,10 +66,7 @@ int	handle_loop(t_data *data)
 		{
 			add_history(line);
 			if (handle_pipeline(data, line) != 0)
-			{
-				ft_putstr_fd("Parsing error!\n", 2);
 				data->exit_code = 2;
-			}
 			line = NULL;
 		}
 		if (line)
