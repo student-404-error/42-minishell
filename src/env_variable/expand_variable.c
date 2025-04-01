@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-// " $USER dkfj " 이런 입력에 대해 처리해줘야함.
-// 마지막 것만 붙이면 됨.
 
 int	get_next_token_type(t_token *token)
 {
@@ -28,12 +26,10 @@ char	*expand_env_one_vari(t_data *data, t_token *token)
 
 	key = get_env_key(token->value + 1);
 	if (ft_strcmp(key, "") == 0)
-	{
 		if (get_next_token_type(token) != TOKEN_STRING)
 			return (free(key), ft_strdup("$"));
 		else
 			return (free(key), ft_strdup(""));
-	}
 	else
 		ret = get_env_value(data, key);
 	return (free(key), ret);
@@ -47,8 +43,8 @@ static char	*expand_env_more_vari(t_data *data, char *token, int start, int idx)
 	char	*value;
 
 	total_length = count_total_length(data, token);
-	if (total_length == 0)
-		return (ft_strdup(""));
+//	if (total_length == 0)
+//		return (ft_strdup(""));
 	ret = malloc(sizeof(char) * (total_length + 1));
 	if (ret == NULL)
 		return (NULL);
@@ -64,8 +60,9 @@ static char	*expand_env_more_vari(t_data *data, char *token, int start, int idx)
 		free(key);
 		free(value);
 	}
-	return (ft_strlcpy(ret + ft_strlen(ret), token + start + 1,
-			ft_strlen(token + start + 1) + 1), ret);
+	ft_strlcpy(ret + ft_strlen(ret), token + start + 1,
+		ft_strlen(token + start + 1) + 1);
+	return (ret);
 }
 
 void	expand_env_vari(t_data *data, t_token **tklst)
