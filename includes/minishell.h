@@ -91,7 +91,7 @@ void			remove_quote(t_token **tklst);
 void			concat_token(t_token **tklst);
 void			expand_env_vari(t_data *data, t_token **tklst);
 void			remove_space_token(t_token **tklst);
-void			change_env_to_cmd(t_token **tklst);
+void			search_cmd(t_token **tklst);
 int				syntax_error(t_token *tklst);
 char			*get_env_key(char *str);
 char			*get_env_value(t_data *data, char *key);

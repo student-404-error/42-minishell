@@ -72,7 +72,7 @@ t_token	*tokenize(t_data *data, char **input)
 	expand_env_vari(data, &state.tklst);
 	concat_token(&state.tklst);
 	remove_space_token(&state.tklst);
-	change_env_to_cmd(&state.tklst);
+	search_cmd(&state.tklst);
 	if (syntax_error(state.tklst) == -1)
 		return (ft_free_token_list(state.tklst), NULL);
 	return (state.tklst);
