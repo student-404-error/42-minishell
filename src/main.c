@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-t_signals g_signals = {0};
+t_signals	g_signals = {0};
 
-int ft_setup_exec(t_data *data, t_token **token)
+int	ft_setup_exec(t_data *data, t_token **token)
 {
 	data->exec = builder(*token);
 	ft_free_token_list(*token);
@@ -30,7 +30,7 @@ int ft_setup_exec(t_data *data, t_token **token)
 }
 
 // 파이프라인을 처리하는 함수
-int handle_pipeline(t_data *data, char *line)
+int	handle_pipeline(t_data *data, char *line)
 {
 	data->tklst = tokenize(data, &line);
 	ft_print_tokens(data->tklst);
@@ -51,9 +51,9 @@ int handle_pipeline(t_data *data, char *line)
 }
 
 // 입력 루프를 처리하는 함수
-int handle_loop(t_data *data)
+int	handle_loop(t_data *data)
 {
-	char *line;
+	char	*line;
 
 	line = NULL;
 	while (1)
@@ -61,7 +61,7 @@ int handle_loop(t_data *data)
 		ft_init_signal();
 		line = readline(PROMPT);
 		if (line == NULL)
-			break;
+			break ;
 		else if (ms_check_line(line) == 0)
 		{
 			add_history(line);
@@ -75,9 +75,9 @@ int handle_loop(t_data *data)
 	return (0);
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
-	t_data *data;
+	t_data	*data;
 
 	(void)ac;
 	(void)av;
