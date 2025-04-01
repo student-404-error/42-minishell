@@ -101,7 +101,7 @@ int				count_total_length(t_data *data, char *token);
 t_token			*ft_new_token(char *value, t_tokenizer *state);
 t_token			*ft_tklast(t_token *tklst);
 void			ft_token_add_back(t_token **tklst, t_token *new);
-char            *ft_free_and_assign(char *old, char *new_val);
+char			*ft_free_and_assign(char *old, char *new_val);
 void			ft_free_token_list(t_token *token);
 void			ft_free_token(t_token *token);
 void			check_state(t_tokenizer *state);
