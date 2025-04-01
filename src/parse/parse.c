@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-void	ft_print_tokens(t_token *tklst)
+void ft_print_tokens(t_token *tklst)
 {
-	t_token	*list_ptr;
+	t_token *list_ptr;
 
 	if (!tklst)
-		return ;
+		return;
 	list_ptr = tklst;
 	printf("\n\n===========RESULT===========\n");
 	while (list_ptr)
@@ -26,10 +26,10 @@ void	ft_print_tokens(t_token *tklst)
 		list_ptr = list_ptr->next;
 	}
 	printf("\n\n");
-	return ;
+	return;
 }
 
-void	state_init(t_tokenizer *state)
+void state_init(t_tokenizer *state)
 {
 	state->idx = 0;
 	state->start = 0;
@@ -38,35 +38,37 @@ void	state_init(t_tokenizer *state)
 	state->tklst = NULL;
 }
 
-void	handle_tokens(t_tokenizer *state, char *input)
+void handle_tokens(t_tokenizer *state, char *input)
 {
 	while (input[state->idx])
 	{
 		check_state(state);
 		if (handle_whitespace(state, input))
-			continue ;
+			continue;
 		if (handle_env_variable(state, input))
-			continue ;
+			continue;
 		if (handle_quote_token(state, input))
-			continue ;
+			continue;
 		if (handle_special_operators(state, input))
-			continue ;
+			continue;
 		if (handle_single_char_operators(state, input))
-			continue ;
+			continue;
 		state->idx++;
 	}
 }
 
-t_token	*tokenize(t_data *data, char *input)
+t_token *tokenize(t_data *data, char *input)
 {
-	t_tokenizer	state;
+	t_tokenizer state;
 
 	state_init(&state);
 	handle_tokens(&state, input);
+	printf("new_input: %s\n", input);
 	if (state.idx != state.start)
 		ft_token_add_back(&state.tklst,
-			ft_new_token(ft_substr(input, state.start,
-					state.idx - state.start), &state));
+						  ft_new_token(ft_substr(input, state.start,
+												 state.idx - state.start),
+									   &state));
 	remove_quote(&state.tklst);
 	expand_env_vari(data, &state.tklst);
 	concat_token(&state.tklst);
