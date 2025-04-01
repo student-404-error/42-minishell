@@ -1,1 +1,1 @@
-valgrind --show-leak-kinds=all --leak-check=full --trace-children=yes --show-reachable=yes --suppressions=rl.supp -s ./minishell
+valgrind --show-leak-kinds=all --leak-check=full --suppressions=rl.supp -s ./minishell
