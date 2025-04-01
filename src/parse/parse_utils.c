@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 20:13:22 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/29 17:34:47 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/01 15:49:35 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,33 @@
 
 void	concat_token(t_token **tklst)
 {
-	t_token	*now_token;
-	t_token	*prev_token;
-	char	*new_str;
+    t_token	*now;
+    t_token	*prev;
+    char	*new_str;
 
-	now_token = (*tklst)->next;
-	if (now_token != NULL)
-		prev_token = now_token->prev;
-	else
-		prev_token = NULL;
-	while (now_token)
-	{
-		if (prev_token && prev_token->type < 4 && now_token->type < 4)
-		{
-			new_str = ft_strjoin(prev_token->value, now_token->value);
-			if (prev_token->prev == NULL)
-			{
-				*tklst = now_token;
-				now_token->prev = NULL;
-			}
-			else
-			{
-				prev_token->prev->next = now_token;
-				now_token->prev = prev_token->prev;
-			}
-			free(prev_token->value);
-			now_token->type = prev_token->type;
-			free(prev_token);
-			free(now_token->value);
-			now_token->value = new_str;
-		}
-		prev_token = now_token;
-		now_token = now_token->next;
-	}
+    now = (*tklst)->next;
+    while (now)
+    {
+        prev = now->prev;
+        if (prev && prev->type < 4 && now->type < 4)
+        {
+            new_str = ft_strjoin(prev->value, now->value);
+            now->type = prev->type;
+            now->value = ft_free_and_assign(now->value, new_str);
+            if (prev->prev)
+                prev->prev->next = now;
+            else
+                *tklst = now;
+            now->prev = prev->prev;
+            ft_free_token(prev);
+        }
+        now = now->next;
+    }
+}
+
+char	*ft_free_and_assign(char *old, char *new_val)
+{
+    return (free(old), new_val);
 }
 
 void	remove_quote(t_token **tklst)

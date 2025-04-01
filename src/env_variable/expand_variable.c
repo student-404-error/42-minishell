@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:15:12 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/29 17:40:24 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/01 15:37:31 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@ char	*expand_env_one_vari(t_data *data, t_token *token)
 
 	key = get_env_key(token->value + 1);
 	if (ft_strcmp(key, "") == 0)
+	{
 		if (get_next_token_type(token) != TOKEN_STRING)
 			return (free(key), ft_strdup("$"));
 		else
 			return (free(key), ft_strdup(""));
+	}
 	else
 		ret = get_env_value(data, key);
 	return (free(key), ret);
@@ -60,9 +62,8 @@ static char	*expand_env_more_vari(t_data *data, char *token, int start, int idx)
 		free(key);
 		free(value);
 	}
-	ft_strlcpy(ret + ft_strlen(ret), token + start + 1,
-		ft_strlen(token + start + 1) + 1);
-	return (ret);
+	return (ft_strlcpy(ret + ft_strlen(ret), token + start + 1,
+			ft_strlen(token + start + 1) + 1), ret);
 }
 
 void	expand_env_vari(t_data *data, t_token **tklst)

@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:40:02 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/29 18:08:54 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/01 15:52:24 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void			concat_token(t_token **tklst);
 void			expand_env_vari(t_data *data, t_token **tklst);
 void			remove_space_token(t_token **tklst);
 void			change_env_to_cmd(t_token **tklst);
+int				syntax_error(t_token *tklst);
 char			*get_env_key(char *str);
 char			*get_env_value(t_data *data, char *key);
 int				get_dollar_idx(char *s);
@@ -100,8 +101,8 @@ int				count_total_length(t_data *data, char *token);
 t_token			*ft_new_token(char *value, t_tokenizer *state);
 t_token			*ft_tklast(t_token *tklst);
 void			ft_token_add_back(t_token **tklst, t_token *new);
+char            *ft_free_and_assign(char *old, char *new_val);
 void			ft_free_token_list(t_token *token);
 void			ft_free_token(t_token *token);
 void			check_state(t_tokenizer *state);
-int				syntax_error(t_token *tklst);
 #endif
