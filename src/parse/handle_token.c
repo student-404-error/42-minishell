@@ -35,7 +35,7 @@ static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 	return (0);
 }
 
-static void add_token(t_tokenizer *state, char *input, char quote)
+static void add_token(t_tokenizer *state, char *input)
 {
 	t_token *token;
 
@@ -62,7 +62,7 @@ int handle_quote_token(t_tokenizer *state, char **input)
 	while ((*input)[state->idx] && (*input)[state->idx] != quote)
 		state->idx++;
 	if ((*input)[state->idx] == quote)
-		add_token(state, *input, quote);
+		add_token(state, *input);
 	else if (!handle_unclosed_quote(input, state, quote))
 		return (0);
 	return (1);

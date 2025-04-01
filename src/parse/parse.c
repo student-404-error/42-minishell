@@ -47,7 +47,7 @@ void handle_tokens(t_tokenizer *state, char **input)
 			continue;
 		if (handle_env_variable(state, *input))
 			continue;
-		if (handle_quote_token(state, *input))
+		if (handle_quote_token(state, input))
 			continue;
 		if (handle_special_operators(state, *input))
 			continue;

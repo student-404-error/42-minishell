@@ -81,12 +81,12 @@ char			*env_create_value(char	*raw);
 int				env_lstsize(t_env *env);
 
 /* parsing 주요 함수 */
-t_token			*tokenize(t_data *data, char *input);
+t_token			*tokenize(t_data *data, char **input);
 int				handle_single_char_operators(t_tokenizer *state, char *input);
 int				handle_special_operators(t_tokenizer *state, char *input);
 int				handle_env_variable(t_tokenizer *state, char *input);
 int				handle_whitespace(t_tokenizer *state, char *input);
-int				handle_quote_token(t_tokenizer *state, char *input);
+int				handle_quote_token(t_tokenizer *state, char **input);
 void			remove_quote(t_token **tklst);
 void			concat_token(t_token **tklst);
 void			expand_env_vari(t_data *data, t_token **tklst);
