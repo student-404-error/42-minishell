@@ -12,6 +12,9 @@
 
 #include "minishell.h"
 
+void ft_add_new_line(char *str)
+{
+}
 static int	handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 {
 	char	*continue_str;
@@ -20,6 +23,7 @@ static int	handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 	continue_str = readline(">");
 	while (continue_str)
 	{
+		ft_add_new_line(continue_str);
 		new_input = ft_strjoin(*input, continue_str);
 		free(*input);
 		*input = new_input;
