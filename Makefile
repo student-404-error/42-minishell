@@ -59,10 +59,6 @@ OBJF			=	.cache
 
 all:	$(NAME)
 
-pr:
-	@echo $(SRCS)
-pr2:SRCS_ENV_VARI
-	@echo $(OBJS)
 $(LIBFT):
 	@make -C $(LFT_DIR)
 
@@ -79,13 +75,13 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
 
 clean:
 	@$(RM) $(OBJ_DIR)
-	make -C $(LFT_DIR) clean
-	echo -e "$(FPurple).o files $(Purple)cleaned\n${RESET}"
+	@make -C $(LFT_DIR) clean
+	@echo -e "$(FPurple).o files $(Purple)cleaned\n${RESET}"
 
 fclean:	clean
 	@$(RM) $(NAME)
-	make -C $(LFT_DIR) fclean
-	echo -e "$(FRed)${NAME}$(Red) cleaned${RESET}\n"
+	@make -C $(LFT_DIR) fclean
+	@echo -e "$(FRed)${NAME}$(Red) cleaned${RESET}\n"
 
 re:	fclean all
 
