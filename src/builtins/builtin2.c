@@ -45,7 +45,10 @@ int	bi_unset(t_data *data, t_args *args)
 		while (args)
 		{
 			if (!ft_strcmp(args->value, "_"))
+			{
 				args = args->next;
+				return (0);
+			}
 			if (bi_delete_var(args->value, &(data->envp)))
 				return (1);
 			args = args->next;
