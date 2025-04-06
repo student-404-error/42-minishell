@@ -59,7 +59,7 @@ extern t_signals	g_signals;
 /* minishell 주요 함수 */
 t_token_type	check_token_type(char *value, t_tokenizer *state);
 int				ft_setup_exec(t_data *data, t_token **token);
-int				handle_pipeline(t_data *data, char *line);
+int				handle_pipeline(t_data *data, char **line);
 int				handle_loop(t_data *data);
 int				parser(t_token **token);
 t_data			*ms_init_data(char **envp);

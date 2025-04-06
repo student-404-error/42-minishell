@@ -30,11 +30,10 @@ int	ft_setup_exec(t_data *data, t_token **token)
 }
 
 // 파이프라인을 처리하는 함수
-int	handle_pipeline(t_data *data, char *line)
+int	handle_pipeline(t_data *data, char **line)
 {
-	data->tklst = tokenize(data, &line);
+	data->tklst = tokenize(data, line);
 	ft_print_tokens(data->tklst);
-	free(line);
 	if (data->tklst == NULL)
 		return (1);
 	if (ft_handle_heredoc(data->tklst) != 0)
@@ -64,9 +63,10 @@ int	handle_loop(t_data *data)
 			break ;
 		else if (ms_check_line(line) == 0)
 		{
-			add_history(line);
-			if (handle_pipeline(data, line) != 0)
+			if (handle_pipeline(data, &line) != 0)
 				data->exit_code = 2;
+			add_history(line);
+			free(line);
 			line = NULL;
 		}
 		if (line)
