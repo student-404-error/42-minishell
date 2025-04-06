@@ -12,31 +12,15 @@
 
 #include "minishell.h"
 
-void ft_add_new_line(char *str)
+char	*ft_add_new_line(char *str)
 {
-}
-static int	handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
-{
-	char	*continue_str;
-	char	*new_input;
+	char	*new_str;
 
-	continue_str = readline(">");
-	while (continue_str)
-	{
-		ft_add_new_line(continue_str);
-		new_input = ft_strjoin(*input, continue_str);
-		free(*input);
-		*input = new_input;
-		state->idx = ft_strlen(*input) - ft_strlen(continue_str);
-		free(continue_str);
-		while ((*input)[state->idx] && (*input)[state->idx] != quote)
-			state->idx++;
-		if ((*input)[state->idx] == quote)
-			return (1);
-		continue_str = readline(">");
-	}
-	ft_putstr_fd("Error: Unclosed quote\n", 2);
-	return (0);
+	if (str == NULL)
+		return (NULL);
+	new_str = ft_strjoin("\n", str);
+	free(str);
+	return (new_str);
 }
 
 static void	add_token(t_tokenizer *state, char *input)
@@ -48,6 +32,30 @@ static void	add_token(t_tokenizer *state, char *input)
 			state);
 	ft_token_add_back(&state->tklst, token);
 	state->start = ++state->idx;
+}
+
+static int	handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
+{
+	char	*continue_str;
+	char	*new_input;
+
+	continue_str = readline(">");
+	while (continue_str)
+	{
+		continue_str = ft_add_new_line(continue_str);
+		new_input = ft_strjoin(*input, continue_str);
+		free(*input);
+		*input = new_input;
+		state->idx = ft_strlen(*input) - ft_strlen(continue_str);
+		free(continue_str);
+		while ((*input)[state->idx] && (*input)[state->idx] != quote)
+			state->idx++;
+		if ((*input)[state->idx] == quote)
+			return (add_token(state, *input), 1);
+		continue_str = readline(">");
+	}
+	ft_putstr_fd("Error: Unclosed quote\n", 2);
+	return (0);
 }
 
 int	handle_quote_token(t_tokenizer *state, char **input)
