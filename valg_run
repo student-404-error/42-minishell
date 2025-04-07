@@ -1,1 +1,2 @@
+make re
 valgrind --show-leak-kinds=all --leak-check=full --suppressions=rl.supp -s ./minishell

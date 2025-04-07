@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:37:51 by jaoh              #+#    #+#             */
-/*   Updated: 2025/04/07 16:46:09 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/07 17:57:04 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	ft_init_heredoc(char **input, int fd, char *eof)
 			free(line);
 			break ;
 		}
-		free(line);
 		if (ft_handle_readline(&line, prev_sigint_handler))
 			return (1);
 	}
