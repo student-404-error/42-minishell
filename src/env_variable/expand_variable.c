@@ -45,7 +45,7 @@ static char	*expand_env_more_vari(t_data *data, char *token, int start, int idx)
 	char	*key;
 	char	*value;
 
-	if (ft_strcmp(token, "$"))
+	if (ft_strcmp(token, "$") == 0)
 		return (ft_strdup("$"));
 	total_length = count_total_length(data, token);
 	ret = malloc(sizeof(char) * (total_length + 1));
