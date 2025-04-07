@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:37:51 by jaoh              #+#    #+#             */
-/*   Updated: 2025/04/07 16:43:52 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/07 16:46:09 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ int	ft_init_heredoc(char **input, int fd, char *eof)
 {
 	char	*line;
 	void	(*prev_sigint_handler)(int);
-	int		ret;
 
-	ret = 0;
 	prev_sigint_handler = signal(SIGINT, sg_heredoc_handler);
 	if (ft_handle_readline(&line, prev_sigint_handler))
 		return (1);
@@ -65,12 +63,13 @@ int	ft_init_heredoc(char **input, int fd, char *eof)
 			break ;
 		}
 		free(line);
-		ret = ft_handle_readline(&line, prev_sigint_handler);
+		if (ft_handle_readline(&line, prev_sigint_handler))
+			return (1);
 	}
 	signal(SIGINT, prev_sigint_handler);
 	if (g_signals.eof == 1)
 		return (g_signals.eof = 0, 1);
-	return (ret);
+	return (0);
 }
 
 void	ft_unlink_err(t_token *token)
