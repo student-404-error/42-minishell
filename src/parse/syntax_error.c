@@ -35,7 +35,8 @@ int	check_redir_syntax(t_token *tklst)
 {
 	if (tklst->next == NULL)
 		return (print_syntax_error("newline"));
-	if (tklst->next->type >= 6 && tklst->next->type <= 9)
+	if (tklst->next->type >= TOKEN_REDIRECTION_IN
+		&& tklst->next->type <= TOKEN_HEREDOC)
 		return (print_syntax_error(tklst->next->value));
 	return (0);
 }
@@ -58,7 +59,8 @@ int	syntax_error(t_token *tklst)
 		if (tklst->type == TOKEN_PIPE)
 			if (check_pipe_syntax(tklst))
 				return (-1);
-		if (tklst->type >= 6 && tklst->type <= 9)
+		if (tklst->type >= TOKEN_REDIRECTION_IN
+			&& tklst->type <= TOKEN_HEREDOC)
 			if (check_redir_syntax(tklst))
 				return (-1);
 		tklst = tklst->next;
