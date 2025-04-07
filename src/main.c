@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:32:39 by jaoh              #+#    #+#             */
-/*   Updated: 2025/04/01 15:12:12 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/07 14:09:06 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	handle_pipeline(t_data *data, char **line)
 	ft_print_tokens(data->tklst);
 	if (data->tklst == NULL)
 		return (1);
-	if (ft_handle_heredoc(data->tklst) != 0)
+	if (ft_handle_heredoc(data->tklst, line) != 0)
 	{
 		ft_unlink_err(data->tklst);
 		ft_free_token_list(data->tklst);

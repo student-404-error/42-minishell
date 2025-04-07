@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:33:08 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/24 16:30:46 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/07 14:54:06 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ t_token	*ft_new_token(char *value, t_tokenizer *state);
 t_token	*ft_tklast(t_token *tklst);
 void	ft_token_add_back(t_token **tklst, t_token *new);
 
-int		ft_init_here_doc(int fd, char *eof);
+int		ft_init_heredoc(char **line, int fd, char *eof);
 void	ft_unlink_err(t_token *token);
-int		ft_handle_heredoc(t_token *token);
+int		ft_handle_heredoc(t_token *token, char **line);
 char	*ft_gen_random_name(char *str);
 
 #endif // !PARSING.15:33:20
