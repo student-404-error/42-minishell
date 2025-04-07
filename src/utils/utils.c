@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:39:30 by jaoh              #+#    #+#             */
-/*   Updated: 2025/03/29 15:30:51 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/07 16:32:01 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,28 @@ int	ms_check_line(char *line)
 	if (*line == '\0')
 		return (1);
 	return (0);
+}
+
+char	*ft_gen_random_name(char *str)
+{
+	unsigned long	rand;
+	int				i;
+	char			*new;
+
+	if (!str)
+		return (NULL);
+	new = ft_calloc(sizeof(char), 17);
+	if (!new)
+		return (NULL);
+	rand = (unsigned long)str;
+	ft_strlcpy(new, "/tmp/hd_", 9);
+	i = 8;
+	while (i < 16)
+	{
+		rand *= RND_OFFSET + RND_PRIME;
+		new[i] = 'a' + (rand % 26);
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
 }
