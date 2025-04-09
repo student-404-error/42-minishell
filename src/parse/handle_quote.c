@@ -56,7 +56,7 @@ static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 		if (!new_input)
 			return (0);
 		*input = new_input;
-		state->idx = ft_strlen(*input) - ft_strlen(continue_str);
+		state->idx = ft_strlen(*input) - ft_strlen(temp);
 		while ((*input)[state->idx] && (*input)[state->idx] != quote)
 			state->idx++;
 		if ((*input)[state->idx] == quote)
@@ -64,6 +64,8 @@ static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 		continue_str = readline(">");
 	}
 	ft_putstr_fd("Error: Unclosed quote\n", 2);
+	free(*input);  // 추가: 실패 시 input 해제
+	*input = NULL; // 추가: input 포인터를 NULL로 설정
 	return (0);
 }
 
@@ -83,7 +85,10 @@ int handle_quote_token(t_tokenizer *state, char **input)
 	while ((*input)[state->idx] && (*input)[state->idx] != quote)
 		state->idx++;
 	if ((*input)[state->idx] == quote)
+	{
 		add_token(state, *input);
+		return (1);
+	}
 	else if (!handle_unclosed_quote(input, state, quote))
 		return (0);
 	return (1);
