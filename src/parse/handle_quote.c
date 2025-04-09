@@ -52,12 +52,8 @@ static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 		}
 		new_input = ft_strjoin(*input, continue_str);
 		free(*input);
-<<<<<<< HEAD
 		*input = new_input;
-		printf("%ld\n", ft_strlen(*input));
 		state->idx = ft_strlen(*input) - ft_strlen(continue_str);
-=======
->>>>>>> 958c61ab27b5f314a603a98c488db9ad64041418
 		free(continue_str);
 		if (!new_input)
 			return (0);
