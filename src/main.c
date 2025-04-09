@@ -44,6 +44,8 @@ int	handle_pipeline(t_data *data, char **line)
 	}
 	if (ft_setup_exec(data, &data->tklst) != 0)
 		return (1);
+	free(*line);
+	*line = NULL;
 	ex_run_exec(data);
 	ms_clear(data, data->tklst);
 	return (0);
