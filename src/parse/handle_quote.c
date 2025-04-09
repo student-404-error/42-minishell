@@ -46,6 +46,7 @@ static int	handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 		new_input = ft_strjoin(*input, continue_str);
 		free(*input);
 		*input = new_input;
+		printf("%ld\n", ft_strlen(*input));
 		state->idx = ft_strlen(*input) - ft_strlen(continue_str);
 		free(continue_str);
 		while ((*input)[state->idx] && (*input)[state->idx] != quote)
