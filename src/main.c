@@ -44,6 +44,7 @@ int	handle_pipeline(t_data *data, char **line)
 	}
 	if (ft_setup_exec(data, &data->tklst) != 0)
 		return (1);
+	add_history(*line);
 	free(*line);
 	*line = NULL;
 	ex_run_exec(data);
@@ -67,7 +68,6 @@ int	handle_loop(t_data *data)
 		{
 			if (handle_pipeline(data, &line) != 0)
 				data->exit_code = 2;
-			add_history(line);
 			free(line);
 			line = NULL;
 		}
