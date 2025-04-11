@@ -6,28 +6,11 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/04/01 15:39:05 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/11 11:52:41 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ft_print_tokens(t_token *tklst)
-{
-	t_token	*list_ptr;
-
-	if (!tklst)
-		return ;
-	list_ptr = tklst;
-	printf("\n\n===========RESULT===========\n");
-	while (list_ptr)
-	{
-		printf("lexing: token: %s | type: %d\n", list_ptr->value, list_ptr->type);
-		list_ptr = list_ptr->next;
-	}
-	printf("\n\n");
-	return ;
-}
 
 void	state_init(t_tokenizer *state)
 {
