@@ -38,18 +38,18 @@ static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 {
 	char *continue_str;
 	char *new_input;
-	char *temp;
+	size_t orig_len;
 
 	continue_str = readline(">");
 	while (continue_str)
 	{
-		temp = continue_str;
-		continue_str = ft_add_new_line(continue_str);
-		if (!continue_str)
+		orig_len = ft_strlen(continue_str);
+		if (orig_len == 0)
 		{
-			free(temp);
+			free(continue_str);
 			return (0);
 		}
+		continue_str = ft_add_new_line(continue_str);
 		new_input = ft_strjoin(*input, continue_str);
 		free(*input);
 		*input = new_input;
@@ -57,8 +57,7 @@ static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 		free(continue_str);
 		if (!new_input)
 			return (0);
-		*input = new_input;
-		state->idx = ft_strlen(*input) - ft_strlen(temp);
+		state->idx = ft_strlen(*input) - orig_len;
 		while ((*input)[state->idx] && (*input)[state->idx] != quote)
 			state->idx++;
 		if ((*input)[state->idx] == quote)
@@ -66,9 +65,29 @@ static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 		continue_str = readline(">");
 	}
 	ft_putstr_fd("Error: Unclosed quote\n", 2);
-	free(*input);  // 추가: 실패 시 input 해제
-	*input = NULL; // 추가: input 포인터를 NULL로 설정
+	state->idx--;
 	return (0);
+	/*
+		char *continue_str;
+		char *new_input;
+
+		continue_str = readline(">");
+		while (continue_str)
+		{
+			continue_str = ft_add_new_line(continue_str);
+			new_input = ft_strjoin(*input, continue_str);
+			free(*input);
+			*input = new_input;
+			state->idx = ft_strlen(*input) - ft_strlen(continue_str);
+			free(continue_str);
+			while ((*input)[state->idx] && (*input)[state->idx] != quote)
+				state->idx++;
+			if ((*input)[state->idx] == quote)
+				return (add_token(state, *input), 1);
+			continue_str = readline(">");
+		}
+		ft_putstr_fd("Error: Unclosed quote\n", 2);
+		return (0);*/
 }
 
 int handle_quote_token(t_tokenizer *state, char **input)

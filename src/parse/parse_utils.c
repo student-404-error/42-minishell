@@ -18,6 +18,8 @@ void	concat_token(t_token **tklst)
 	t_token	*prev;
 	char	*new_str;
 
+	if (*tklst == NULL)
+		return ;
 	now = (*tklst)->next;
 	while (now)
 	{
