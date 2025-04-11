@@ -6,7 +6,7 @@
 /*   By: seong-ki <seong-ki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 18:11:40 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/04/11 11:01:55 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/11 12:12:17 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ static int	handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 	{
 		orig_len = ft_strlen(continue_str);
 		if (orig_len == 0)
-		{
-			free(continue_str);
-			return (0);
-		}
+			return (free(continue_str), 0);
 		continue_str = ft_add_new_line(continue_str);
 		new_input = ft_strjoin(*input, continue_str);
 		free(*input);
@@ -57,37 +54,13 @@ static int	handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 		free(continue_str);
 		if (!new_input)
 			return (0);
-		state->idx = ft_strlen(*input) - orig_len;
 		while ((*input)[state->idx] && (*input)[state->idx] != quote)
 			state->idx++;
 		if ((*input)[state->idx] == quote)
 			return (add_token(state, *input), 1);
 		continue_str = readline(">");
 	}
-	ft_putstr_fd("Error: Unclosed quote\n", 2);
-	state->idx--;
-	return (0);
-	/*
-		char *continue_str;
-		char *new_input;
-
-		continue_str = readline(">");
-		while (continue_str)
-		{
-			continue_str = ft_add_new_line(continue_str);
-			new_input = ft_strjoin(*input, continue_str);
-			free(*input);
-			*input = new_input;
-			state->idx = ft_strlen(*input) - ft_strlen(continue_str);
-			free(continue_str);
-			while ((*input)[state->idx] && (*input)[state->idx] != quote)
-				state->idx++;
-			if ((*input)[state->idx] == quote)
-				return (add_token(state, *input), 1);
-			continue_str = readline(">");
-		}
-		ft_putstr_fd("Error: Unclosed quote\n", 2);
-		return (0);*/
+	return (ft_putstr_fd("Error: Unclosed quote\n", 2), state->idx--, 0);
 }
 
 int	handle_quote_token(t_tokenizer *state, char **input)

@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:32:39 by jaoh              #+#    #+#             */
-/*   Updated: 2025/04/07 18:00:09 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/11 11:56:03 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	ft_setup_exec(t_data *data, t_token **token)
 int	handle_pipeline(t_data *data, char **line)
 {
 	data->tklst = tokenize(data, line);
-	ft_print_tokens(data->tklst);
 	if (data->tklst == NULL)
 		return (1);
 	if (ft_handle_heredoc(data->tklst, line) != 0)

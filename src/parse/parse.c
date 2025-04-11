@@ -6,7 +6,7 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 18:07:50 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/04/11 11:52:41 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/04/11 12:12:21 by seong-ki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ void	handle_tokens(t_tokenizer *state, char **input)
 	while ((*input)[state->idx])
 	{
 		check_state(state);
-		if (state->idx >= (int) ft_strlen(*input))
-			break ;
 		if (handle_whitespace(state, *input))
 			continue ;
 		if (handle_env_variable(state, *input))
@@ -53,11 +51,8 @@ t_token	*tokenize(t_data *data, char **input)
 			ft_new_token(ft_substr(*input, state.start,
 					state.idx - state.start),
 				&state));
-	ft_print_tokens(state.tklst);
 	remove_quote(&state.tklst);
-	ft_print_tokens(state.tklst);
 	expand_env_vari(data, &state.tklst);
-	ft_print_tokens(state.tklst);
 	concat_token(&state.tklst);
 	remove_space_token(&state.tklst);
 	search_cmd(&state.tklst);
