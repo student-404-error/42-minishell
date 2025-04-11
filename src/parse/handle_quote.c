@@ -6,15 +6,15 @@
 /*   By: seong-ki <seong-ki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 18:11:40 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/04/01 18:11:41 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/04/11 11:01:55 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *ft_add_new_line(char *str)
+char	*ft_add_new_line(char *str)
 {
-	char *new_str;
+	char	*new_str;
 
 	if (str == NULL)
 		return (NULL);
@@ -23,22 +23,22 @@ char *ft_add_new_line(char *str)
 	return (new_str);
 }
 
-static void add_token(t_tokenizer *state, char *input)
+static void	add_token(t_tokenizer *state, char *input)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = ft_new_token(ft_substr(input, state->start - 1,
-								   state->idx - state->start + 2),
-						 state);
+				state->idx - state->start + 2),
+			state);
 	ft_token_add_back(&state->tklst, token);
 	state->start = ++state->idx;
 }
 
-static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
+static int	handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 {
-	char *continue_str;
-	char *new_input;
-	size_t orig_len;
+	char	*continue_str;
+	char	*new_input;
+	size_t	orig_len;
 
 	continue_str = readline(">");
 	while (continue_str)
@@ -90,18 +90,18 @@ static int handle_unclosed_quote(char **input, t_tokenizer *state, char quote)
 		return (0);*/
 }
 
-int handle_quote_token(t_tokenizer *state, char **input)
+int	handle_quote_token(t_tokenizer *state, char **input)
 {
-	char quote;
+	char	quote;
 
 	if ((*input)[state->idx] != '\'' && (*input)[state->idx] != '"')
 		return (0);
 	quote = (*input)[state->idx];
 	if (state->idx != state->start)
 		ft_token_add_back(&state->tklst,
-						  ft_new_token(ft_substr(*input, state->start,
-												 state->idx - state->start),
-									   state));
+			ft_new_token(ft_substr(*input, state->start,
+					state->idx - state->start),
+				state));
 	state->start = ++state->idx;
 	while ((*input)[state->idx] && (*input)[state->idx] != quote)
 		state->idx++;

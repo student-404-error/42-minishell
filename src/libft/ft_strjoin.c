@@ -6,16 +6,16 @@
 /*   By: seong-ki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 16:06:26 by seong-ki          #+#    #+#             */
-/*   Updated: 2025/03/11 20:28:20 by seong-ki         ###   ########.fr       */
+/*   Updated: 2025/04/11 10:56:43 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char *ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	char *result;
-	int i;
+	char	*result;
+	int		i;
 
 	if (!s1 || !s2)
 		return (NULL);

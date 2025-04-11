@@ -6,22 +6,20 @@
 /*   By: jaoh <jaoh@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:37:51 by jaoh              #+#    #+#             */
-/*   Updated: 2025/04/07 17:57:04 by jaoh             ###   ########.fr       */
+/*   Updated: 2025/04/11 11:03:45 by jaoh             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int ft_handle_line(char **input, char *line, char *eof, int fd)
+static int	ft_handle_line(char **input, char *line, char *eof, int fd)
 {
-	char *temp;
-	char *new_input;
+	char	*temp;
+	char	*new_input;
 
-	// *input에 "\n"을 추가한 임시 문자열 생성
 	temp = ft_strjoin(*input, "\n");
 	if (!temp)
 		return (1);
-	// temp와 line을 이어붙임
 	new_input = ft_strjoin(temp, line);
 	free(temp);
 	if (!new_input)
@@ -42,7 +40,7 @@ static int ft_handle_line(char **input, char *line, char *eof, int fd)
 	return (0);
 }
 
-static int ft_handle_readline(char **line, void (*prev_sigint_handler)(int))
+static int	ft_handle_readline(char **line, void (*prev_sigint_handler)(int))
 {
 	*line = readline(">");
 	if (!*line)
@@ -55,10 +53,10 @@ static int ft_handle_readline(char **line, void (*prev_sigint_handler)(int))
 	return (0);
 }
 
-int ft_init_heredoc(char **input, int fd, char *eof)
+int	ft_init_heredoc(char **input, int fd, char *eof)
 {
-	char *line;
-	void (*prev_sigint_handler)(int);
+	char	*line;
+	void	(*prev_sigint_handler)(int);
 
 	prev_sigint_handler = signal(SIGINT, sg_heredoc_handler);
 	if (ft_handle_readline(&line, prev_sigint_handler))
@@ -68,7 +66,7 @@ int ft_init_heredoc(char **input, int fd, char *eof)
 		if (ft_handle_line(input, line, eof, fd))
 		{
 			free(line);
-			break;
+			break ;
 		}
 		if (ft_handle_readline(&line, prev_sigint_handler))
 			return (1);
@@ -79,7 +77,7 @@ int ft_init_heredoc(char **input, int fd, char *eof)
 	return (0);
 }
 
-void ft_unlink_err(t_token *token)
+void	ft_unlink_err(t_token *token)
 {
 	while (token)
 	{
@@ -89,11 +87,11 @@ void ft_unlink_err(t_token *token)
 	}
 }
 
-int ft_handle_heredoc(t_token *token, char **input)
+int	ft_handle_heredoc(t_token *token, char **input)
 {
-	char *filename;
-	int fd;
-	int end;
+	char	*filename;
+	int		fd;
+	int		end;
 
 	end = 0;
 	while (token != NULL && end == 0)
